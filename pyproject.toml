@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "alphabetic"
+version = "0.0.1"
+authors = [
+  { name="Oren Halvani" }
+]
+description = "A lightweight Python library for querying the alphabet of languages."
+readme = "README.md"
+requires-python = ">=3.10"
+
+classifiers = [
+	"Development Status :: 5 - Production/Stable",
+	"Intended Audience :: Developers",
+	"License :: OSI Approved :: MIT License",
+	"Operating System :: OS Independent", 
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.11",
+	"Programming Language :: Python :: 3.12"
+]
+
+dependencies = [
+    "enum"
+]
+keywords = [
+	"alphabet",
+	"alphabet characters",
+	"alphabet letters",
+    "alphabet-list"	
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Halvani/alphabetic"
+"Bug Tracker" = "https://github.com/Halvani/alphabetic/issues"
