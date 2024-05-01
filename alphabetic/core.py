@@ -1,74 +1,122 @@
 from enum import Enum, auto, IntEnum
 
 
+class NonLanguage(Enum):
+    Morse = auto(),
+
+
 class Language(Enum):
     Albanian  = auto(),
+    Arabic = auto(),
+    Bashkir   = auto(),
     Belarusian = auto(),
     Boko = auto(),
     Bulgarian  = auto(),
+    Buryat   = auto(),
     Catalan  = auto(),
     Croatian   = auto(),
     Czech  = auto(),
+    Dungan  = auto()
     Dutch  = auto(),
     English = auto(),
     Finnish  = auto(),
     French = auto(),
+    Georgian = auto(),
     German = auto(),
     Greek = auto(),
+    Hawaiian = auto(),
     Hawar = auto(),
     Hebrew  = auto(),
     Icelandic  = auto(),
     Italian = auto(),
+    Kashubian  = auto(),
     Kazakh  = auto(),
     Korean = auto(),
     Kurmanji = auto(),
+    Kyrgyz  = auto(),
     Latin  = auto(),
     Latvian   = auto(),
     Lithuanian  = auto(),
+    Macedonian   = auto(),
     Maltese  = auto(),
     Mongolian = auto(),
+    Polish = auto(),
+    Portuguese = auto(),
+    Russian = auto(),
+    Serbian   = auto(),
     Slovene  = auto(),
     Sorani = auto(),
     Spanish  = auto(),
     Swedish   = auto(),
     Turkish  = auto(),
-    Turkmen  = auto()
+    Turkmen  = auto(),
+    Ukrainian = auto(),
+    Yakut  = auto(),
     
 
 class Alphabet:
-    def entire_alphabeth(self, language: Language) -> str:
+
+    @classmethod
+    def alphabeth_by_code(self, non_language: NonLanguage) -> str:
         alphabeth_dict = {
-            Language.Albanian:   "ABCDDhEFGGjHIJKLLlMNNjOPQRRrSShTThUVXXhYZZhabcddhefggjhijklllmnnjopqrrrsshtthuvxxhyzzhÇËçë",
-            Language.Belarusian: "ЁІЎАБВГДЕЖЗЙКЛМНОПРСТУФХЦЧШЫЬЭЮЯабвгдежзйклмнопрстуфхцчшыьэюяёіў",
-            Language.Boko:       "ABCDEFGHIJKLMNORSShTTsUWYZabcdefghijklmnorsshttsuwyzƁƊƘƙƳƴɗʼ",
-            Language.Bulgarian:  "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯабвгдежзийклмнопрстуфхцчшщъьюя", # https://en.wikipedia.org/wiki/Bulgarian_alphabet
-            Language.Catalan:    "ABCDEFGHIJKLMNOPQuRSTUVWXYZabcdefghijklmnopqurstuvwxyzÇç", # https://en.wikipedia.org/wiki/Catalan_language
-            Language.Croatian:   "ABCDDžEFGHIJKLLjMNNjOPRSTUVZabcddžefghijklljmnnjoprstuvzĆćČĐđŠšŽž", # https://de.wikipedia.org/wiki/Kroatische_Sprache#Alphabet_und_Aussprache
-            Language.Czech:      "ABCChDEFGHIJKLMNOPQRSTUVWXYZabcchdefghijklmnopqrstuvwxyzÁÉÍÓÚÝáéíóúýČčĎďĚěŇňŘřŠšŤťŮůŽž",
-            Language.Dutch :     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", # https://en.wikipedia.org/wiki/Dutch_language
-            Language.English:    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-            Language.Finnish:    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÄÅÖäåö", # https://en.wikipedia.org/wiki/Finnish_orthography
-            Language.French:     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÀÂÆÇÈÉÊËÎÏÔÙÛÜàâæçèéêëîïôùûüÿŒœŸ",
-            Language.German:     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÄÖÜßäöü",
-            Language.Greek:      "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω", # https://en.wikipedia.org/wiki/Greek_alphabet
-            Language.Hawar:      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÇÊÎÛçêîûŞş", # https://en.wikipedia.org/wiki/Kurdish_alphabets
-            Language.Hebrew:     "ABCDEFGHIJKLMNOPQuRSTUVWXYZabcdefghijklmnopqurstuvwxyzÇç", # https://en.wikipedia.org/wiki/Hebrew_alphabet
-            Language.Icelandic:  "ABDEFGHIJKLMNOPRSTUVXYabdefghijklmnoprstuvxyÁÆÉÍÐÓÖÚÝÞáæéíðóöúýþ", # https://en.wikipedia.org/wiki/Icelandic_language
-            Language.Italian:    "ABCDEFGHILMNOPQRSTUVZabcdefghilmnopqrstuvz",
-            Language.Kazakh:     "ЁІАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюяёіҒғҚқҢңҮүҰұҺһӘәӨө", # https://en.wikipedia.org/wiki/Kazakh_alphabets
-            Language.Korean:     "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ",
-            Language.Kurmanji:   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÇÊÎÛçêîûŞş", # https://de.wikipedia.org/wiki/Kurdische_Alphabete
-            Language.Latin:      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", # https://en.wikipedia.org/wiki/Latin_alphabet
-            Language.Latvian:    "ABCDEFGHIJKLMNOPRSTUVZabcdefghijklmnoprstuvzĀāČčĒēĢģĪīĶķĻļŅņŠšŪūŽž", # https://en.wikipedia.org/wiki/Latvian_orthography
-            Language.Lithuanian: "ABCDEFGHIJKLMNOPRSTUVYZabcdefghijklmnoprstuvyzĄąČčĖėĘęĮįŠšŪūŲųŽž", # https://en.wikipedia.org/wiki/Lithuanian_orthography#Alphabet
-            Language.Maltese:    "ABDEFGGĦHIIEJKLMNOPQRSTUVWXZabdefggħhiiejklmnopqrstuvwxzĊċĠġĦħŻż",
-            Language.Mongolian:  "ᠠᠡᠢᠣᠤᠥᠦᠨᠪᠫᠬᠬ‍ᠭᠭ‍ᠮᠯᠰᠱᠲᠳᠳ᠊ᠴᠵᠶᠷᠸᠹᠺᠼᠽ",
-            Language.Slovene:    "ABCDEFGHIJKLMNOPRSTUVZabcdefghijklmnoprstuvzČčŠšŽž", # https://en.wikipedia.org/wiki/Slovene_alphabet
-            Language.Sorani:     "ئـابتجحخدرزسشعغفقلمنوووپچڕژڤکگڵھۆیێە",
-            Language.Spanish:    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÑñ",
-            Language.Swedish:    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÄÅÖäåö", # https://en.wikipedia.org/wiki/Swedish_language
-            Language.Turkish:    "ABCDEFGHIJKLMNOPRSTUVYZabcdefghijklmnoprstuvyzÂÇÎÖÛÜâçîöûüĞğİıŞş",
-            Language.Turkmen:    "ABDEFGHIJKLMNOPRSTUWYZabdefghijklmnoprstuwyzÄÇÖÜÝäçöüýŇňŞşŽž",  # Latin, Cyrillic, Arabic; https://en.wikipedia.org/wiki/Turkmen_alphabet,                 
+            NonLanguage.Morse : [("A", "▄ ▄▄▄"), ("B", "▄▄▄ ▄ ▄ ▄"), ("C", "▄▄▄ ▄ ▄▄▄ ▄"), ("D", "▄▄▄ ▄ ▄"), ("E", "▄"), ("F", "▄ ▄ ▄▄▄ ▄"), ("G", "▄▄▄ ▄▄▄ ▄"), ("H", "▄ ▄ ▄ ▄"), ("I", "▄ ▄"), ("J", "▄ ▄▄▄ ▄▄▄ ▄▄▄"), ("K", "▄▄▄ ▄ ▄▄▄"), ("L", "▄ ▄▄▄ ▄ ▄"), ("M", "▄▄▄ ▄▄▄"), ("N", "▄▄▄ ▄"), ("O", "▄▄▄ ▄▄▄ ▄▄▄"), ("P", "▄ ▄▄▄ ▄▄▄ ▄"), ("Q", "▄▄▄ ▄▄▄ ▄ ▄▄▄"), ("R", "▄ ▄▄▄ ▄"), ("S", "▄ ▄ ▄"), ("T", "▄▄▄"), ("U", "▄ ▄ ▄▄▄"), ("V", "▄ ▄ ▄ ▄▄▄"), ("W", "▄ ▄▄▄ ▄▄▄"), ("X", "▄▄▄ ▄ ▄ ▄▄▄"), ("Y", "▄▄▄ ▄ ▄▄▄ ▄▄▄"), ("Z", "▄▄▄ ▄▄▄ ▄ ▄")], 
+        }
+
+        return alphabeth_dict[non_language]
+
+    @classmethod
+    def alphabeth_by_language(self, language: Language) -> str:
+        alphabeth_dict = {
+
+            Language.Albanian:    ["A", "B", "C", "Ç", "D", "Dh", "E", "Ë", "F", "G", "Gj", "H", "I", "J", "K", "L", "Ll", "M", "N", "Nj", "O", "P", "Q", "R", "Rr", "S", "Sh", "T", "Th", "U", "V", "X", "Xh", "Y", "Z", "Zh", "a", "b", "c", "ç", "d", "dh", "e", "ë", "f", "g", "gj", "h", "i", "j", "k", "l", "ll", "m", "n", "nj", "o", "p", "q", "r", "rr", "s", "sh", "t", "th", "u", "v", "x", "xh", "y", "z", "zh"],
+            Language.Arabic: ["ا", "ب", "ة", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز", "س", "ش", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "ه", "و", "ي"], 
+            Language.Bashkir: ["Ё", "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я", "а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я", "ё", "Ғ", "ғ", "Ҙ", "ҙ", "Ҡ", "ҡ", "Ң", "ң", "Ҫ", "ҫ", "Ү", "ү", "Һ", "һ", "Ә", "ә", "Ө", "ө"], 
+            Language.Belarusian:  ["Ё", "І", "Ў", "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Ы", "Ь", "Э", "Ю", "Я", "а", "б", "в", "г", "д", "е", "ж", "з", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "ы", "ь", "э", "ю", "я", "ё", "і", "ў"],
+            Language.Boko:       ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "R", "S", "S", "h", "T", "T", "s", "U", "W", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "r", "s", "s", "h", "t", "t", "s", "u", "w", "y", "z", "Ɓ", "Ɗ", "Ƙ", "ƙ", "Ƴ", "ƴ", "ɗ", "ʼ"],
+            Language.Bulgarian:  ["А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ь", "Ю", "Я", "а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ь", "ю", "я"], # https://en.wikipedia.org/wiki/Bulgarian_alphabet
+            Language.Buryat: ["Ё", "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я", "а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я", "ё", "Ү", "ү", "Һ", "һ", "Ө", "ө"], 
+            Language.Catalan:   ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "u", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "u", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Ç", "ç"], # https://en.wikipedia.org/wiki/Catalan_language
+            Language.Croatian: ["A", "B", "C", "D", "D", "ž", "E", "F", "G", "H", "I", "J", "K", "L", "L", "j", "M", "N", "N", "j", "O", "P", "R", "S", "T", "U", "V", "Z", "a", "b", "c", "d", "d", "ž", "e", "f", "g", "h", "i", "j", "k", "l", "l", "j", "m", "n", "n", "j", "o", "p", "r", "s", "t", "u", "v", "z", "Ć", "ć", "Č", "Đ", "đ", "Š", "š", "Ž", "ž"], # https://de.wikipedia.org/wiki/Kroatische_Sprache#Alphabet_und_Aussprache
+            Language.Czech:    ["A", "B", "C", "C", "h", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "c", "h", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Á", "É", "Í", "Ó", "Ú", "Ý", "á", "é", "í", "ó", "ú", "ý", "Č", "č", "Ď", "ď", "Ě", "ě", "Ň", "ň", "Ř", "ř", "Š", "š", "Ť", "ť", "Ů", "ů", "Ž", "ž"],
+            Language.Dungan: ["Ё", "Ў", "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я", "а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о\u2060", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ\u2060", "ы", "ь\u2060", "э", "ю", "я", "ё", "ў", "Җ", "җ", "Ң", "ң", "Ү", "ү", "Ә", "ә"], 
+            Language.Dutch :  ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"], # https://en.wikipedia.org/wiki/Dutch_language
+            Language.English:   ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],
+            Language.Finnish:    ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Ä", "Å", "Ö", "ä", "å", "ö"], # https://en.wikipedia.org/wiki/Finnish_orthography
+            Language.French:     ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "À", "Â", "Æ", "Ç", "È", "É", "Ê", "Ë", "Î", "Ï", "Ô", "Ù", "Û", "Ü", "à", "â", "æ", "ç", "è", "é", "ê", "ë", "î", "ï", "ô", "ù", "û", "ü", "ÿ", "Œ", "œ", "Ÿ"],
+            Language.Georgian: ["ა", "ბ", "გ", "დ", "ე", "ვ", "ზ", "თ", "ი", "კ", "ლ", "მ", "ნ", "ო", "პ", "ჟ", "რ", "ს", "ტ", "უ", "ფ", "ქ", "ღ", "ყ", "შ", "ჩ", "ც", "ძ", "წ", "ჭ", "ხ", "ჯ", "ჰ", "ჱ", "ჲ", "ჳ", "ჴ", "ჵ"],  # https://en.wikipedia.org/wiki/Georgian_scripts
+            Language.German:    ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Ä", "Ö", "Ü", "ß", "ä", "ö", "ü"],
+            Language.Greek: ["Α", "Β", "Γ", "Δ", "Ε", "Ζ", "Η", "Θ", "Ι", "Κ", "Λ", "Μ", "Ν", "Ξ", "Ο", "Π", "Ρ", "Σ", "Τ", "Υ", "Φ", "Χ", "Ψ", "Ω", "α", "β", "γ", "δ", "ε", "ζ", "η", "θ", "ι", "κ", "λ", "μ", "ν", "ξ", "ο", "π", "ρ", "σ", "τ", "υ", "φ", "χ", "ψ", "ω"], # https://en.wikipedia.org/wiki/Greek_alphabet
+            Language.Hawaiian: ["A", "E", "H", "I", "K", "L", "M", "N", "O", "P", "U", "W", "a", "e", "h", "i", "k", "l", "m", "n", "o", "p", "u", "w", "ʻ"],  # https://en.wikipedia.org/wiki/Hawaiian_language
+            Language.Hawar:   ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Ç", "Ê", "Î", "Û", "ç", "ê", "î", "û", "Ş", "ş"], # https://en.wikipedia.org/wiki/Kurdish_alphabets
+            Language.Hebrew:   ["א", "ב", "ג", "ד", "ה", "ו", "ז", "ח", "ט", "י", "כ", "ך", "ל", "מ", "ם", "נ", "ן", "ס", "ע", "פ", "ף", "צ", "ץ", "ק", "ר", "ש", "ת"],  # https://en.wikipedia.org/wiki/Hebrew_alphabet
+            Language.Icelandic:  ["A", "B", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "V", "X", "Y", "a", "b", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v", "x", "y", "Á", "Æ", "É", "Í", "Ð", "Ó", "Ö", "Ú", "Ý", "Þ", "á", "æ", "é", "í", "ð", "ó", "ö", "ú", "ý", "þ"], # https://en.wikipedia.org/wiki/Icelandic_language
+            Language.Italian:  ["A", "B", "C", "D", "E", "F", "G", "H", "I", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "z"],
+            Language.Kashubian: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "W", "Y", "Z", "Ã", "É", "Ë", "Ò", "Ó", "Ô", "Ù", "Ą", "Ł", "Ń", "Ż"],
+            Language.Kazakh:   ["Ё", "І", "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я", "а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я", "ё", "і", "Ғ", "ғ", "Қ", "қ", "Ң", "ң", "Ү", "ү", "Ұ", "ұ", "Һ", "һ", "Ә", "ә", "Ө", "ө"],  # https://en.wikipedia.org/wiki/Kazakh_alphabets
+            Language.Korean: ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ", "ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ", "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"],
+            Language.Kurmanji:  ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Ç", "Ê", "Î", "Û", "ç", "ê", "î", "û", "Ş", "ş"], # https://de.wikipedia.org/wiki/Kurdische_Alphabete
+            Language.Kyrgyz: ["a", "Ё", "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я", "ё", "Ң", "ң", "Ү", "ү", "Ө", "ө"], 
+            Language.Latin:   ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],  # https://en.wikipedia.org/wiki/Latin_alphabet
+            Language.Latvian:    ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "V", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v", "z", "Ā", "ā", "Č", "č", "Ē", "ē", "Ģ", "ģ", "Ī", "ī", "Ķ", "ķ", "Ļ", "ļ", "Ņ", "ņ", "Š", "š", "Ū", "ū", "Ž", "ž"], # https://en.wikipedia.org/wiki/Latvian_orthography
+            Language.Lithuanian:  ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "V", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v", "y", "z", "Ą", "ą", "Č", "č", "Ė", "ė", "Ę", "ę", "Į", "į", "Š", "š", "Ū", "ū", "Ų", "ų", "Ž", "ž"],  # https://en.wikipedia.org/wiki/Lithuanian_orthography#Alphabet
+            Language.Macedonian: ["Ѓ", "Ѕ", "Ј", "Љ", "Њ", "Ќ", "Џ", "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "а", "б", "в", "г", "д", "е", "ж", "з", "и", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "ѓ", "ѕ", "ј", "љ", "њ", "ќ", "џ"], 
+            Language.Maltese:   ["A", "B", "D", "E", "F", "G", "G", "Ħ", "H", "I", "I", "E", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Z", "a", "b", "d", "e", "f", "g", "g", "ħ", "h", "i", "i", "e", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "z", "Ċ", "ċ", "Ġ", "ġ", "Ħ", "ħ", "Ż", "ż"],
+            Language.Mongolian:   ["ᠠ", "ᠡ", "ᠢ", "ᠣ", "ᠤ", "ᠥ", "ᠦ", "ᠨ", "ᠪ", "ᠫ", "ᠬ", "ᠬ", "\u200d", "ᠭ", "ᠭ", "\u200d", "ᠮ", "ᠯ", "ᠰ", "ᠱ", "ᠲ", "ᠳ", "ᠳ", "᠊", "ᠴ", "ᠵ", "ᠶ", "ᠷ", "ᠸ", "ᠹ", "ᠺ", "ᠼ", "ᠽ"],
+            Language.Polish:   ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Ó", "ó", "Ą", "ą", "Ć", "ć", "Ę", "ę", "Ł", "ł", "Ń", "ń", "Ś", "ś", "Ź", "ź", "Ż", "ż"],  # https://en.wikipedia.org/wiki/Polish_alphabet 
+            Language.Portuguese : ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "À", "Á", "Â", "Ã", "Ç", "É", "Ê", "Í", "Ó", "Ô", "Õ", "Ú", "Ü", "à", "á", "â", "ã", "ç", "é", "ê", "í", "ó", "ô", "õ", "ú", "ü"],  # https://en.wikipedia.org/wiki/Portuguese_orthography 
+            Language.Russian: ["Ё", "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я", "а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я", "ё"],
+            Language.Serbian: ["Ђ", "Ј", "Љ", "Њ", "Ћ", "Џ", "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "З́", "И", "К", "Л", "М", "Н", "О", "П", "Р", "С", "С́", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "а", "б", "в", "г", "д", "е", "ж", "з", "з́", "и", "к", "л", "м", "н", "о", "п", "р", "с", "с́", "т", "у", "ф", "х", "ц", "ч", "ш", "ђ", "ј", "љ", "њ", "ћ", "џ"], 
+            Language.Slovene:   ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "V", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v", "z", "Č", "č", "Š", "š", "Ž", "ž"],  # https://en.wikipedia.org/wiki/Slovene_alphabet
+            Language.Sorani:  ["ئ", "ـ", "ا", "ب", "ت", "ج", "ح", "خ", "د", "ر", "ز", "س", "ش", "ع", "غ", "ف", "ق", "ل", "م", "ن", "و", "و", "و", "پ", "چ", "ڕ", "ژ", "ڤ", "ک", "گ", "ڵ", "ھ", "ۆ", "ی", "ێ", "ە"],
+            Language.Spanish:  ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Ñ", "ñ"],
+            Language.Swedish:   ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Ä", "Å", "Ö", "ä", "å", "ö"], # https://en.wikipedia.org/wiki/Swedish_language
+            Language.Turkish:     ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "V", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v", "y", "z", "Â", "Ç", "Î", "Ö", "Û", "Ü", "â", "ç", "î", "ö", "û", "ü", "Ğ", "ğ", "İ", "ı", "Ş", "ş"],
+            Language.Turkmen:   ["A", "B", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "W", "Y", "Z", "a", "b", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "w", "y", "z", "Ä", "Ç", "Ö", "Ü", "Ý", "ä", "ç", "ö", "ü", "ý", "Ň", "ň", "Ş", "ş", "Ž", "ž"], # https://en.wikipedia.org/wiki/Turkmen_alphabet,  
+            Language.Ukrainian: ["Є", "І", "Ї", "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ь", "Ю", "Я", "а", "б", "в", "г", "д", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ь", "ю", "я", "є", "і", "ї", "Ґ", "ґ"], 
+            Language.Yakut: ["Ё", "А", "Б", "В", "Г", "Д", "Дь", "Е", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", "Нь", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я", "а", "б", "в", "г", "д", "дь", "е", "ж", "з", "и", "й", "к", "л", "м", "н", "нь", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я", "ё", "Ҕ", "ҕ", "Ҥ", "ҥ", "Ү", "ү", "Һ", "һ", "Ө", "ө"],   
             }
 
         return alphabeth_dict[language]
+    
+
+
