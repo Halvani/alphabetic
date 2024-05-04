@@ -29,13 +29,17 @@ class Language(Enum):
     Arabic = "ara",
     Bashkir = "bak",
     Belarusian = "bel",
+    Boko = "bqc",
     Bulgarian = "bul",
+    Buryat = "bua", 
     Catalan = "cat",
     Croatian = "hrv",
     Czech = "ces",
+    Danish = "dan",
     Dungan = "dng",
     Dutch = "nld",
     English = "eng",
+    Esperanto = "epo",
     Estonian = "est",
     Finnish = "fin",
     French = "fra",
@@ -48,31 +52,34 @@ class Language(Enum):
     Italian = "ita",
     Kashubian = "csb",
     Kazakh = "kaz",
+    Kirghiz = "kir",    # aka Kyrgyz
     Korean = "kor",
+    Kurmanji = "kmr",   
     Latin = "lat",
     Latvian = "lav",
     Lithuanian = "lit",
     Macedonian = "mkd",
     Maltese = "mlt",
     Mongolian = "mon",
+    Mru = "mro",
     Polish = "pol",
     Portuguese = "por",
     Russian = "rus",
     Serbian = "srp",
+    Slovenian = "slv", # aka Slovene
+    Sorani = "ckb", 
     Spanish = "spa",
     Swedish = "swe",
     Turkish = "tur",
     Turkmen = "tuk",
     Ukrainian = "ukr",
     Yakut = "sah",
-    Slovenian = "slv", # aka Slovene
-    Kirghiz = "kir",    # aka Kyrgyz
-    Sorani = "ckb", 
-    Kurmanji = "kmr",   
-    Buryat = "bua", 
-    Boko = "bqc",
-    Mru = "mro",
-    Esperanto = "epo",
+    Kumyk = "kum",
+    Lezghian = "lez",
+    Moldovan  = "rum",
+    Mari = "chm",
+
+
         
 
 class Syllabary:
@@ -89,16 +96,36 @@ class Logographic:
 class Alphabet:
 
     @staticmethod
+    def update_lang_json_file(langcode: str, 
+                              alphabet: list[str], 
+                              json_filename=r"alphabetic/data/language_data.json") -> None:
+        
+        json_data = Path(json_filename).read_text(encoding="utf8")
+        alphabet_dict = json.loads(json_data)
+
+        alphabet_dict[langcode] = {"alphabet": alphabet}
+
+        Path(json_filename).write_text(json.dumps(alphabet_dict))
+
+        created_dict = json.loads(Path(json_data).read_text(encoding="utf8"))
+        if langcode in created_dict:
+            print(f"Updated json-file successfully! Alphabet size: {len(created_dict)} (characters).")    
+        else:
+            print("Something went wrong. Json file could not be written.")  
+
+
+
+    @staticmethod
     def provides_letter_cases(alphabet: list[str]):
         return True if len([c for c in alphabet if c.isupper() or c.islower()]) > 0 else False 
 
     @staticmethod
     def by_code(non_language: NonLanguage) -> str:
-        alphabeth_dict = {
+        alphabet_dict = {
             NonLanguage.Morse : [("A", "▄ ▄▄▄"), ("B", "▄▄▄ ▄ ▄ ▄"), ("C", "▄▄▄ ▄ ▄▄▄ ▄"), ("D", "▄▄▄ ▄ ▄"), ("E", "▄"), ("F", "▄ ▄ ▄▄▄ ▄"), ("G", "▄▄▄ ▄▄▄ ▄"), ("H", "▄ ▄ ▄ ▄"), ("I", "▄ ▄"), ("J", "▄ ▄▄▄ ▄▄▄ ▄▄▄"), ("K", "▄▄▄ ▄ ▄▄▄"), ("L", "▄ ▄▄▄ ▄ ▄"), ("M", "▄▄▄ ▄▄▄"), ("N", "▄▄▄ ▄"), ("O", "▄▄▄ ▄▄▄ ▄▄▄"), ("P", "▄ ▄▄▄ ▄▄▄ ▄"), ("Q", "▄▄▄ ▄▄▄ ▄ ▄▄▄"), ("R", "▄ ▄▄▄ ▄"), ("S", "▄ ▄ ▄"), ("T", "▄▄▄"), ("U", "▄ ▄ ▄▄▄"), ("V", "▄ ▄ ▄ ▄▄▄"), ("W", "▄ ▄▄▄ ▄▄▄"), ("X", "▄▄▄ ▄ ▄ ▄▄▄"), ("Y", "▄▄▄ ▄ ▄▄▄ ▄▄▄"), ("Z", "▄▄▄ ▄▄▄ ▄ ▄")], 
         }
 
-        return alphabeth_dict[non_language]
+        return alphabet_dict[non_language]
 
     @staticmethod
     def by_language(language: Language, 
@@ -107,10 +134,10 @@ class Alphabet:
 
         
         json_data = Path(json_filename).read_text(encoding="utf8")
-        alphabeth_dict = json.loads(json_data)
+        alphabet_dict = json.loads(json_data)
         langcode = language.value[0]
 
-        alphabet = alphabeth_dict[langcode]["alphabeth"]
+        alphabet = alphabet_dict[langcode]["alphabet"]
 
         if letter_case == LetterCase.Both:
             return alphabet
