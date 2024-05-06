@@ -1,21 +1,29 @@
+import dcl
 import json
 from pathlib import Path
 from enum import Enum, auto, IntEnum
 
+from .errors import *
 
 # Notes: 
 # -------------------------------
-# Japanese --> Hiragana and Katakana are not letters. There is no alphabet in Japanese; the Kana form a syllabary, not an alphabet.
-# True alphabets: A true alphabet contains separate letters (not diacritic marks) for both consonants and vowels.   --> https://en.wikipedia.org/wiki/List_of_writing_systems#Syllabaries
-# Casing: https://www.quora.com/Which-languages-have-no-capitalized-letter
-
 # Clarify --> Hawar (Language?):   ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Ç", "Ê", "Î", "Û", "ç", "ê", "î", "û", "Ş", "ş"], # https://en.wikipedia.org/wiki/Kurdish_alphabets
+# Clarify --> Mahajani (Language?): ["𑅐", "𑅑", "𑅒", "𑅓", "𑅔", "𑅕", "𑅖", "𑅗", "𑅘", "𑅙", "𑅚", "𑅛", "𑅜", "𑅝", "𑅞", "𑅟", "𑅠", "𑅡", "𑅢", "𑅣", "𑅤", "𑅥", "𑅦", "𑅧", "𑅨", "𑅩", "𑅪", "𑅫", "𑅬", "𑅭", "𑅮", "𑅯", "𑅰", "𑅱", "𑅲"],  What is the language code? --> https://en.wikipedia.org/wiki/Mahajani 
+
+# Japanese --> Hiragana and Katakana are not letters. There is no alphabet in Japanese; the Kana form a syllabary, not an alphabet.
+# True alphabets: A true alphabet contains separate letters (not diacritic marks) for both consonants and vowels. --> https://en.wikipedia.org/wiki/List_of_writing_systems#Syllabaries
+# Languages without casing distinction: Amharic, Arabic, Assamese, Azerbaijani, Brahui, Balinese, Baluchi, Batak, Baybayin, Bengali, Bilen, Burmese, Chinese, Georgian, Gujarati, Gurmukhi, Hebrew, Hindi, Japanese, Kannada, Kashmiri, Khmer, Korean, Kurdish, Central, Lao, Lontara, Malayalam, Middle Brahmi, Odia, Pashto, Persian, Punjabi, Sindhi, Sinhala, Sundanese, Sylheti, Tamil, Telugu, Thai, Tibetan, Tigre, Tigrinya, Tirhuta, Urdu, Uyghur, Yiddish   --> https://www.quora.com/Which-languages-have-no-capitalized-letter
+# Moldovan and Romanian share the same alphabet and language code ("rum") --> https://en.wikipedia.org/wiki/Moldovan_language
+# Sanskrit: Currently, Devanagari serves as its writing system --> https://www.easyhindityping.com/sanskrit-alphabet
+# Diacritical marks: A number of languages (e.g., French, German, Spanish, Italian, Portuguese, Polish, Czech, Swedish, etc.) make use of diacritics. --> https://entnemdept.ufl.edu/frank/kiss/kiss3.htm
+# Sundanese: These days Sundanese is normally written with the Latin alphabet, however the Sundanese script is still used to some extent. 
+# Zulu: Additional phonemes in Zulu are written using sequences of multiple letters. However, it is not clear if they count as alphabetic letters too.  -->  https://en.wikipedia.org/wiki/Zulu_language
+
            
 class LetterCase(Enum):
     Lower = auto(),
     Upper = auto(),
     Both = auto()
-
 
 
 class NonLanguage(Enum):
@@ -30,9 +38,13 @@ class Language(Enum):
     Bashkir = "bak",
     Belarusian = "bel",
     Boko = "bqc",
+    Bosnian = "bos",
     Bulgarian = "bul",
     Buryat = "bua", 
     Catalan = "cat",
+    Chechen = "che",
+    Cherokee = "chr", 
+    Chukchi = "ckt",
     Croatian = "hrv",
     Czech = "ces",
     Danish = "dan",
@@ -49,43 +61,62 @@ class Language(Enum):
     Hawaiian = "haw",
     Hebrew = "heb",
     Icelandic = "isl",
+    Indonesian = "ind",
     Italian = "ita",
     Kashubian = "csb",
     Kazakh = "kaz",
     Kirghiz = "kir",    # aka Kyrgyz
     Korean = "kor",
+    Kumyk = "kum",
     Kurmanji = "kmr",   
     Latin = "lat",
     Latvian = "lav",
+    Lezghian = "lez",
     Lithuanian = "lit",
     Macedonian = "mkd",
     Maltese = "mlt",
+    Malay = "may",
+    Maori = "mao",
+    Mari = "chm",
+    Moldovan  = "rum",
     Mongolian = "mon",
     Mru = "mro",
+    Nepali  = "nep",
+    Norwegian  = "nor",
     Polish = "pol",
     Portuguese = "por",
+    Rohingya  = "rhg",
+    Romanian = "rum",
     Russian = "rus",
+    Sanskrit = "san",
     Serbian = "srp",
+    Slovak = "slo",
     Slovenian = "slv", # aka Slovene
+    Somali = "som",
     Sorani = "ckb", 
     Spanish = "spa",
+    Sundanese = "sun",
     Swedish = "swe",
+    Tajik  = "tgk",
+    Tatar = "tat",
     Turkish = "tur",
     Turkmen = "tuk",
     Ukrainian = "ukr",
+    Wolof = "wol",
     Yakut = "sah",
-    Kumyk = "kum",
-    Lezghian = "lez",
-    Moldovan  = "rum",
-    Mari = "chm",
-
-
+    Yiddish = "yid",
+    Zulu = "zul",
+    
         
 
 class Syllabary:
-    # Hiragana = ["あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ", "さ", "し", "す", "せ", "そ", "た", "ち", "つ", "て", "と", "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "へ", "ほ", "ま", "み", "む", "め", "も", "や", "ゆ", "よ", "ら", "り", "る", "れ", "ろ", "わ", "を", "ん"], 
-    # Katakana = ["ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ", "ス", "セ", "ソ", "タ", "チ", "ツ", "テ", "ト", "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ", "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ワ", "ヲ", "ン"], 
     pass
+    # Hiragana = ["あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ", "さ", "し", "す", "せ", "そ", "た", "ち", "つ", "て", "と", "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "へ", "ほ", "ま", "み", "む", "め", "も", "や", "ゆ", "よ", "ら", "り", "る", "れ", "ろ", "わ", "を", "ん"], 
+
+    # Katakana = ["ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ", "サ", "シ", "ス", "セ", "ソ", "タ", "チ", "ツ", "テ", "ト", "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ", "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ヨ", "ラ", "リ", "ル", "レ", "ロ", "ワ", "ヲ", "ン"], 
+
+    #Cherokee = ["Ꭰ", "Ꭱ", "Ꭲ", "Ꭳ", "Ꭴ", "Ꭵ", "Ꭶ", "Ꭷ", "Ꭸ", "Ꭹ", "Ꭺ", "Ꭻ", "Ꭼ", "Ꭽ", "Ꭾ", "Ꭿ", "Ꮀ", "Ꮁ", "Ꮂ", "Ꮃ", "Ꮄ", "Ꮅ", "Ꮆ", "Ꮇ", "Ꮈ", "Ꮉ", "Ꮊ", "Ꮋ", "Ꮌ", "Ꮍ", "Ꮎ", "Ꮏ", "Ꮐ", "Ꮑ", "Ꮒ", "Ꮓ", "Ꮔ", "Ꮕ", "Ꮖ", "Ꮗ", "Ꮘ", "Ꮙ", "Ꮚ", "Ꮛ", "Ꮜ", "Ꮝ", "Ꮞ", "Ꮟ", "Ꮠ", "Ꮡ", "Ꮢ", "Ꮣ", "Ꮤ", "Ꮥ", "Ꮦ", "Ꮧ", "Ꮨ", "Ꮩ", "Ꮪ(du),", "Ꮫ", "Ꮬ", "Ꮭ", "Ꮮ", "Ꮯ", "Ꮰ", "Ꮱ", "Ꮲ", "Ꮳ", "Ꮴ", "Ꮵ", "Ꮶ", "Ꮷ", "Ꮸ", "Ꮹ", "Ꮺ", "Ꮻ", "Ꮼ", "Ꮽ", "Ꮾ", "Ꮿ", "Ᏸ", "Ᏹ", "Ᏺ", "Ᏻ", "Ᏼ", "Ᏽ"],
+   
 
 
 class Logographic:
@@ -119,6 +150,14 @@ class Alphabet:
     def provides_letter_cases(alphabet: list[str]):
         return True if len([c for c in alphabet if c.isupper() or c.islower()]) > 0 else False 
 
+
+    @staticmethod
+    def extract_diacritics(alphabet: list[str]) -> list[str]:
+        extracted_diacritics = dcl.get_diacritics("".join(alphabet) )
+        return [c.character for _, c in extracted_diacritics.items()]
+
+
+
     @staticmethod
     def by_code(non_language: NonLanguage) -> str:
         alphabet_dict = {
@@ -129,15 +168,23 @@ class Alphabet:
 
     @staticmethod
     def by_language(language: Language, 
-                              letter_case: LetterCase = LetterCase.Both,
-                              json_filename=r"alphabetic/data/language_data.json") -> str:       
+                    letter_case: LetterCase = LetterCase.Both,
+                    only_diacritics: bool = False,
+                    json_filename=r"alphabetic/data/language_data.json") -> str:  
 
+
+        if not Path(json_filename).exists():
+            raise FileNotFoundError(f"Internal json file: [{json_filename}] could not be found. This file contains all supported language alphabets.")
         
         json_data = Path(json_filename).read_text(encoding="utf8")
         alphabet_dict = json.loads(json_data)
         langcode = language.value[0]
 
         alphabet = alphabet_dict[langcode]["alphabet"]
+
+
+        if only_diacritics:
+            alphabet = Alphabet.extract_diacritics(alphabet)
 
         if letter_case == LetterCase.Both:
             return alphabet
