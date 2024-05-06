@@ -141,7 +141,7 @@ print(*Alphabet.by_language(Language.Czech, only_true_alphabet=True))
 |Yiddish|yid|
 |Zulu|zul|
 </details>
-
+<br>
 
 # Contribution
 If you like this project, you are welcome to support it, e.g. by providing additional languages  (there is a lot to do with regard to [ISO 639-2](https://www.loc.gov/standards/iso639-2/php/code_list.php)). Feel free to fork the repository and create a pull request to suggest and collaborate on changes.
