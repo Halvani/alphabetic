@@ -171,7 +171,7 @@ class Alphabet:
     @staticmethod
     def by_language(language: Language, 
                     letter_case: LetterCase = LetterCase.Both,
-                    only_diacritics: bool = False,
+                    only_true_alphabet: bool = False,
                     json_filename=r"alphabetic/data/language_data.json") -> str:  
 
 
@@ -185,8 +185,9 @@ class Alphabet:
         alphabet = alphabet_dict[langcode]["alphabet"]
 
 
-        if only_diacritics:
-            alphabet = Alphabet.extract_diacritics(alphabet)
+        if only_true_alphabet:
+            diacritics = set(Alphabet.extract_diacritics(alphabet))
+            alphabet = [c for c in alphabet if c not in diacritics]
 
         if letter_case == LetterCase.Both:
             return alphabet
