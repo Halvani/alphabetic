@@ -1,4 +1,4 @@
-# alphabetic
+# Alphabetic
 A lightweight Python module for querying language alphabets, codes, syllabaries and logographics
 
 # Description
