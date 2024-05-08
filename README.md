@@ -56,8 +56,20 @@ print(*Alphabet.by_language(Language.Czech, only_true_alphabet=True))
 # A B C C h D E F G H I J K L M N O P Q R S T U V W X Y Z a b c c h d e f g h i j k l m n o p q r s t u v w x y z
 ```
 
+Moreover, you can strip out diphthongs that are present for several languages:
+```python
+
+print(*Alphabet.by_language(Language.Albanian)
+
+# Entire alphabet: A B C Ç D Dh E Ë F G Gj H I J K L Ll M N Nj O P Q R Rr S Sh T Th U V X Xh Y Z Zh a b c ç d dh e ë f g gj h i j k l ll m n nj o p q r rr s sh t th u v x xh y z zh
+
+print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
+
+# A B C Ç D E Ë F G H I J K L M N O P Q R S T U V X Y Z a b c ç d e ë f g h i j k l m n o p q r s t u v x y z
+```
+
 # Features
-- Currently 72 languages are supported, with more to follow over time
+- Currently 93 languages are supported, with more to follow over time
 - At the heart of Alphabetic is a [Json file](https://github.com/Halvani/alphabetic/blob/main/alphabetic/data/language_data.json) that can be used independently of the respective programming language or application
 - Besides langauge alphabets, Alphabetic also provides codes (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)), [Syllabaries](https://en.wikipedia.org/wiki/Syllabary) and [Logographics](https://en.wikipedia.org/wiki/Logogram)
 
@@ -67,18 +79,24 @@ print(*Alphabet.by_language(Language.Czech, only_true_alphabet=True))
 
 |Language|ISO 639-2 code|
 |---|---|
+|Afrikaans|afr|
 |Albanian|sqi|
+|Amharic|amh|
 |Arabic|ara|
+|Assamese|asm|
+|Bambara|bam|
 |Bashkir|bak|
+|Basque|baq|
 |Belarusian|bel|
 |Boko|bqc|
 |Bosnian|bos|
 |Bulgarian|bul|
-|Buryat|bua| 
+|Buryat|bua|
 |Catalan|cat|
 |Chechen|che|
-|Cherokee|chr| 
+|Cherokee|chr|
 |Chukchi|ckt|
+|Corsican|cos|
 |Croatian|hrv|
 |Czech|ces|
 |Danish|dan|
@@ -94,12 +112,14 @@ print(*Alphabet.by_language(Language.Czech, only_true_alphabet=True))
 |Greek|gre|
 |Hawaiian|haw|
 |Hebrew|heb|
+|Hindi|hin|
 |Icelandic|isl|
 |Indonesian|ind|
 |Italian|ita|
+|Javanese|jav|
 |Kashubian|csb|
 |Kazakh|kaz|
-|Kirghiz / Kyrgyz|kir|
+|Kirghiz|kir|
 |Korean|kor|
 |Kumyk|kum|
 |Kurmanji|kmr|
@@ -112,34 +132,47 @@ print(*Alphabet.by_language(Language.Czech, only_true_alphabet=True))
 |Maltese|mlt|
 |Maori|mao|
 |Mari|chm|
-|Moldovan |rum|
+|Moldovan|rum|
 |Mongolian|mon|
 |Mru|mro|
-|Nepali |nep|
-|Norwegian |nor|
+|Nepali|nep|
+|Norwegian|nor|
+|Occitan|oci|
+|Pashto|pus|
+|Persian|per|
 |Polish|pol|
 |Portuguese|por|
-|Rohingya |rhg|
-|Romanian|rum|
+|Punjabi|pan|
+|Quechua|que|
+|Rohingya|rhg|
 |Russian|rus|
+|Samoan|smo|
+|Sango|sag|
 |Sanskrit|san|
 |Serbian|srp|
 |Slovak|slo|
-|Slovenian / Slovene|slv|
+|Slovenian|slv|
 |Somali|som|
-|Sorani|ckb| 
+|Sorani|ckb|
 |Spanish|spa|
 |Sundanese|sun|
 |Swedish|swe|
-|Tajik |tgk|
+|Tajik|tgk|
 |Tatar|tat|
 |Turkish|tur|
 |Turkmen|tuk|
+|Tuvan|tyv|
+|Twi|twi|
 |Ukrainian|ukr|
+|Uzbek|uzb|
+|Venda|ven|
+|Volapük|vol|
+|Welsh|wel|
 |Wolof|wol|
 |Yakut|sah|
 |Yiddish|yid|
 |Zulu|zul|
+
 </details>
 <br>
 
