@@ -34,7 +34,7 @@ print(*Alphabet.by_language(Language.Bosnian, letter_case=LetterCase.Lower))
 
 # а б в г д е ж з и к л м н о п р с т у ф х ц ч ш ђ ј љ њ ћ џ
 ```
-However, for some languages (e.g. *Hebrew* or *Arabic*, which have no upper/lower case) such restrictions are not possible. Therefore, in such cases, the entire alphabet is returned...
+However, for some so-called [non-bicameral](https://www.liquidbubble.co.uk/blog/the-comprehensive-guide-to-typography-jargon-for-designers/) languages (e.g. *Hebrew* or *Arabic*, which have **no** upper/lower case) such restrictions are not possible. Therefore, in such cases, the entire alphabet is returned...
 
 ```python
 from alphabetic import Language, Alphabet, LetterCase 
