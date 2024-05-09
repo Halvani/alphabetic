@@ -25,7 +25,7 @@ print(*Alphabet.by_language(Language.Greek))
 # Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω
 ```
 
-The output of  ```by_language``` is a simple list of utf8-strings. Depending on the selected language, the alphabet can be further restricted in terms of letter casing: 
+The output of  ```by_language``` is a list of utf8-strings. Depending on the [selected language](#Supported_Languages), the alphabet can be further restricted in terms of letter casing: 
 
 ```python
 from alphabetic import Language, Alphabet, LetterCase 
@@ -34,7 +34,7 @@ print(*Alphabet.by_language(Language.Bosnian, letter_case=LetterCase.Lower))
 
 # а б в г д е ж з и к л м н о п р с т у ф х ц ч ш ђ ј љ њ ћ џ
 ```
-However, for some so-called [non-bicameral](https://www.liquidbubble.co.uk/blog/the-comprehensive-guide-to-typography-jargon-for-designers/) languages (e.g. *Hebrew* or *Arabic*, which have **no** upper/lower case) such restrictions are not possible. Therefore, in such cases, the entire alphabet is returned...
+Note that for some so-called [non-bicameral](https://www.liquidbubble.co.uk/blog/the-comprehensive-guide-to-typography-jargon-for-designers/) languages such as *Hebrew* or *Arabic*, which have **no** upper/lower case, such restrictions are not possible. Therefore, in such cases, the entire alphabet is returned:
 
 ```python
 from alphabetic import Language, Alphabet, LetterCase 
@@ -74,6 +74,7 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 - Besides langauge alphabets, Alphabetic also provides codes (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)), [Syllabaries](https://en.wikipedia.org/wiki/Syllabary) and [Logographics](https://en.wikipedia.org/wiki/Logogram)
 
 
+<a name="Supported_Languages"></a>
 # Supported languages
 <details><summary>Open to view all supported languages</summary>
 
@@ -84,29 +85,37 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Amharic|amh|
 |Arabic|ara|
 |Assamese|asm|
+|Avar|ava|
 |Bambara|bam|
 |Bashkir|bak|
 |Basque|baq|
 |Belarusian|bel|
+|Bislama|bis|
 |Boko|bqc|
 |Bosnian|bos|
+|Breton|bre|
 |Bulgarian|bul|
-|Buryat|bua|
+|Buryat|bua| 
 |Catalan|cat|
+|Chamorro |cha| 
 |Chechen|che|
-|Cherokee|chr|
+|Cherokee|chr| 
 |Chukchi|ckt|
+|Chuvash|chv|
 |Corsican|cos|
 |Croatian|hrv|
 |Czech|ces|
 |Danish|dan|
 |Dungan|dng|
 |Dutch|nld|
+|Dzongkha|dzo|
 |English|eng|
 |Esperanto|epo|
 |Estonian|est|
+|Fijian|fij|
 |Finnish|fin|
 |French|fra|
+|Gaelic|gla|
 |Georgian|kat|
 |German|deu|
 |Greek|gre|
@@ -117,6 +126,7 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Indonesian|ind|
 |Italian|ita|
 |Javanese|jav|
+|Kabardian|kbd|
 |Kashubian|csb|
 |Kazakh|kaz|
 |Kirghiz|kir|
@@ -132,32 +142,33 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Maltese|mlt|
 |Maori|mao|
 |Mari|chm|
-|Moldovan|rum|
+|Moldovan |rum|
 |Mongolian|mon|
 |Mru|mro|
-|Nepali|nep|
-|Norwegian|nor|
+|Nepali |nep|
+|Norwegian |nor|
 |Occitan|oci|
 |Pashto|pus|
 |Persian|per|
 |Polish|pol|
 |Portuguese|por|
 |Punjabi|pan|
-|Quechua|que|
-|Rohingya|rhg|
+|Quechua |que|
+|Rohingya |rhg|
+|Romanian|rum|
 |Russian|rus|
-|Samoan|smo|
+|Samoan |smo|
 |Sango|sag|
 |Sanskrit|san|
 |Serbian|srp|
 |Slovak|slo|
 |Slovenian|slv|
 |Somali|som|
-|Sorani|ckb|
+|Sorani|ckb| 
 |Spanish|spa|
 |Sundanese|sun|
 |Swedish|swe|
-|Tajik|tgk|
+|Tajik |tgk|
 |Tatar|tat|
 |Turkish|tur|
 |Turkmen|tuk|
@@ -172,7 +183,6 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Yakut|sah|
 |Yiddish|yid|
 |Zulu|zul|
-
 </details>
 <br>
 
