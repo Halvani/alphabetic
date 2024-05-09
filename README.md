@@ -10,7 +10,6 @@ The idea is simple: given the name of the desired language (e.g. *German*, *Serb
 The easiest way to install Alphabetic is to use pip, where you can choose between (1) the PyPI repository and (2) this repository. 
 
 - (1) ```pip install alphabetic```
-
 - (2) ```pip install git+https://github.com/Halvani/alphabetic.git```
 
 The latter will pull and install the latest commit from this repository as well as the required Python dependencies. 
@@ -69,7 +68,7 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 ```
 
 # Features
-- Currently 93 languages are supported, with more to follow over time
+- Currently 102 languages are supported, with more to follow over time
 - At the heart of Alphabetic is a [Json file](https://github.com/Halvani/alphabetic/blob/main/alphabetic/data/language_data.json) that can be used independently of the respective programming language or application
 - Besides langauge alphabets, Alphabetic also provides codes (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)), [Syllabaries](https://en.wikipedia.org/wiki/Syllabary) and [Logographics](https://en.wikipedia.org/wiki/Logogram)
 
