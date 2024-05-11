@@ -7,6 +7,10 @@ from .errors import *
 
 # Notes: 
 # -------------------------------
+# ISO 639 is a standardized nomenclature used to classify languages. Each language is assigned a two-letter (set 1) and three-letter lowercase abbreviation (sets 2–5). 
+# Alphabetic uses only the 
+
+
 # Clarify --> Hawar (Language?):   ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "Ç", "Ê", "Î", "Û", "ç", "ê", "î", "û", "Ş", "ş"], # https://en.wikipedia.org/wiki/Kurdish_alphabets
 # Clarify --> Mahajani (Language?): ["𑅐", "𑅑", "𑅒", "𑅓", "𑅔", "𑅕", "𑅖", "𑅗", "𑅘", "𑅙", "𑅚", "𑅛", "𑅜", "𑅝", "𑅞", "𑅟", "𑅠", "𑅡", "𑅢", "𑅣", "𑅤", "𑅥", "𑅦", "𑅧", "𑅨", "𑅩", "𑅪", "𑅫", "𑅬", "𑅭", "𑅮", "𑅯", "𑅰", "𑅱", "𑅲"],  What is the language code? --> https://en.wikipedia.org/wiki/Mahajani 
 
@@ -21,6 +25,9 @@ from .errors import *
 # Zulu: Additional phonemes in Zulu are written using sequences of multiple letters. However, it is not clear if they count as alphabetic letters too.  -->  https://en.wikipedia.org/wiki/Zulu_language
 # Basque: Basque is written using the Latin script including ⟨ñ⟩ and sometimes ⟨ç⟩ and ⟨ü⟩. Basque does not use ⟨c, q, v, w, y⟩ for native words, but the Basque alphabet (established by Euskaltzaindia) does include them for loanwords --> https://en.wikipedia.org/wiki/Basque_language#Writing_system
            
+# Sources of language code listings --> https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes ; https://de.wikipedia.org/wiki/Kategorie:Alphabet
+
+
 
 class Language(Enum):
     # According to: https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
@@ -104,13 +111,19 @@ class Language(Enum):
     Russian = "rus",
     Samoan  = "smo",
     Sango = "sag",
+    Haitian = "hat",
     Sanskrit = "san",
+    Igbo = "ibo",
     Serbian = "srp",
+    Herero = "her",
     Slovak = "slo",
     Slovenian = "slv", # aka Slovene
     Somali = "som",
-    Sorani = "ckb", 
+    Sorani = "ckb",
+    Moksha = "mdf",
     Spanish = "spa",
+    Abkhazian = "abk",
+    Afar = "aar",
     Sundanese = "sun",
     Swedish = "swe",
     Tajik  = "tgk",
@@ -120,6 +133,7 @@ class Language(Enum):
     Tuvan = "tyv",
     Twi = "twi",
     Ukrainian = "ukr",
+    Hausa = "hau",
     Uzbek = "uzb",
     Venda = "ven",
     Volapük = "vol",
@@ -127,7 +141,9 @@ class Language(Enum):
     Wolof = "wol",
     Yakut = "sah",
     Yiddish = "yid",
-    Zulu = "zul"
+    Ewe = "ewe",
+    Zulu = "zul",
+
     
     
 class LetterCase(Enum):
@@ -151,7 +167,7 @@ class Logographic(Enum):
 class Script:
     @staticmethod
     def by_syllabary(syllabary: Syllabary,
-                     json_filename=r"alphabetic/data/syllabary_data.json") -> list[str]:
+                     json_filename: str = r"alphabetic/data/syllabary_data.json") -> list[str]:
 
         if not Path(json_filename).exists():
             raise FileNotFoundError(f"Internal json file: [{json_filename}] could not be found. This file contains all supported syllabaries.")
@@ -165,7 +181,7 @@ class Script:
     
     @staticmethod
     def by_logographic(logographic: Logographic, 
-                       json_filename=r"alphabetic/data/logographic_data.json"
+                       json_filename: str = r"alphabetic/data/logographic_data.json"
                        ) -> list[str]:
         
         if not Path(json_filename).exists():
@@ -182,7 +198,7 @@ class Alphabet:
     @staticmethod
     def update_lang_json_file(langcode: str, 
                               alphabet: list[str], 
-                              json_filename=r"alphabetic/data/alphabet_data.json") -> None:
+                              json_filename: str = r"alphabetic/data/alphabet_data.json") -> None:
         
         json_data = Path(json_filename).read_text(encoding="utf8")
         alphabet_dict = json.loads(json_data)
@@ -191,9 +207,9 @@ class Alphabet:
 
         Path(json_filename).write_text(json.dumps(alphabet_dict), encoding="utf8")
 
-        created_dict = json.loads(Path(json_data).read_text(encoding="utf8"))
+        created_dict = json.loads(Path(json_filename).read_text(encoding="utf8"))
         if langcode in created_dict:
-            print(f"Updated json-file successfully! Alphabet size: {len(created_dict)} (characters).")    
+            print(f"Updated json-file successfully! Alphabet size: {len(created_dict[langcode]["alphabet"])} (characters).")    
         else:
             print("Something went wrong. Json file could not be written.")  
 
@@ -232,7 +248,6 @@ class Alphabet:
                     strip_diphthongs: bool = False,
                     json_filename=r"alphabetic/data/alphabet_data.json") -> str:  
 
-
         if not Path(json_filename).exists():
             raise FileNotFoundError(f"Internal json file: [{json_filename}] could not be found. This file contains all supported language alphabets.")
         
@@ -265,6 +280,3 @@ class Alphabet:
                 return [c for c in alphabet if c.isupper()]
             else:
                 return alphabet
-
-
-
