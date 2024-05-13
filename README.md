@@ -50,7 +50,7 @@ print(*Alphabet.by_language(Language.Arabic, letter_case=LetterCase.Lower))
 According to [Wikipedia](https://en.wikipedia.org/wiki/List_of_writing_systems#Syllabaries): 
 "*A true alphabet contains separate letters (**not diacritic marks**) for both consonants and vowels.*" In order to strip out diacritics from a desired alphabet, you can restrict the output of ```by_language``` as follows:
 ```python
-print(*Alphabet.by_language(Language.Czech, only_true_alphabet=True))
+print(*Alphabet.by_language(Language.Czech, strip_diacritics=True))
 
 # A B C C h D E F G H I J K L M N O P Q R S T U V W X Y Z a b c c h d e f g h i j k l m n o p q r s t u v w x y z
 ```
@@ -76,6 +76,7 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 <a name="Supported_Languages"></a>
 # Supported languages
 <details><summary>Open to view all supported languages</summary>
+
 |Language|ISO 639-2 code|
 |---|---|
 |Abkhazian|abk|
