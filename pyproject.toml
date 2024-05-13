@@ -4,11 +4,11 @@ build-backend = "hatchling.build"
 
 [project]
 name = "alphabetic"
-version = "0.0.3"
+version = "0.0.4"
 authors = [
   { name="Oren Halvani" }
 ]
-description = "A lightweight Python library for querying the alphabet of languages."
+description = "A lightweight Python module for querying language alphabets, codes, syllabaries and logographics "
 readme = "README.md"
 requires-python = ">=3.10"
 
