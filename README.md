@@ -4,7 +4,7 @@ A lightweight Python module for querying language alphabets, codes, syllabaries 
 # Description
 Alphabetic is a small project that was born out of the need to find out the alphabet of several languages for a private NLP project. Determining the alphabet of a language is required for various NLP tasks, e.g. for classifying the language of a given text or for normalizing it (e.g., by removing noisy/random strings). 
 
-The idea is simple: given the name of the desired language (e.g. *German*, *Serbian*, *Estonian*, etc.), Alphabetic first translates the language internally into an [ISO 639-2](https://www.loc.gov/standards/iso639-2/php/code_list.php) language code and then returns the corresponding alphabet. 
+The idea is simple: given the name of the [desired language](#Supported_Languages), Alphabetic first translates the language internally into an [ISO 639-2](https://www.loc.gov/standards/iso639-2/php/code_list.php) language code and then returns the corresponding alphabet. 
 
 # Installation
 The easiest way to install Alphabetic is to use pip, where you can choose between (1) the PyPI repository and (2) this repository. 
@@ -68,23 +68,26 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 ```
 
 # Features
-- Currently 102 languages are supported, with more to follow over time
-- At the heart of Alphabetic is a [Json file](https://github.com/Halvani/alphabetic/blob/main/alphabetic/data/language_data.json) that can be used independently of the respective programming language or application
-- Besides langauge alphabets, Alphabetic also provides codes (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)), [Syllabaries](https://en.wikipedia.org/wiki/Syllabary) and [Logographics](https://en.wikipedia.org/wiki/Logogram)
+- Currently 117 languages are supported, with more to follow over time
+- At the heart of Alphabetic is a [json file](https://github.com/Halvani/alphabetic/blob/main/alphabetic/data/language_data.json) that can be used independently of the respective programming language or application
+- Besides langauge alphabets, Alphabetic also provides codes (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)), [syllabaries](https://en.wikipedia.org/wiki/Syllabary) and [logographics](https://en.wikipedia.org/wiki/Logogram)
 
 
 <a name="Supported_Languages"></a>
 # Supported languages
 <details><summary>Open to view all supported languages</summary>
-
 |Language|ISO 639-2 code|
 |---|---|
+|Abkhazian|abk|
+|Afar|aar|
 |Afrikaans|afr|
 |Albanian|sqi|
 |Amharic|amh|
 |Arabic|ara|
+|Armenian|arm|
 |Assamese|asm|
 |Avar|ava|
+|Avestan|ave|
 |Bambara|bam|
 |Bashkir|bak|
 |Basque|baq|
@@ -94,11 +97,12 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Bosnian|bos|
 |Breton|bre|
 |Bulgarian|bul|
-|Buryat|bua| 
+|Buryat|bua|
 |Catalan|cat|
-|Chamorro |cha| 
+|Chamorro|cha|
 |Chechen|che|
-|Cherokee|chr| 
+|Cherokee|chr|
+|Chichewa|nya|
 |Chukchi|ckt|
 |Chuvash|chv|
 |Corsican|cos|
@@ -111,6 +115,8 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |English|eng|
 |Esperanto|epo|
 |Estonian|est|
+|Ewe|ewe|
+|Faroese|fao|
 |Fijian|fij|
 |Finnish|fin|
 |French|fra|
@@ -118,10 +124,15 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Georgian|kat|
 |German|deu|
 |Greek|gre|
+|Guarani|grn|
+|Haitian|hat|
+|Hausa|hau|
 |Hawaiian|haw|
 |Hebrew|heb|
+|Herero|her|
 |Hindi|hin|
 |Icelandic|isl|
+|Igbo|ibo|
 |Indonesian|ind|
 |Italian|ita|
 |Javanese|jav|
@@ -129,6 +140,7 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Kashubian|csb|
 |Kazakh|kaz|
 |Kirghiz|kir|
+|Komi|kpv|
 |Korean|kor|
 |Kumyk|kum|
 |Kurmanji|kmr|
@@ -136,38 +148,39 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Latvian|lav|
 |Lezghian|lez|
 |Lithuanian|lit|
+|Luganda|lug|
 |Macedonian|mkd|
 |Malay|may|
 |Maltese|mlt|
 |Maori|mao|
 |Mari|chm|
-|Moldovan |rum|
+|Moksha|mdf|
+|Moldovan|rum|
 |Mongolian|mon|
 |Mru|mro|
-|Nepali |nep|
-|Norwegian |nor|
+|Nepali|nep|
+|Norwegian|nor|
 |Occitan|oci|
 |Pashto|pus|
 |Persian|per|
 |Polish|pol|
 |Portuguese|por|
 |Punjabi|pan|
-|Quechua |que|
-|Rohingya |rhg|
-|Romanian|rum|
+|Quechua|que|
+|Rohingya|rhg|
 |Russian|rus|
-|Samoan |smo|
+|Samoan|smo|
 |Sango|sag|
 |Sanskrit|san|
 |Serbian|srp|
 |Slovak|slo|
 |Slovenian|slv|
 |Somali|som|
-|Sorani|ckb| 
+|Sorani|ckb|
 |Spanish|spa|
 |Sundanese|sun|
 |Swedish|swe|
-|Tajik |tgk|
+|Tajik|tgk|
 |Tatar|tat|
 |Turkish|tur|
 |Turkmen|tuk|
