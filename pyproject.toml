@@ -5,15 +5,13 @@ build-backend = "hatchling.build"
 [project]
 name = "alphabetic"
 version = "0.0.4"
-authors = [
-  { name="Oren Halvani" }
-]
-description = "A lightweight Python module for querying language alphabets, codes, syllabaries and logographics "
+authors = [{name="Oren Halvani"}]
+description = "A lightweight Python module for querying language alphabets, codes, syllabaries and logographics"
 readme = "README.md"
 requires-python = ">=3.10"
 
 classifiers = [
-	"Development Status :: 5 - Production/Stable",
+	"Development Status :: 4 - Beta",
 	"Intended Audience :: Developers",
 	"License :: OSI Approved :: MIT License",
 	"Operating System :: OS Independent", 
@@ -22,12 +20,18 @@ classifiers = [
 	"Programming Language :: Python :: 3.12"
 ]
 
+dependencies = [
+    "dcl==1.0.0"
+]
 
 keywords = [
 	"alphabet",
-	"alphabet characters",
-	"alphabet letters",
-    "alphabet-list"	
+	"syllabaries",
+	"logographics",
+	"alphabet-codes",
+	"alphabet-characters",
+	"alphabet-letters",
+	"alphabet-list"
 ]
 
 [project.urls]

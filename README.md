@@ -68,7 +68,7 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 ```
 
 # Features
-- Currently 117 languages are supported, with more to follow over time
+- Currently 128 languages are supported, with more to follow over time
 - At the heart of Alphabetic is a [json file](https://github.com/Halvani/alphabetic/blob/main/alphabetic/data/language_data.json) that can be used independently of the respective programming language or application
 - Besides langauge alphabets, Alphabetic also provides codes (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)), [syllabaries](https://en.wikipedia.org/wiki/Syllabary) and [logographics](https://en.wikipedia.org/wiki/Logogram)
 
@@ -104,9 +104,11 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Chechen|che|
 |Cherokee|chr|
 |Chichewa|nya|
+|Chinese|chi|
 |Chukchi|ckt|
 |Chuvash|chv|
 |Corsican|cos|
+|Cree|cre|
 |Croatian|hrv|
 |Czech|ces|
 |Danish|dan|
@@ -136,10 +138,13 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Igbo|ibo|
 |Indonesian|ind|
 |Italian|ita|
+|Japanese|jpn|
 |Javanese|jav|
 |Kabardian|kbd|
+|Kanuri|kau|
 |Kashubian|csb|
 |Kazakh|kaz|
+|Kinyarwanda|kin|
 |Kirghiz|kir|
 |Komi|kpv|
 |Korean|kor|
@@ -148,13 +153,18 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Latin|lat|
 |Latvian|lav|
 |Lezghian|lez|
+|Lingala|lin|
 |Lithuanian|lit|
 |Luganda|lug|
 |Macedonian|mkd|
+|Malagasy|mlg|
 |Malay|may|
+|Malayalam|mal|
 |Maltese|mlt|
+|Manx|glv|
 |Maori|mao|
 |Mari|chm|
+|Marshallese|mah|
 |Moksha|mdf|
 |Moldovan|rum|
 |Mongolian|mon|
@@ -162,6 +172,7 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Nepali|nep|
 |Norwegian|nor|
 |Occitan|oci|
+|Oromo|orm|
 |Pashto|pus|
 |Persian|per|
 |Polish|pol|
