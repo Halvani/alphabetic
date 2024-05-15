@@ -1,5 +1,8 @@
-![alt text](logo.jpg)
-
+<div align="center">
+  <p>
+    <a href="#"><img src="https://raw.githubusercontent.com/Halvani/alphabetic/main/assets/images/logo.jpg" alt="Alphabetic logo"/></a>
+  </p>
+</div>
 
 # Alphabetic
 A lightweight Python module for querying language alphabets, codes, syllabaries and logographics
