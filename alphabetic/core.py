@@ -191,15 +191,15 @@ class Code(Enum):
 # Note, the values of Syllabary represent ISO-15924 identifiers  
 class Syllabary(Enum):
     Avestan = "Avst",
+    Ethiopic = "Ethi",
     Carian = "Cari",
     Lydian = "Lydi",
-    Hangul = "Hang",
     Hiragana = "Hira",
     Cherokee = "Cher",
     Katakana = "Kana",
 
 # Note, the values of Logographic represent ISO-15924 identifiers
-class Logographic(Enum):
+class Logographic(Enum):    
     Kanji = "Hani",
     Chinese_Simplified = "Hans",
 

@@ -1,3 +1,6 @@
+![alt text](logo.jpg)
+
+
 # Alphabetic
 A lightweight Python module for querying language alphabets, codes, syllabaries and logographics
 
