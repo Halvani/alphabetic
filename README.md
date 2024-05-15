@@ -1,18 +1,16 @@
 <div align="center">
-  <p>
-    <a href="#"><img src="https://raw.githubusercontent.com/Halvani/alphabetic/main/assets/images/logo.jpg" alt="Alphabetic logo"/></a>
-  </p>
+  <p><a href="#"><img src="https://raw.githubusercontent.com/Halvani/alphabetic/main/assets/images/logo.jpg" alt="Alphabetic logo"/></a></p>
 </div>
 
 # Alphabetic
 A lightweight Python module for querying language alphabets, codes, syllabaries and logographics
 
-# Description
-Alphabetic is a small project that was born out of the need to find out the alphabet of several languages for a private NLP project. Determining the alphabet of a language is required for various NLP tasks, e.g. for classifying the language of a given text or for normalizing it (e.g., by removing noisy/random strings). 
+## Description
+Alphabetic is a small project that was born out of the need to find out the alphabet of several languages for a private NLP project. Determining the alphabet of a language is important for various NLP tasks (e.g., for classifying the language of a given text or for normalizing it by removing noisy/random strings). 
 
-The idea is simple: given the name of the [desired language](#Supported_Languages), Alphabetic first translates the language internally into an [ISO 639-2](https://www.loc.gov/standards/iso639-2/php/code_list.php) language code and then returns the corresponding alphabet. 
+The idea is simple: given the name of the [desired language](#Supported_Languages), [syllabary](#Supported_Syllabaries)  [logographic](#Supported_Logographics), Alphabetic first translates the language internally into a respective ISO-code (either [ISO 639-2](https://www.loc.gov/standards/iso639-2/php/code_list.php) or [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924)) and then returns the corresponding script. 
 
-# Installation
+## Installation
 The easiest way to install Alphabetic is to use pip, where you can choose between (1) the PyPI repository and (2) this repository. 
 
 - (1) ```pip install alphabetic```
@@ -20,7 +18,7 @@ The easiest way to install Alphabetic is to use pip, where you can choose betwee
 
 The latter will pull and install the latest commit from this repository as well as the required Python dependencies. 
 
-# Usage
+## Usage
 A simple lookup of a language's alphabet can be performed as follows:
 ```python
 from alphabetic import Language, Alphabet
@@ -73,14 +71,14 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 # A B C Ç D E Ë F G H I J K L M N O P Q R S T U V X Y Z a b c ç d e ë f g h i j k l m n o p q r s t u v x y z
 ```
 
-# Features
-- Currently 128 languages are supported, with more to follow over time
+## Features
+- Currently [128 languages](#Supported_Languages) are supported, with more to follow over time
 - At the heart of Alphabetic is a [json file](https://github.com/Halvani/alphabetic/blob/main/alphabetic/data/language_data.json) that can be used independently of the respective programming language or application
 - Besides langauge alphabets, Alphabetic also provides codes (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)), [syllabaries](https://en.wikipedia.org/wiki/Syllabary) and [logographics](https://en.wikipedia.org/wiki/Logogram)
 
 
 <a name="Supported_Languages"></a>
-# Supported languages
+## Supported languages
 <details><summary>Open to view all supported languages</summary>
 
 |Language|ISO 639-2 code|
@@ -215,11 +213,45 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Zulu|zul|
 </details>
 
-# Contribution
+<a name="Supported_Syllabaries"></a>
+## Supported syllabaries
+<details><summary>Open to view all supported syllabaries</summary>
+
+|Syllabary|15924 code|
+|---|---|
+|Avestan|Avst|
+|Carian|Cari|
+|Cherokee|Cher|
+|Ethiopic|Ethi|
+|Hiragana|Hira|
+|Katakana|Kana|
+|Lydian|Lydi|
+</details>
+
+<a name="Supported_Logographics"></a>
+## Supported logographics
+<details><summary>Open to view all supported logographics</summary>
+
+|Logographic|15924 code|
+|---|---|
+|Chinese_Simplified|Hans|
+|Kanji|Hani|
+</details>
+
+## Design considerations
+Once delving deeper into the world of [writing systems](https://en.wikipedia.org/wiki/List_of_writing_systems), one is overwhelmed by the numerous difficulties that arise when organizing the various alphabets, syllabaries and logographies. This is particularly difficult when it comes to non-Latin scripts with their many variabilities and forms. Therefore, various design considerations were made to make "Alphabetic" as simple and usable as possible. 
+
+- For languages that exhibit several variants of alphabets, the more modern or the most frequently encountered form was used. References to sources such as Omniglot, Wikipedia and Britannica were used for this purpose. 
+
+- For Arbaic scripts where the character form depends on its position, the so-called [isolated forms](https://www.arabacademy.com/the-different-forms-of-arabic-letters-and-how-they-come-together/) were used. 
+
+- For languages that contain diphthongs, these were integrated into the alphabets. These can be suppressed if required. The same applies to [diacritical marks](https://en.wikipedia.org/wiki/Diacritic) (e.g., acute, breve, cédille, gravis, etc.). 
+
+## Contribution
 If you like this project, you are welcome to support it, e.g. by providing additional languages  (there is a lot to do with regard to [ISO 639-2](https://www.loc.gov/standards/iso639-2/php/code_list.php)). Feel free to fork the repository and create a pull request to suggest and collaborate on changes.
 
-# Last remarks
-As is usual with open source projects, we developers do not earn any money with what we do, but are primarily interested in giving something back to the community with fun, passion and joy. Nevertheless, we would be very happy if you rewarded all the time that has gone into the project with just a small star 🤗 
+## Disclaimer
+Although this project has been carried out with great care, we accept no liability for the completeness and accuracy of all data. The use of this data for integration into production systems is at your own risk.
 
-
-
+## Last remarks
+As is usual with open source projects, we developers do not earn any money with what we do, but are primarily interested in giving something back to the community with fun, passion and joy. Nevertheless, we would be very happy if you rewarded all the time that has gone into the project with just a small star 🤗
