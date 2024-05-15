@@ -42,6 +42,10 @@ from .errors import *
 # Clarify --> Mahajani (Language?): ["𑅐", "𑅑", "𑅒", "𑅓", "𑅔", "𑅕", "𑅖", "𑅗", "𑅘", "𑅙", "𑅚", "𑅛", "𑅜", "𑅝", "𑅞", "𑅟", "𑅠", "𑅡", "𑅢", "𑅣", "𑅤", "𑅥", "𑅦", "𑅧", "𑅨", "𑅩", "𑅪", "𑅫", "𑅬", "𑅭", "𑅮", "𑅯", "𑅰", "𑅱", "𑅲"],  What is the language code? --> https://en.wikipedia.org/wiki/Mahajani 
 
 
+    # chr
+    # chi
+    # jpn
+
 class Language(Enum):
     Abkhazian = "abk",
     Afar = "aar",
@@ -176,6 +180,7 @@ class Language(Enum):
 class JsonFile(Enum):
     Code = r"alphabetic/data/code_data.json",
     Alphabet = r"alphabetic/data/alphabet_data.json",
+    Abugida = r"alphabetic/data/abugida_data.json",
     Syllabary = r"alphabetic/data/syllabary_data.json",
     Logographic = r"alphabetic/data/logographic_data.json",
 
@@ -188,7 +193,7 @@ class Code(Enum):
     Morse = auto(),
     NATO_Phonetic_Alphabet = auto(),     
 
-# Note, the values of Syllabary represent ISO-15924 identifiers  
+# Values represent ISO-15924 identifiers 
 class Syllabary(Enum):
     Avestan = "Avst",
     Ethiopic = "Ethi",
@@ -198,10 +203,15 @@ class Syllabary(Enum):
     Cherokee = "Cher",
     Katakana = "Kana",
 
-# Note, the values of Logographic represent ISO-15924 identifiers
+# Values represent ISO-15924 identifiers
 class Logographic(Enum):    
     Kanji = "Hani",
     Chinese_Simplified = "Hans",
+
+# Values represent ISO-15924 identifiers
+class Abugida(Enum):
+    Thaana = "Thaa",
+
 
 def __load_dict_from_jsonfile__(json_filename: JsonFile, err_msg_enum_class: str):
     json_filename = json_filename.value[0]
@@ -215,16 +225,19 @@ def __load_dict_from_jsonfile__(json_filename: JsonFile, err_msg_enum_class: str
 
 class Script:
     @staticmethod
+
+    def by_abugida(abugida: Abugida) -> list[str]:
+         _dict = __load_dict_from_jsonfile__(JsonFile.Abugida, err_msg_enum_class = "abugidas")
+         return _dict[abugida.value[0]]["script"]
+
     def by_syllabary(syllabary: Syllabary) -> list[str]:
          _dict = __load_dict_from_jsonfile__(JsonFile.Syllabary, err_msg_enum_class = "syllabaries")
-         iso_code = syllabary.value[0]
-         return _dict[iso_code]["script"] 
+         return _dict[syllabary.value[0]]["script"] 
     
     @staticmethod
     def by_logographic(logographic: Logographic) -> list[str]:
         _dict = __load_dict_from_jsonfile__(JsonFile.Logographic, err_msg_enum_class = "logographics")       
-        iso_code = logographic.value[0]
-        return _dict[iso_code]["script"]
+        return _dict[logographic.value[0]]["script"]
     
 
 class Alphabet:
@@ -302,7 +315,7 @@ class Alphabet:
         alphabet_dict = json.loads(json_data)
 
         alphabet_dict[langcode] = {"alphabet": alphabet}
-        Path(json_filename).write_text(json.dumps(alphabet_dict), encoding="utf8")
+        Path(json_filename).write_text(json.dumps(alphabet_dict, ensure_ascii=False), encoding="utf8")
         created_dict = json.loads(Path(json_filename).read_text(encoding="utf8"))
 
         if langcode in created_dict:
