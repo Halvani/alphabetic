@@ -46,10 +46,6 @@ from .errors import *
 # Clarify --> Mahajani (Language?): ["𑅐", "𑅑", "𑅒", "𑅓", "𑅔", "𑅕", "𑅖", "𑅗", "𑅘", "𑅙", "𑅚", "𑅛", "𑅜", "𑅝", "𑅞", "𑅟", "𑅠", "𑅡", "𑅢", "𑅣", "𑅤", "𑅥", "𑅦", "𑅧", "𑅨", "𑅩", "𑅪", "𑅫", "𑅬", "𑅭", "𑅮", "𑅯", "𑅰", "𑅱", "𑅲"],  What is the language code? --> https://en.wikipedia.org/wiki/Mahajani 
 
 
-    # chr
-    # chi
-    # jpn
-
 class Language(Enum):
     Abkhazian = "abk",
     Afar = "aar",
@@ -182,11 +178,13 @@ class Language(Enum):
 
 
 class JsonFile(Enum):
-    LatinScriptCode = r"alphabetic/data/latin_script_code.json",
-    Alphabet = r"alphabetic/data/alphabet.json",
+    Abjad = r"alphabetic/data/abjad.json",
     Abugida = r"alphabetic/data/abugida.json",
+    Alphabet = r"alphabetic/data/alphabet.json",
+    Latin_Script_Code = r"alphabetic/data/latin_script_code.json",
+    Logographic = r"alphabetic/data/logographic.json",    
     Syllabary = r"alphabetic/data/syllabary.json",
-    Logographic = r"alphabetic/data/logographic.json",
+    
 
 class LetterCase(Enum):
     Lower = auto(),
@@ -196,6 +194,15 @@ class LetterCase(Enum):
 class LatinScriptCode(Enum):
     Morse = auto(),
     NATO_Phonetic_Alphabet = auto(),     
+
+# Values represent ISO 639-2 identifiers 
+class Abjad(Enum): 
+    Hebrew = "heb",
+    Arabic = "ara",
+
+# Values represent ISO-15924 identifiers
+class Abugida(Enum):
+    Thaana = "Thaa",
 
 # Values represent ISO-15924 identifiers 
 class Syllabary(Enum):
@@ -211,10 +218,6 @@ class Syllabary(Enum):
 class Logographic(Enum):    
     Kanji = "Hani",
     Chinese_Simplified = "Hans",
-
-# Values represent ISO-15924 identifiers
-class Abugida(Enum):
-    Thaana = "Thaa",
 
 
 
@@ -247,7 +250,7 @@ class JsonUtils:
 
     @staticmethod
     def __pluralize_json_filename(json_file: JsonFile) -> str:
-        if json_file == JsonFile.LatinScriptCode:
+        if json_file == JsonFile.Latin_Script_Code:
             p = "latin script code".split()
             plural_form = f"{p[0]} {p[1]} {JsonUtils.__pluralize(p[2])}" 
             return plural_form
@@ -316,6 +319,12 @@ class AlphabetUtils:
        
 
 class WritingSystem:
+
+    @staticmethod
+    def by_abjad(abjad: Abjad) -> list[str]:
+         _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Abjad)
+         return _dict[abjad.value[0]]["script"]
+
     @staticmethod
     def by_abugida(abugida: Abugida) -> list[str]:
          _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Abugida)
@@ -333,7 +342,7 @@ class WritingSystem:
     
 
     def by_code(latin_script_code: LatinScriptCode) -> list[tuple[str,str]]:       
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.LatinScriptCode)
+        _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Latin_Script_Code)
         return _dict[latin_script_code.name]["alphabet"]
 
 
@@ -359,9 +368,11 @@ class WritingSystem:
                         Syllabary.Katakana.name : WritingSystem.by_syllabary(Syllabary.Katakana),
                         Logographic.Kanji.name : WritingSystem.by_logographic(Logographic.Kanji)}
 
-
+            
+            abjad_dict = dict([(a.name, a.value[0]) for a in Abjad]) 
+            abugida_dict = dict([(a.name, a.value[0]) for a in Abugida]) 
             syllabary_dict = dict([(s.name, s.value[0]) for s in Syllabary])
-            logographic_dict = dict([(s.name, s.value[0]) for s in Logographic])
+            logographic_dict = dict([(l.name, l.value[0]) for l in Logographic])
 
             if language.name in syllabary_dict:                 
                 syllabary = Syllabary[language.name]
@@ -370,6 +381,15 @@ class WritingSystem:
             elif language.name in logographic_dict:
                 logographic = Logographic[language.name]
                 alphabet = WritingSystem.by_logographic(logographic)
+
+            elif language.name in abjad_dict:
+                abjad = Abjad[language.name]
+                alphabet = WritingSystem.by_abjad(abjad)
+
+            elif language.name in abugida_dict:
+                abugida = Abugida[language.name]
+                alphabet = WritingSystem.by_abugida(abugida)
+
         else:
             alphabet = _dict[language_code]["alphabet"]
 
