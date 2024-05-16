@@ -6,6 +6,9 @@ from .errors import *
 
 # Notes: 
 # -------------------------------
+# The exact relationship between writing systems and languages can be complex. 
+# A single language (e.g. Hindustani) can have multiple writing systems, and a writing system can also represent multiple languages. --> https://en.wikipedia.org/wiki/Writing_system
+
 # ISO 639 is a standardized nomenclature used to classify languages. Each language is assigned a two-letter (set 1) and three-letter lowercase abbreviation (sets 2–5). 
 # Alphabetic uses in almost all cases ISO 639-2 as a language code identifier. However, in cases where no ISO 639-2 fields were available (e.g., "Komi") the ISO 639-3 code was used instead.    
 #
@@ -178,18 +181,18 @@ class Language(Enum):
 
 
 class JsonFile(Enum):
-    Code = r"alphabetic/data/code_data.json",
-    Alphabet = r"alphabetic/data/alphabet_data.json",
-    Abugida = r"alphabetic/data/abugida_data.json",
-    Syllabary = r"alphabetic/data/syllabary_data.json",
-    Logographic = r"alphabetic/data/logographic_data.json",
+    LatinScriptCode = r"alphabetic/data/latin_script_code.json",
+    Alphabet = r"alphabetic/data/alphabet.json",
+    Abugida = r"alphabetic/data/abugida.json",
+    Syllabary = r"alphabetic/data/syllabary.json",
+    Logographic = r"alphabetic/data/logographic.json",
 
 class LetterCase(Enum):
     Lower = auto(),
     Upper = auto(),
     Both = auto()
 
-class Code(Enum):
+class LatinScriptCode(Enum):
     Morse = auto(),
     NATO_Phonetic_Alphabet = auto(),     
 
@@ -213,34 +216,54 @@ class Abugida(Enum):
     Thaana = "Thaa",
 
 
-def __load_dict_from_jsonfile__(json_filename: JsonFile, err_msg_enum_class: str):
-    json_filename = json_filename.value[0]
-    if not Path(json_filename).exists():
-        err_msg = f"Internal json file: [{json_filename}] could not be found. This file contains all supported {err_msg_enum_class}."
-        raise FileNotFoundError(err_msg)
-    
-    json_data = Path(json_filename).read_text(encoding="utf8")
-    return json.loads(json_data)
 
-
-class Script:
+class JsonUtils:
     @staticmethod
-
-    def by_abugida(abugida: Abugida) -> list[str]:
-         _dict = __load_dict_from_jsonfile__(JsonFile.Abugida, err_msg_enum_class = "abugidas")
-         return _dict[abugida.value[0]]["script"]
-
-    def by_syllabary(syllabary: Syllabary) -> list[str]:
-         _dict = __load_dict_from_jsonfile__(JsonFile.Syllabary, err_msg_enum_class = "syllabaries")
-         return _dict[syllabary.value[0]]["script"] 
-    
+    def load_dict_from_jsonfile(json_filename: JsonFile, err_msg_enum_class: str):
+        json_filename = json_filename.value[0]
+        if not Path(json_filename).exists():
+            err_msg = f"Internal json file: [{json_filename}] could not be found. This file contains all supported {err_msg_enum_class}."
+            raise FileNotFoundError(err_msg)
+        
+        json_data = Path(json_filename).read_text(encoding="utf8")
+        return json.loads(json_data)
+     
     @staticmethod
-    def by_logographic(logographic: Logographic) -> list[str]:
-        _dict = __load_dict_from_jsonfile__(JsonFile.Logographic, err_msg_enum_class = "logographics")       
-        return _dict[logographic.value[0]]["script"]
-    
+    def update_lang_json_file(langcode: str, alphabet: list[str]) -> None:
+        json_filename = JsonFile.Alphabet.value[0]
+        alphabet_dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Alphabet, err_msg_enum_class = "alphabets")
+        alphabet_dict[langcode] = {"alphabet": alphabet}
+        Path(json_filename).write_text(json.dumps(alphabet_dict, ensure_ascii=False), encoding="utf8")
+        created_dict = json.loads(Path(json_filename).read_text(encoding="utf8"))
 
-class Alphabet:
+        if langcode in created_dict:
+            lang_dict = dict([(e.value[0], e.name) for e in Language])
+            print(f"✅ Updated json-file successfully!\nLanguage: {lang_dict[langcode]}; "
+                  f"Language code: {langcode}; Alphabet size: {len(created_dict[langcode]["alphabet"])} (characters).")    
+        else:
+            print("❌ Something went wrong! Alphabet could not be written to internal json file.") 
+
+    @staticmethod
+    def del_entry_from_jsonfile(json_filename: str, key: str):
+        _dict = JsonUtils.load_dict_from_jsonfile(json_filename, "") 
+        
+        if key not in _dict:
+            print(f"The specified key [{key}] has not been found in the given json file.")
+            return    
+        
+        _dict.pop(key, None)    
+        json_content = json.dumps(_dict, ensure_ascii=False)
+        Path(json_filename).write_text(json_content, encoding="utf8")
+    
+        check = JsonUtils.load_dict_from_jsonfile(json_filename, "")
+        if key not in check:
+            print(f"{key} sucessfully deleted from the given json file.")
+        else:
+            print("Something went wrong. Given entry could not be deleted!")
+
+
+
+class AlphabetUtils:
     @staticmethod
     def provides_letter_cases(alphabet: list[str]) -> bool:
         return True if len([c for c in alphabet if c.isupper() or c.islower()]) > 0 else False 
@@ -253,25 +276,39 @@ class Alphabet:
     @staticmethod
     def extract_diphthongs(alphabet: list[str]) -> list[str]:
         return [c for c in alphabet  if len(c) == 2]
+       
+
+class WritingSystem:
+    @staticmethod
+    def by_abugida(abugida: Abugida) -> list[str]:
+         _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Abugida, err_msg_enum_class = "abugidas")
+         return _dict[abugida.value[0]]["script"]
 
     @staticmethod
-    def by_code(code: Code) -> list[tuple[str,str]]:       
-        _dict = __load_dict_from_jsonfile__(JsonFile.Code, err_msg_enum_class = "codes")
-        return _dict[code.name]["alphabet"] 
+    def by_syllabary(syllabary: Syllabary) -> list[str]:
+         _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Syllabary, err_msg_enum_class = "syllabaries")
+         return _dict[syllabary.value[0]]["script"] 
+    
+    @staticmethod
+    def by_logographic(logographic: Logographic) -> list[str]:
+        _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Logographic, err_msg_enum_class = "logographics")       
+        return _dict[logographic.value[0]]["script"]
+    
+
+    def by_code(latin_script_code: LatinScriptCode) -> list[tuple[str,str]]:       
+        _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.LatinScriptCode, err_msg_enum_class = "latin script codes")
+        return _dict[latin_script_code.name]["alphabet"]
+
 
     @staticmethod
     def by_language(language: Language, 
                     letter_case: LetterCase = LetterCase.Both,
                     strip_diacritics: bool = False,
                     strip_diphthongs: bool = False) -> str:
-
-        #--------------------------------------------------------
-        #TODO: Special treatment for: { Korean = "kor", Japanese = "jpn" }
-        #--------------------------------------------------------
-        
+       
         # Check if the accociated language code exists within the internal JsonFile.Alphabet file. 
         # If the key is not present, perform a fallback to the Syllabary and Logographic json files and return the respective script.
-        _dict = __load_dict_from_jsonfile__(JsonFile.Alphabet, err_msg_enum_class = "alphabets")
+        _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Alphabet, err_msg_enum_class = "alphabets")
         language_code = language.value[0]
     
         if language_code not in _dict:
@@ -281,46 +318,28 @@ class Alphabet:
 
             if language.name in syllabary_dict:                 
                 syllabary = Syllabary[language.name]
-                alphabet = Script.by_syllabary(syllabary) 
+                alphabet = WritingSystem.by_syllabary(syllabary) 
 
             elif language.name in logographic_dict:
                 logographic = Logographic[language.name]
-                alphabet = Script.by_logographic(logographic) 
+                alphabet = WritingSystem.by_logographic(logographic) 
 
         else:
             alphabet = _dict[language_code]["alphabet"]  
         
         # Apply specified filters
         if strip_diacritics:
-            diacritics = set(Alphabet.extract_diacritics(alphabet))
+            diacritics = set(AlphabetUtils.extract_diacritics(alphabet))
             alphabet = [c for c in alphabet if c not in diacritics]
 
         if strip_diphthongs:
-            diphthongs = Alphabet.extract_diphthongs(alphabet)
+            diphthongs = AlphabetUtils.extract_diphthongs(alphabet)
             alphabet = [c for c in alphabet if c not in diphthongs]
 
         if letter_case == LetterCase.Lower:
-            return [c for c in alphabet if c.islower()] if Alphabet.provides_letter_cases(alphabet) else alphabet
+            return [c for c in alphabet if c.islower()] if AlphabetUtils.provides_letter_cases(alphabet) else alphabet
         elif letter_case == LetterCase.Upper:
-            return [c for c in alphabet if c.isupper()] if Alphabet.provides_letter_cases(alphabet) else alphabet
+            return [c for c in alphabet if c.isupper()] if AlphabetUtils.provides_letter_cases(alphabet) else alphabet
         else: 
             return alphabet
 
-        
-    @staticmethod
-    def update_lang_json_file(langcode: str, alphabet: list[str]) -> None:
-
-        json_filename = JsonFile.Alphabet.value[0]
-        json_data = Path(json_filename).read_text(encoding="utf8")
-        alphabet_dict = json.loads(json_data)
-
-        alphabet_dict[langcode] = {"alphabet": alphabet}
-        Path(json_filename).write_text(json.dumps(alphabet_dict, ensure_ascii=False), encoding="utf8")
-        created_dict = json.loads(Path(json_filename).read_text(encoding="utf8"))
-
-        if langcode in created_dict:
-            lang_dict = dict([(e.value[0], e.name) for e in Language])
-            print(f"✅ Updated json-file successfully!\nLanguage: {lang_dict[langcode]}; "
-                  f"Language code: {langcode}; Alphabet size: {len(created_dict[langcode]["alphabet"])} (characters).")    
-        else:
-            print("❌ Something went wrong! Alphabet could not be written to internal json file.")  
