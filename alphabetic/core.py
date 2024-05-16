@@ -1,3 +1,4 @@
+from typing import Union
 import dcl
 import json
 from pathlib import Path
@@ -75,7 +76,7 @@ class Language(Enum):
     Chechen = "che",
     Cherokee = "chr",
     Chichewa = "nya",
-    Chinese = "chi",
+    Chinese_Simplified = "chi",
     Chukchi = "ckt",
     Chuvash = "chv",
     Corsican = "cos",
@@ -218,20 +219,57 @@ class Abugida(Enum):
 
 
 class JsonUtils:
+
     @staticmethod
-    def load_dict_from_jsonfile(json_filename: JsonFile, err_msg_enum_class: str):
-        json_filename = json_filename.value[0]
-        if not Path(json_filename).exists():
-            err_msg = f"Internal json file: [{json_filename}] could not be found. This file contains all supported {err_msg_enum_class}."
+    def __pluralize(word: str) -> str:
+        """
+        Pluralizes an English word.
+
+        Args:
+            word (str): The word to be pluralized.
+
+        Returns:
+            str: The pluralized word.
+        """
+        
+        stem = word[:-1]
+        if word.endswith("y") and len(word) > 1 and word[-2] not in set(["a", "e", "i", "o", "u"]):
+            return f"{stem}ies"
+        elif word.endswith(("o", "ch", "s", "sh", "x", "z")):
+            return f"{word}es"
+        elif word.endswith("f") and len(word) > 1:
+            return f"{stem}ves"
+        elif word.endswith("fe") and len(word) > 2:
+            stem = word[:-2]
+            return f"{stem}ves"
+        else:
+            return f"{word}s"
+
+    @staticmethod
+    def __pluralize_json_filename(json_file: JsonFile) -> str:
+        if json_file == JsonFile.LatinScriptCode:
+            p = "latin script code".split()
+            plural_form = f"{p[0]} {p[1]} {JsonUtils.__pluralize(p[2])}" 
+            return plural_form
+        else:
+            return JsonUtils.__pluralize(json_file.name.lower())
+
+
+    @staticmethod
+    def load_dict_from_jsonfile(json_filename: JsonFile) -> dict:
+        json_fname = json_filename.value[0]
+        if not Path(json_fname).exists():
+            err_msg = f"Internal json file: [{json_fname}] could not be found. This file contains all supported {JsonUtils.__pluralize_json_filename(json_filename)}."
             raise FileNotFoundError(err_msg)
         
-        json_data = Path(json_filename).read_text(encoding="utf8")
+        json_data = Path(json_fname).read_text(encoding="utf8")
         return json.loads(json_data)
      
+
     @staticmethod
     def update_lang_json_file(langcode: str, alphabet: list[str]) -> None:
         json_filename = JsonFile.Alphabet.value[0]
-        alphabet_dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Alphabet, err_msg_enum_class = "alphabets")
+        alphabet_dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Alphabet)
         alphabet_dict[langcode] = {"alphabet": alphabet}
         Path(json_filename).write_text(json.dumps(alphabet_dict, ensure_ascii=False), encoding="utf8")
         created_dict = json.loads(Path(json_filename).read_text(encoding="utf8"))
@@ -244,23 +282,22 @@ class JsonUtils:
             print("❌ Something went wrong! Alphabet could not be written to internal json file.") 
 
     @staticmethod
-    def del_entry_from_jsonfile(json_filename: str, key: str):
-        _dict = JsonUtils.load_dict_from_jsonfile(json_filename, "") 
+    def del_entry_from_jsonfile(json_file: JsonFile, key: str):
+        _dict = JsonUtils.load_dict_from_jsonfile(json_file) 
         
         if key not in _dict:
-            print(f"The specified key [{key}] has not been found in the given json file.")
+            print(f"❌ Specified key [{key}] has not been found in the given json file.")
             return    
         
         _dict.pop(key, None)    
         json_content = json.dumps(_dict, ensure_ascii=False)
-        Path(json_filename).write_text(json_content, encoding="utf8")
+        Path(json_file.value[0]).write_text(json_content, encoding="utf8")
     
-        check = JsonUtils.load_dict_from_jsonfile(json_filename, "")
+        check = JsonUtils.load_dict_from_jsonfile(json_file)
         if key not in check:
-            print(f"{key} sucessfully deleted from the given json file.")
+            print(f"✅ Sucessfully deleted the key [{key}] from the json file: {json_file.value[0]}.")
         else:
-            print("Something went wrong. Given entry could not be deleted!")
-
+            print(f"❌ Something went wrong. Given key [{key}] could not be deleted!")
 
 
 class AlphabetUtils:
@@ -281,22 +318,22 @@ class AlphabetUtils:
 class WritingSystem:
     @staticmethod
     def by_abugida(abugida: Abugida) -> list[str]:
-         _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Abugida, err_msg_enum_class = "abugidas")
+         _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Abugida)
          return _dict[abugida.value[0]]["script"]
 
     @staticmethod
     def by_syllabary(syllabary: Syllabary) -> list[str]:
-         _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Syllabary, err_msg_enum_class = "syllabaries")
+         _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Syllabary)
          return _dict[syllabary.value[0]]["script"] 
     
     @staticmethod
     def by_logographic(logographic: Logographic) -> list[str]:
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Logographic, err_msg_enum_class = "logographics")       
+        _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Logographic)       
         return _dict[logographic.value[0]]["script"]
     
 
     def by_code(latin_script_code: LatinScriptCode) -> list[tuple[str,str]]:       
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.LatinScriptCode, err_msg_enum_class = "latin script codes")
+        _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.LatinScriptCode)
         return _dict[latin_script_code.name]["alphabet"]
 
 
@@ -304,14 +341,24 @@ class WritingSystem:
     def by_language(language: Language, 
                     letter_case: LetterCase = LetterCase.Both,
                     strip_diacritics: bool = False,
-                    strip_diphthongs: bool = False) -> str:
+                    strip_diphthongs: bool = False) -> Union[list[str], dict] :
        
         # Check if the accociated language code exists within the internal JsonFile.Alphabet file. 
         # If the key is not present, perform a fallback to the Syllabary and Logographic json files and return the respective script.
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Alphabet, err_msg_enum_class = "alphabets")
+        _dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Alphabet)
         language_code = language.value[0]
     
         if language_code not in _dict:
+
+            # Special case for languages that have *multiple* writing systems and non-mapable language codes. 
+            # ---------------------------------------------------------------------------------------
+            # Note that for such languages such as Japanese none of the filters below can be applied. 
+            # Thus, the respective writing system type(s) is/are returned as they are. 
+            if language == Language.Japanese:
+                return {Syllabary.Hiragana.name: WritingSystem.by_syllabary(Syllabary.Hiragana),
+                        Syllabary.Katakana.name : WritingSystem.by_syllabary(Syllabary.Katakana),
+                        Logographic.Kanji.name : WritingSystem.by_logographic(Logographic.Kanji)}
+
 
             syllabary_dict = dict([(s.name, s.value[0]) for s in Syllabary])
             logographic_dict = dict([(s.name, s.value[0]) for s in Logographic])
@@ -322,10 +369,10 @@ class WritingSystem:
 
             elif language.name in logographic_dict:
                 logographic = Logographic[language.name]
-                alphabet = WritingSystem.by_logographic(logographic) 
-
+                alphabet = WritingSystem.by_logographic(logographic)
         else:
-            alphabet = _dict[language_code]["alphabet"]  
+            alphabet = _dict[language_code]["alphabet"]
+
         
         # Apply specified filters
         if strip_diacritics:

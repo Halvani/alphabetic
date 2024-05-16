@@ -21,60 +21,70 @@ The latter will pull and install the latest commit from this repository as well 
 ## Usage
 A simple lookup of a language's alphabet can be performed as follows:
 ```python
-from alphabetic import Language, Alphabet
+from alphabetic import (Language, WritingSystem)
 
-print(*Alphabet.by_language(Language.Greek))
+print(*WritingSystem.by_language(Language.Greek))
 
 # Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω
 ```
 
-The output of  ```by_language``` is a list of utf8-strings. Depending on the [selected language](#Supported_Languages), the alphabet can be further restricted in terms of letter casing: 
-
+Depending on the [selected language](#Supported_Languages), the output of  ```by_language``` can be either a list containing the accociated alphabet or a dictionary of accociated writing system types (e.g., Syllabary or Logographic). This is a [design consideration](#Design_Considerations) that results from the fact that certain languages such as [Japanese have no alphabet but instead three writing systems](https://www.busuu.com/en/japanese/alphabet). So in this case the output would look like this: 
 ```python
-from alphabetic import Language, Alphabet, LetterCase 
+from alphabetic import (Language, WritingSystem)
 
-print(*Alphabet.by_language(Language.Bosnian, letter_case=LetterCase.Lower))
+print(WritingSystem.by_language(Language.Japanese))
+
+# {'Hiragana': ['あ', 'い', ...], 'Katakana': ['ア', 'イ', 'ウ', ...], 'Kanji': ['一', '丁', '七', ...]
+```
+
+In cases where the given language has an alphabet, the result can be filtered in terms of: 
+- **Letter casing**:
+```python
+from alphabetic import (Language, LetterCase, WritingSystem)
+
+# print(*WritingSystem.by_language(Language.Bosnian))
+
+# Ђ Ј Љ Њ Ћ Џ А Б В Г Д Е Ж З И К Л М Н О П Р С Т У Ф Х Ц Ч Ш а б в г д е ж з и к л м н о п р с т у ф х ц ч ш ђ ј љ њ ћ џ
+
+print(*WritingSystem.by_language(Language.Bosnian, letter_case=LetterCase.Lower))
 
 # а б в г д е ж з и к л м н о п р с т у ф х ц ч ш ђ ј љ њ ћ џ
 ```
-Note that for some so-called [non-bicameral](https://www.liquidbubble.co.uk/blog/the-comprehensive-guide-to-typography-jargon-for-designers/) languages such as *Hebrew* or *Arabic*, which have **no** upper/lower case, such restrictions are not possible. Therefore, in such cases, the entire alphabet is returned:
 
-```python
-from alphabetic import Language, Alphabet, LetterCase 
-
-print(*Alphabet.by_language(Language.Hebrew, letter_case=LetterCase.Lower))
-
-# א ב ג ד ה ו ז ח ט י כ ך ל מ ם נ ן ס ע פ ף צ ץ ק ר ש ת
-
-print(*Alphabet.by_language(Language.Arabic, letter_case=LetterCase.Lower))
-
-# ا ب ة ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي
-```
-
-According to [Wikipedia](https://en.wikipedia.org/wiki/List_of_writing_systems#Syllabaries): 
-"*A true alphabet contains separate letters (**not diacritic marks**) for both consonants and vowels.*" In order to strip out diacritics from a desired alphabet, you can restrict the output of ```by_language``` as follows:
-```python
-print(*Alphabet.by_language(Language.Czech, strip_diacritics=True))
-
-# A B C C h D E F G H I J K L M N O P Q R S T U V W X Y Z a b c c h d e f g h i j k l m n o p q r s t u v w x y z
-```
-
-Moreover, you can strip out diphthongs that are present for several languages:
+- **Diphthongs**:
 ```python
 
-print(*Alphabet.by_language(Language.Albanian)
+# print(*WritingSystem.by_language(Language.Albanian))
 
-# Entire alphabet: A B C Ç D Dh E Ë F G Gj H I J K L Ll M N Nj O P Q R Rr S Sh T Th U V X Xh Y Z Zh a b c ç d dh e ë f g gj h i j k l ll m n nj o p q r rr s sh t th u v x xh y z zh
+# A B C Ç D Dh E Ë F G Gj H I J K L Ll M N Nj O P Q R Rr S Sh T Th U V X Xh Y Z Zh a b c ç d dh e ë f g gj h i j k l ll m n nj o p q r rr s sh t th u v x xh y z zh
 
-print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
+print(*WritingSystem.by_language(Language.Albanian, strip_diphthongs=True))
 
 # A B C Ç D E Ë F G H I J K L M N O P Q R S T U V X Y Z a b c ç d e ë f g h i j k l m n o p q r s t u v x y z
 ```
 
+- **Diacritics**
+```python
+print(*WritingSystem.by_language(Language.Czech, strip_diacritics=True))
+
+# A B C C h D E F G H I J K L M N O P Q R S T U V W X Y Z a b c c h d e f g h i j k l m n o p q r s t u v w x y z
+```
+For certain languages such as Chinese (simplified), which have a language code but no alphabet, a fallback strategy is used which maps the ISO 639-2 language code to an ISO 15924 code (as an example here: "chi" --> "Hans"). As a user, you do not have to handle this manually, but simply call up the language as it is:
+
+```python
+print(*WritingSystem.by_language(Language.Chinese_Simplified))
+
+# 㑇 㑊 㕮 㘎 㙍 㙘 㙦 㛃 㛚 㛹 㟃 㠇 㠓 㤘 㥄 㧐 ...
+```
+
 ## Features
-- Currently [128 languages](#Supported_Languages) are supported, with more to follow over time
-- At the heart of Alphabetic is a [json file](https://github.com/Halvani/alphabetic/blob/main/alphabetic/data/language_data.json) that can be used independently of the respective programming language or application
-- Besides langauge alphabets, Alphabetic also provides codes (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)), [syllabaries](https://en.wikipedia.org/wiki/Syllabary) and [logographics](https://en.wikipedia.org/wiki/Logogram)
+- Currently [128 languages](#Supported_Languages) and the corresponding alphabets are supported, with more to follow over time.
+
+- Beside alphabets, other writing systems / scripts are supported (e.g., [abugidas](https://en.wikipedia.org/wiki/Abugida), [syllabaries](https://en.wikipedia.org/wiki/Syllabary), [logographics](https://en.wikipedia.org/wiki/Logogram) and Latin script representations (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)))
+
+- At the heart of Alphabetic are several [json files](https://github.com/Halvani/alphabetic/blob/main/alphabetic/data) that can be used independently of the respective programming language or application
+
+
 
 
 <a name="Supported_Languages"></a>
@@ -238,6 +248,7 @@ print(*Alphabet.by_language(Language.Albanian, strip_diphthongs=True))
 |Kanji|Hani|
 </details>
 
+<a name="Design_Considerations"></a>
 ## Design considerations
 Once delving deeper into the world of [writing systems](https://en.wikipedia.org/wiki/List_of_writing_systems), one is overwhelmed by the numerous difficulties that arise when organizing the various alphabets, syllabaries and logographies. This is particularly difficult when it comes to non-Latin scripts with their many variabilities and forms. Therefore, various design considerations were made to make "Alphabetic" as simple and usable as possible. 
 
@@ -246,6 +257,20 @@ Once delving deeper into the world of [writing systems](https://en.wikipedia.org
 - For Arbaic scripts where the character form depends on its position, the so-called [isolated forms](https://www.arabacademy.com/the-different-forms-of-arabic-letters-and-how-they-come-together/) were used. 
 
 - For languages that contain diphthongs, these were integrated into the alphabets. These can be suppressed if required. The same applies to [diacritical marks](https://en.wikipedia.org/wiki/Diacritic) (e.g., acute, breve, cédille, gravis, etc.). 
+
+- For so-called [non-bicameral](https://www.liquidbubble.co.uk/blog/the-comprehensive-guide-to-typography-jargon-for-designers/) such as *Hebrew* and *Arabic*, where there is **no distinction between upper and lower case**, the respective filter ``` letter_case=``` argument is ignored and the entire alphabet is returned instead:
+
+```python
+from alphabetic import (Language, LetterCase, WritingSystem)
+
+print(*WritingSystem.by_language(Language.Hebrew, letter_case=LetterCase.Upper))
+
+# א ב ג ד ה ו ז ח ט י כ ך ל מ ם נ ן ס ע פ ף צ ץ ק ר ש ת
+
+print(*WritingSystem.by_language(Language.Arabic, letter_case=LetterCase.Lower))
+
+# ا ب ة ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي
+```
 
 ## Contribution
 If you like this project, you are welcome to support it, e.g. by providing additional languages  (there is a lot to do with regard to [ISO 639-2](https://www.loc.gov/standards/iso639-2/php/code_list.php)). Feel free to fork the repository and create a pull request to suggest and collaborate on changes.
