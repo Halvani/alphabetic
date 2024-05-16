@@ -278,5 +278,7 @@ If you like this project, you are welcome to support it, e.g. by providing addit
 ## Disclaimer
 Although this project has been carried out with great care, we accept no liability for the completeness and accuracy of all data. The use of this data for integration into production systems is at your own risk.
 
+Please also note that this project is still in the initial phase. Therefore, the code structure may change over time.
+
 ## Last remarks
 As is usual with open source projects, we developers do not earn any money with what we do, but are primarily interested in giving something back to the community with fun, passion and joy. Nevertheless, we would be very happy if you rewarded all the time that has gone into the project with just a small star 🤗
