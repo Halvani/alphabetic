@@ -90,9 +90,9 @@ class Language(Enum):
     Chichewa = "nya", # Script type: Alphabet; Writing system: Latin (Chewa alphabet), Mwangwego, Chewa Braille
     Chinese_Simplified = "chi", # Script type: Logographic; Writing system: Chinese characters, Bopomofo, Pinyin, Xiao'erjing, Dungan, Chinese Braille, ʼPhags-pa script
     Chukchi = "ckt", # Script type: Alphabet; Writing system: Cyrillic script, Tenevil (Historically)
-    Chuvash = "chv",
-    Corsican = "cos",
-    Cree = "cre",
+    Chuvash = "chv", # Script type: Alphabet; Writing system: Cyrillic
+    Corsican = "cos", # Script type: Alphabet; Writing system: Latin script (Corsican alphabet)
+    Cree = "cre", # Writing system: Latin, Canadian Aboriginal syllabics (Cree)
     Croatian = "hrv",
     Czech = "ces",
     Danish = "dan",
