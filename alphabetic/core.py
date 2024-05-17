@@ -67,7 +67,7 @@ class Language(Enum):
     Afar = "aar", # Script type: Alphabet; Writing system: Latin script
     Afrikaans = "afr", # Script type: Alphabet; Writing system: Latin script
     Albanian = "sqi", # Script type: Alphabet; Writing system: Latin script
-    Amharic = "amh",  # Script type: Abugida;  Writing system: Geʽez script (slightly derivated)
+    Amharic = "amh",  # Script type: Abugida; Writing system: Geʽez script (slightly derivated)
     Arabic = "ara", # Script type: Abjad; Writing system: Arabic alphabet
     Armenian = "arm", # Script type	Alphabet: Writing system: Armenian alphabet
     Assamese = "asm", # Script type	Abugida; Writing system: Bengali–Assamese script 
@@ -93,24 +93,26 @@ class Language(Enum):
     Chuvash = "chv", # Script type: Alphabet; Writing system: Cyrillic
     Corsican = "cos", # Script type: Alphabet; Writing system: Latin script (Corsican alphabet)
     Cree = "cre", # Writing system: Latin, Canadian Aboriginal syllabics (Cree)
-    Croatian = "hrv",
-    Czech = "ces",
-    Danish = "dan",
-    Dungan = "dng",
-    Dutch = "nld",
-    Dzongkha = "dzo",
-    English = "eng",
-    Esperanto = "epo",
-    Estonian = "est",
-    Ewe = "ewe",
-    Faroese = "fao",
-    Fijian = "fij",
-    Finnish = "fin",
-    French = "fra",
-    Gaelic = "gla",
-    Georgian = "kat",
-    German = "deu",
-    Greek = "gre",
+    Croatian = "hrv", # Script type: Alphabet; Writing system: Latin (Gaj's alphabet), Yugoslav Braille, Glagolitic (historical), Bosnian cyrillic (historical)
+    Czech = "ces", # Script type: Alphabet; Writing system: Latin script (Czech alphabet), Czech Braille
+    Danish = "dan", # Script type: Alphabet; Writing system: Latin (Danish alphabet), Danish Braille
+    Dungan = "dng", # Script type: Alphabet; Writing system: Cyrillic (official), Chinese characters (obsolete), Xiao'erjing (obsolete), Latin (historical)
+    Dutch = "nld", # Script type: Alphabet; Writing system: Latin (Dutch alphabet), Dutch Braille
+    Dzongkha = "dzo", # Script type: Abugida; Writing system: Tibetan script, Dzongkha Braille
+    English = "eng", # Script type: Alphabet; Writing system: Latin script
+    Esperanto = "epo", # Script type: Alphabet; Writing system: Latin script (Esperanto alphabet), Esperanto Braille
+    Estonian = "est", # Script type: Alphabet; Writing system: Latin (Estonian alphabet), Estonian Braille
+    Ewe = "ewe", # Script type: Alphabet; Writing system: Latin (Ewe alphabet), Ewe Braille
+    Faroese = "fao", # Script type: Alphabet; Writing system: Latin (Faroese alphabet), Faroese Braille
+    Fijian = "fij", # Script type: Alphabet; Writing system: Latin-based
+    Finnish = "fin", # Script type: Alphabet; Writing system: Latin (Finnish alphabet), Finnish Braille
+    French = "fra", # Script type: Alphabet; Writing system: Latin script (French alphabet), French Braille
+    Scottish_Gaelic = "gla", # Script type: Alphabet; Writing system: Latin (Scottish Gaelic alphabet), Insular script (historically), Ogham (historically)  
+    Georgian = "kat", # Script type: Alphabet; Writing system: Georgian script, Georgian Braille
+    Parthian  = "xpr", # Script type: Abjad; Writing system: Inscriptional Parthian, Manichaean script
+    Irish = "gle", # Script type: Alphabet; Writing system: Writing system: Latin (Irish alphabet), Ogham (historically), Irish Braille
+    German = "deu", # Script type: Alphabet; Writing system: Latin script (German alphabet), German Braille, Until the seventh/eighth century: Runic, Until the mid-20th century: Hebrew Alphabet
+    Greek = "gre", # Script type: Alphabet; Writing system: Greek alphabet
     Guarani = "grn",
     Haitian = "hat",
     Hausa = "hau",
@@ -214,12 +216,14 @@ class LatinScriptCode(Enum):
 
 # Values represent ISO-15924 identifiers
 class Abjad(Enum):
+    Parthian = "Prti",
     Ugaritic  = "Ugar",
     Hebrew = "Hebr",
     Arabic = "Arab",
 
 # Values represent ISO-15924 or (if not available/present for the respective language) ISO 639-2 identifiers !
 class Abugida(Enum):
+    Dzongkha = "dzo",
     Amharic = "amh",
     Sundanese = "Sund",
     Malayalam = "Mlym",
@@ -241,7 +245,6 @@ class Syllabary(Enum):
 class Logographic(Enum):    
     Kanji = "Hani",
     Chinese_Simplified = "Hans",
-
 
 
 class JsonUtils:
