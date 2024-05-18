@@ -133,6 +133,7 @@ class Language(Enum):
     Kinyarwanda = "kin",
     Kirghiz = "kir",
     Komi = "kpv",
+    Hebrew_Samaritan = "smp",
     Korean = "kor",
     Kumyk = "kum",
     Kurmanji = "kmr",
@@ -162,7 +163,9 @@ class Language(Enum):
     Pashto = "pus",
     Persian = "per",
     Polish = "pol",
+    Aleut = "ale",
     Portuguese = "por",
+    Phoenician = "phn",
     Punjabi = "pan",
     Quechua = "que",
     Rohingya = "rhg",
@@ -197,6 +200,7 @@ class Language(Enum):
 
 
 class JsonFile(Enum):
+    ISO_639_1_2_Language_Code = r"alphabetic/data/iso_639_1-2_codes_en_de_fr.json",
     Abjad = r"alphabetic/data/abjad.json",
     Abugida = r"alphabetic/data/abugida.json",
     Alphabet = r"alphabetic/data/alphabet.json",
@@ -216,6 +220,8 @@ class LatinScriptCode(Enum):
 
 # Values represent ISO-15924 identifiers
 class Abjad(Enum):
+    Hebrew_Samaritan = "Samr",
+    Phoenician  = "Phnx",
     Parthian = "Prti",
     Ugaritic  = "Ugar",
     Hebrew = "Hebr",
@@ -295,17 +301,19 @@ class JsonUtils:
      
 
     @staticmethod
-    def update_lang_json_file(langcode: str, alphabet: list[str]) -> None:
+    def update_lang_json_file(iso_639_code: str, alphabet: list[str]) -> None:
         json_filename = JsonFile.Alphabet.value[0]
         alphabet_dict = JsonUtils.load_dict_from_jsonfile(JsonFile.Alphabet)
-        alphabet_dict[langcode] = {"script": alphabet}
+        alphabet_dict[iso_639_code] = {"script": alphabet}
         Path(json_filename).write_text(json.dumps(alphabet_dict, ensure_ascii=False), encoding="utf8")
         created_dict = json.loads(Path(json_filename).read_text(encoding="utf8"))
 
-        if langcode in created_dict:
-            lang_dict = dict([(e.value[0], e.name) for e in Language])
-            print(f"✅ Updated json-file successfully!\nLanguage: {lang_dict[langcode]}; "
-                  f"Language code: {langcode}; Alphabet size: {len(created_dict[langcode]["script"])} (characters).")    
+        if iso_639_code in created_dict:
+            language_code_db = JsonUtils.load_dict_from_jsonfile(JsonFile.ISO_639_1_2_Language_Code)
+            language = language_code_db[iso_639_code][1]
+            print(f"✅ Updated json-file successfully!\nLanguage: {language}; "
+                  f"Language code: {iso_639_code}; Alphabet size: {len(created_dict[iso_639_code]["script"])} (characters).\n" 
+                  f"Note, in order to use this language, you must add the respective entry: {language} = \"{iso_639_code}\" to the enum class Language.")    
         else:
             print("❌ Something went wrong! Alphabet could not be written to internal json file.") 
 
