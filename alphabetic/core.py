@@ -79,7 +79,7 @@ class JsonUtils:
 
         if iso_639_code in created_dict:            
             language = language_code_db[iso_639_code][1]
-            print(f"✅ Updated json-file successfully!\nLanguage: {language};\nLanguage code: {iso_639_code}; Alphabet size: {len(created_dict[iso_639_code]["script"])} (characters).\nNote, in order to use this language, you must add the respective entry: {language} = '{iso_639_code}' to the enum class Language.")    
+            print(f"✅ Updated json-file successfully!\nLanguage: {language};\nLanguage code: {iso_639_code}; Alphabet size: {len(created_dict[iso_639_code]['script'])} (characters).\nNote, in order to use this language, you must add the respective entry: {language} = '{iso_639_code}' to the enum class Language.")    
         else:
             print("❌ Something went wrong! Alphabet could not be written to internal json file.") 
 
