@@ -3,8 +3,7 @@ import dcl
 import json
 from pathlib import Path
 from enum import Enum, auto
-from .errors import *
-
+from .errors import FileNotFoundError, Non_Existing_ISO_639_2_Langcode
 
 class JsonUtils: 
 
@@ -48,10 +47,10 @@ class JsonUtils:
     def __pluralize_json_filename(json_file: FilePath) -> str:
         if json_file == JsonUtils.FilePath.Latin_Script_Code:
             p = "latin script code".split()
-            plural_form = f"{p[0]} {p[1]} {JsonUtils.__pluralize(p[2])}" 
+            plural_form = f"{p[0]} {p[1]} {JsonUtils.__pluralize(p[2])}"
             return plural_form
-        else:
-            return JsonUtils.__pluralize(json_file.name.lower())
+        
+        return JsonUtils.__pluralize(json_file.name.lower())
 
 
     @staticmethod
