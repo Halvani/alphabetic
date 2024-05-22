@@ -109,7 +109,13 @@ class TestCore(unittest.TestCase):
         assert [alphabet[c] for c in "HALVANI"] == ['Hotel', 'Alfa', 'Lima', 'Victor', 'Alfa', 'November', 'India']
 
 
-    def test_iso_15924_maps_to_iso_639_2_3(self):
+    def test_iso_15924_maps_to_iso_639_test_1(self):
+        with pytest.raises(ValueError):
+            ws = WritingSystem()
+            ws.retrieve_iso_formal_name("xxxx", ws.Syllabary)
+
+
+    def test_iso_15924_maps_to_iso_639_test_2(self):
         ws = WritingSystem()
         assert sorted(ws.by_language(ws.Language.Jeju, as_list=True)) == sorted(ws.by_language(ws.Language.Korean, as_list=True))
 

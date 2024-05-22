@@ -1,96 +1,159 @@
-from typing import Union, NoReturn
+import re
 import dcl
 import json
 from pathlib import Path
 from enum import Enum, auto
-from .errors import FileNotFoundError, Non_Existing_ISO_639_2_Langcode
+from typing import Union, NoReturn
+from .errors import Non_Existing_ISO_639_2_Langcode
 
-class JsonUtils: 
-
+class JsonUtils:
+    """Provides utility functions for working with writing systems and scripts embeddedd in JSON data."""
     class FilePath(Enum):
-        ISO_639_1_2_Language_Code = r"alphabetic/data/iso_639_1-2_codes_en_de_fr.json",
+        """An enumeration containing file paths for internal JSON data on specific writing systems."""
         Abjad = r"alphabetic/data/abjad.json",
         Abugida = r"alphabetic/data/abugida.json",
         Alphabet = r"alphabetic/data/alphabet.json",
         Featural = r"alphabetic/data/featural.json",
-        Latin_Script_Code = r"alphabetic/data/latin_script_code.json",
-        Logographic = r"alphabetic/data/logographic.json",    
+        Logographic = r"alphabetic/data/logographic.json",
         Syllabary = r"alphabetic/data/syllabary.json",
+        Latin_Script_Code = r"alphabetic/data/latin_script_code.json",
+        ISO_639_1_2_Language_Code = r"alphabetic/data/iso_639_1-2_codes_en_de_fr.json",
 
 
     @staticmethod
     def __pluralize(word: str) -> str:
         """
-        Pluralizes an English word.
+        Converts a given singular noun to its plural form based on standard English grammar rules.
 
         Args:
-            word (str): The word to be pluralized.
+            word (str): The singular noun to be pluralized.
 
         Returns:
-            str: The pluralized word.
+            str: The plural form of the given noun.
+
+        Examples:
+            >>> __pluralize("city")
+            'cities'
+            >>> __pluralize("bus")
+            'buses'
+            >>> __pluralize("leaf")
+            'leaves'
+            >>> __pluralize("knife")
+            'knives'
+            >>> __pluralize("cat")
+            'cats'
+
+        Rules applied:
+            - If the word ends with 'y' preceded by a consonant, replace 'y' with 'ies'.
+            - If the word ends with 'o', 'ch', 's', 'sh', 'x', or 'z', append 'es'.
+            - If the word ends with 'f', replace 'f' with 'ves'.
+            - If the word ends with 'fe', replace 'fe' with 'ves'.
+            - For all other cases, append 's'.
         """
         
         stem = word[:-1]
         if word.endswith("y") and len(word) > 1 and word[-2] not in set(["a", "e", "i", "o", "u"]):
             return f"{stem}ies"
-        elif word.endswith(("o", "ch", "s", "sh", "x", "z")):
+        if word.endswith(("o", "ch", "s", "sh", "x", "z")):
             return f"{word}es"
-        elif word.endswith("f") and len(word) > 1:
+        if word.endswith("f") and len(word) > 1:
             return f"{stem}ves"
-        elif word.endswith("fe") and len(word) > 2:
+        if word.endswith("fe") and len(word) > 2:
             stem = word[:-2]
             return f"{stem}ves"
-        else:
-            return f"{word}s"
+        
+        return f"{word}s"
 
     @staticmethod
     def __pluralize_json_filename(json_file: FilePath) -> str:
-        if json_file == JsonUtils.FilePath.Latin_Script_Code:
-            p = "latin script code".split()
-            plural_form = f"{p[0]} {p[1]} {JsonUtils.__pluralize(p[2])}"
-            return plural_form
-        
-        return JsonUtils.__pluralize(json_file.name.lower())
+        """
+        Converts a given json filename to its plural form.
+
+        Args:
+            json_file (FilePath): The singular filename to be pluralized.
+
+        Returns:
+            str: The plural form of the given json filename.
+        """
+        tokens = json_file.name.split("_")
+        return f"{' '.join(tokens[:-1])} {JsonUtils.__pluralize(tokens[-1])}".lower().strip()
 
 
     @staticmethod
     def load_dict_from_jsonfile(json_filename: FilePath) -> dict:
+        """
+        Loads a dictionary from a given JSON file.
+
+        This method reads a JSON file specified by `json_filename` and returns its contents as a dictionary.
+        If the file does not exist, a `FileNotFoundError` is raised with an appropriate error message.
+
+        Args:
+            json_filename (FilePath): A `FilePath` object containing the path to the (internal) JSON file.
+
+        Returns: 
+            dict: The contents of the JSON file as a dictionary.
+
+        Raises:
+            FileNotFoundError: If the JSON file does not exist.
+        """
         json_fname = json_filename.value[0]
         if not Path(json_fname).exists():
             err_msg = f"Internal json file: [{json_fname}] could not be found. This file contains all supported {JsonUtils.__pluralize_json_filename(json_filename)}."
             raise FileNotFoundError(err_msg)
-        
+
         json_data = Path(json_fname).read_text(encoding="utf8")
         return json.loads(json_data)
      
 
     @staticmethod
-    def update_lang_json_file(iso_639_code: str, alphabet: list[str]) -> None:
-
+    def update_lang_json_file(iso_code_or_name_to_insert: str, script_to_insert: list[str]) -> None:
+        #TODO: Modify to handle all script type jsonfiles.
         language_code_db = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.ISO_639_1_2_Language_Code)
-        if iso_639_code not in language_code_db:
-            raise Non_Existing_ISO_639_2_Langcode(f"Specified language code: [{iso_639_code}] does not exist in the internal ISO 639-1/2 database.")
+        if iso_code_or_name_to_insert not in language_code_db:
+            raise Non_Existing_ISO_639_2_Langcode(f"Specified language code: [{iso_code_or_name_to_insert}] does not exist in the internal ISO 639-1/2 database.")
 
         json_filename = JsonUtils.FilePath.Alphabet.value[0]
         alphabet_dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Alphabet)
-        alphabet_dict[iso_639_code] = {"script": alphabet}
+        alphabet_dict[iso_code_or_name_to_insert] = {"script": script_to_insert}
         Path(json_filename).write_text(json.dumps(alphabet_dict, ensure_ascii=False), encoding="utf8")
         created_dict = json.loads(Path(json_filename).read_text(encoding="utf8"))
 
-        if iso_639_code in created_dict:            
-            language = language_code_db[iso_639_code][1]
-            print(f"✅ Updated json-file successfully!\nLanguage: {language};\nLanguage code: {iso_639_code}; Alphabet size: {len(created_dict[iso_639_code]['script'])} (characters).\nNote, in order to use this language, you must add the respective entry: {language} = '{iso_639_code}' to the enum class Language.")    
+        if iso_code_or_name_to_insert in created_dict:
+            language = language_code_db[iso_code_or_name_to_insert][1]
+            print(f"✅ Updated json-file successfully!\nLanguage: {language};\nLanguage code: {iso_code_or_name_to_insert}; Alphabet size: {len(created_dict[iso_code_or_name_to_insert]['script'])} (characters).\nNote, in order to use this language, you must add the respective entry: {language} = '{iso_code_or_name_to_insert}' to the enum class Language.")    
         else:
-            print("❌ Something went wrong! Alphabet could not be written to internal json file.") 
+            print("❌ Something went wrong! Alphabet could not be written to internal json file.")
+
 
     @staticmethod
     def del_entry_from_jsonfile(json_file: FilePath, key: str):
-        _dict = JsonUtils.load_dict_from_jsonfile(json_file) 
+        """
+        Deletes an entry from a JSON file specified by the given key.
+
+        This method loads the JSON content from the specified file, checks for the existence of the key, and if found, 
+        removes the key-value pair from the dictionary. It then writes the updated dictionary back to the JSON file. 
+        Finally, it verifies that the key has been successfully deleted.
+
+        Args:
+            json_file (FilePath): The path to the JSON file from which the entry should be deleted.
+            key (str): The key of the entry to be deleted.
+
+        Raises:
+            Non_Existing_ISO_639_2_Langcode: If the specified key does not exist in the JSON file.
+
+        Example:
+            json_file = JsonUtils.FilePath.Alphabet            
+            key = "haw"
+            del_entry_from_jsonfile(json_file, key)
+
+        This will delete the entry with the specified key (Hawaiian language code) from the JSON file if it exists.
+        """
+        _dict = JsonUtils.load_dict_from_jsonfile(json_file)
 
         if key not in _dict:
-            raise Non_Existing_ISO_639_2_Langcode(f"❌ Specified key: [{key}] does not exist in the given json file.")  
-        
-        _dict.pop(key, None)    
+            raise Non_Existing_ISO_639_2_Langcode(f"❌ Specified key: [{key}] does not exist in the given json file.")
+
+        _dict.pop(key, None)
         json_content = json.dumps(_dict, ensure_ascii=False)
         Path(json_file.value[0]).write_text(json_content, encoding="utf8")
     
@@ -101,9 +164,7 @@ class JsonUtils:
             print(f"❌ Something went wrong. Given key [{key}] could not be deleted!")
 
 
-
-
-# Notes: 
+# Notes:
 # -------------------------------
 #
 # Wrt the writing system types, Alphabetic uses the classification by Daniels and Bright --> Daniels, Peter T.; Bright, William, eds. (1996). The World's Writing Systems. Oxford University Press. ISBN 0-195-07993-0.
@@ -128,9 +189,15 @@ class JsonUtils:
 # Cree: This language is considered to be a Syllabary according to: https://en.wikipedia.org/wiki/Cree_(language)#Writing 
 # However, no ISO-15924 identifier can be found for it under: https://en.wikipedia.org/wiki/ISO_15924 Hencee, it is treated here as an alphabet.
 #
+# Punjabi: The Punjabi language is written in multiple scripts i.e. Gurmukhi (Abugida) and Shahmukhi (Abjad). This phenomenon is also known as synchronic digraphia!
+#
 # Japanese: There is no alphabet in Japanese. In fact, there are three writing systems called Hiragana, Katakana and Kanji. Katakana and Hiragana constitute syllabaries; 
 # Katakana are primarily used to write foreign words, plant and animal names, and for emphasis. --> https://en.wikipedia.org/wiki/Japanese_language#Writing_system
 #
+# Sorani: It is unclear which script type Sorani strictly belongs to. Many Kurdish varieties, mainly Sorani, are written using a modified Persian alphabet with 33 letters introduced by Sa'id Kaban Sedqi. 
+# Unlike the Persian alphabet, which is an abjad, Central Kurdish is almost a true alphabet in which vowels are given the same treatment as consonants. 
+# However, we consider for simplicity the Abjad classification. Compare: https://en.wikipedia.org/wiki/Sorani vs. https://kurdishwriting.com/alphabetpage
+# 
 # Javanese: Javanese can also be written with the Arabic script (known as the Pegon script) and today generally uses Latin script instead of Javanese script for practical purposes. --> https://en.wikipedia.org/wiki/Javanese_language#Writing_system
 # Chinese: According to Britannica, Chinese represents a logographic writing system -->  https://www.britannica.com/topic/Chinese-writing
 # 
@@ -157,27 +224,8 @@ class JsonUtils:
 
 
 class WritingSystem:
-    # Example: "Deva" -> ["hin", ...]
-    iso_15924_to_iso_639_2_3 = { "Hang" : set(["kor", "jje"]), }
 
-    def __jsonfiles_present__(self) -> NoReturn:
-        json_filepaths = [x.value[0] for x in JsonUtils.FilePath]
-
-        missing_jsonfiles = []
-        for json_filepath in json_filepaths:
-            if not Path(json_filepath).exists():
-                missing_jsonfiles.append(json_filepath)
-
-        if len(missing_jsonfiles) == 1:
-            raise FileNotFoundError(f"Json file: [{missing_jsonfiles[0]}] was not found. Ensure this file exists before performing the instantiation.")
-        elif len(missing_jsonfiles) > 1:
-            raise FileNotFoundError(f"The following json files: {missing_jsonfiles} were not found. Ensure these files exists before performing the instantiation.")
- 
-
-    def __init__(self) -> NoReturn:
-        self.__jsonfiles_present__()
-
-
+    
     class Language(Enum):
         Abkhazian = "abk", # Script type: Alphabet; Writing system: Cyrillic script
         Afar = "aar", # Script type: Alphabet; Writing system: Latin script
@@ -255,50 +303,51 @@ class WritingSystem:
         Samaritan = "smp", # Script type Abjad; Writing system: Samaritan abjad
         Korean = "kor", # Script type: Featural alphabet; Writing system: Hangul / chosŏn'gŭl (Korean script); Hanja / hancha (auxiliary script for disambiguation [South Korea], historical in North Korea)
         Jeju = "jje", # Script type: Featural alphabet; Writing system: Hangul
-        Osage = "osa", # Script type: Alphabet; Writing system: Latin (Osage alphabet), Osage script        
-        Kumyk = "kum",
-        Kurmanji = "kmr",
-        Latin = "lat",
-        Latvian = "lav",
-        Lezghian = "lez",
-        Lingala = "lin",
-        Lithuanian = "lit",
-        Luganda = "lug",
-        Macedonian = "mkd",
-        Malagasy = "mlg",
-        Malay = "may",
-        Malayalam = "mal",
-        Maltese = "mlt",
-        Manx = "glv",
-        Maori = "mao",
-        Mari = "chm",
-        Marshallese = "mah",
-        Moksha = "mdf",
-        Moldovan = "rum",
-        Mongolian = "mon",
-        Mru = "mro",
-        Nepali = "nep",
-        Norwegian = "nor",
-        Occitan = "oci",
-        Oromo = "orm",
-        Pashto = "pus",
-        Persian = "per",
-        Polish = "pol",
-        Aleut = "ale",
-        Portuguese = "por",
-        Phoenician = "phn",
-        Punjabi = "pan",
-        Quechua = "que",
-        Rohingya = "rhg",
-        Russian = "rus",
-        Samoan = "smo",
-        Sango = "sag",
-        Sanskrit = "san",
-        Serbian = "srp",
-        Slovak = "slo",
-        Slovenian = "slv",
-        Somali = "som",
-        Sorani = "ckb",
+        Osage = "osa", # Script type: Alphabet; Writing system: Latin (Osage alphabet), Osage script
+        Kumyk = "kum", # Script type: Alphabet; Writing system: Cyrillic, Latin, Arabic
+        Kurmanji = "kmr", # Script type: Alphabet; Writing system: Hawar alphabet (Latin) in Turkey, Syria, Iraq and Iran, Sorani alphabet (Arabic) in Iraq and Iran, Cyrillic script in Russia and Armenia
+        Latin = "lat", # Script type: Alphabet; Writing system: Latin alphabet (Latin script)
+        Latvian = "lav", # Script type: Alphabet; Writing system: Latin (Latvian alphabet), Latvian Braille
+        Lezghian = "lez", # Script type: Alphabet; Writing system: Cyrillic (1938–present), Latin (1928–38), Arabic (before 1928)
+        Lingala = "lin", # Script type: Alphabet; Writing system: African reference alphabet (Latin), Mandombe script
+        Lithuanian = "lit", # Script type: Alphabet; Writing system: Latin (Lithuanian alphabet), Lithuanian Braille
+        Luganda = "lug", # Script type: Alphabet; Writing system: Latin script (Ganda alphabet), Ganda Braille
+        Macedonian = "mkd", # Script type: Alphabet; Writing system: Cyrillic (Macedonian alphabet), Macedonian Braille
+        Malagasy = "mlg", # Script type: Alphabet; Writing system: Latin script (Malagasy alphabet), Sorabe alphabet (Historically), Malagasy Braille
+        Malay = "may", # Script type: Alphabet; Writing system: Latin (Malay alphabet), Arabic (Jawi script), Arabic (Pegon script) (In Indonesia), Thai alphabet (in Thailand), Malay Braille, Historically Pallava script, Kawi script, Ulu scripts, Rejang script
+        Malayalam = "mal", # Script type: Alphabet; Writing system: Malayalam script (Brahmic), Malayalam Braille, Vatteluttu (historical), Koleluttu (historical), Malayanma (historical), Grantha (historical), Arabi Malayalam script (mostly historical), Suriyani Malayalam (historical), Hebrew script, Latin script (informal)
+        Maltese = "mlt", # Script type: Alphabet; Writing system: Latin (Maltese alphabet), Maltese Braille
+        Manx = "glv", # Script type: Alphabet; Writing system: Latin
+        Maori = "mao", # Script type: Alphabet; Writing system: Latin (Māori alphabet), Māori Braille
+        Mari = "chm", # Script type: Alphabet; Writing system: Cyrillic
+        Marshallese = "mah", # Script type: Alphabet; Writing system: Latin (Marshallese alphabet)
+        Moksha = "mdf", # Script type: Alphabet; Writing system: Cyrillic
+        Moldovan = "rum", # Script type: Alphabet; Writing system: Moldovan Cyrillic (Transnistria), Latin alphabet (Ukraine)
+        Mongolian = "mon", # Script type: Alphabet; Writing system: Traditional Mongolian (in China and Mongolia), Mongolian Cyrillic (in Mongolia and Russia), Mongolian Braille, ʼPhags-pa (historical, among others)
+        Mru = "mro", # Script type: Alphabet; Writing system: Mru script, Latin script
+        Nepali = "nep", # Script type: Abugida; Writing system: Devanagari, Devanagari Braille
+        Norwegian = "nor", # Script type: Alphabet; Writing system: Latin (Norwegian alphabet), Norwegian Braille
+        Occitan = "oci", # Script type: Alphabet; Writing system: Latin alphabet (Occitan alphabet)
+        Oromo = "orm", # Script type: Alphabet; Writing system: Latin (Qubee, Oromo alphabet), Qubee Sheek Bakrii Saphaloo
+        Pashto = "pus", # Script type: Abjad; Writing system: Pashto alphabet
+        Persian = "per", # Script type: Abjad; Writing system: Persian alphabet (Iran and Afghanistan), Tajik alphabet (Tajikistan), Old Persian cuneiform (525 BC – 330 BC), Pahlavi scripts (2nd century BC to 7th century AD), Persian Braille
+        Polish = "pol", # Script type: Alphabet; Writing system: Latin (Polish alphabet)
+        Aleut = "ale", # Script type: Alphabet; Writing system: Latin (Alaska), Cyrillic (Alaska, Russia)
+        Portuguese = "por", # Script type: Alphabet; Writing system: Latin (Portuguese alphabet), Portuguese Braille
+        Phoenician = "phn", # Script type: Abjad; Writing system: Phoenician alphabet
+        Punjabi_Shahmukhi = "pan", # Script type: Abjad; Writing system: Shāhmukhī (majority, Pakistan), Gurmukhī (official, India), Punjabi Braille
+        Punjabi_Gurmukhī = "_pan", # Script type: Abugida; Writing system: Shāhmukhī (majority, Pakistan), Gurmukhī (official, India), Punjabi Braille
+        Quechua = "que", # Script type: Alphabet; Writing system: Latin (Quechuan alphabet)
+        Rohingya = "rhg", # Script type: Alphabet: Writing system: Hanifi Rohingya, Perso-Arabic (Rohingya Arabic Alphabet), Latin (Rohingyalish), Burmese, Bengali–Assamese (rare)
+        Russian = "rus", # Script type: Alphabet: Writing system: Cyrillic (Russian alphabet), Russian Braille
+        Samoan = "smo", # Script type: Alphabet; Writing system: Latin (Samoan alphabet), Samoan Braille
+        Sango = "sag", # Script type: Alphabet; Writing system: Latin script
+        Sanskrit = "san", # Script type: Abugida; Writing system: Devanagari script (present day), Originally orally transmitted, Brahmi script (from 1st century BCE), Brahmic scripts
+        Serbian = "srp", # Script type: Alphabet; Writing system: Serbian Cyrillic, Serbian Latin, Yugoslav Braille
+        Slovak = "slo", # Script type: Alphabet; Writing system: Latin (Slovak alphabet), Slovak Braille, Cyrillic (Pannonian Rusyn alphabet)
+        Slovenian = "slv", # Script type: Alphabet; Writing system: Latin (Slovene alphabet), Slovene Braille
+        Somali = "som", # Script type: Alphabet; Writing system: Somali Latin alphabet (Latin script; official), Wadaad's writing (Arabic script), Osmanya alphabet, Borama alphabet, Kaddare alphabet
+        Sorani = "ckb", # Script type: Abjad; Writing system: Kurdo-Arabic alphabet (Persian alphabet), Hawar alphabet (occasionally)
         Spanish = "spa",
         Sundanese = "sun",
         Swedish = "swe",
@@ -310,29 +359,38 @@ class WritingSystem:
         Tuvan = "tyv",
         Twi = "twi",
         Ukrainian = "ukr",
-        Uzbek = "uzb",
-        Venda = "ven",
-        Volapük = "vol",
-        Welsh = "wel",
-        Wolof = "wol",
-        Ugaritic = "uga",
-        Yakut = "sah",
-        Yiddish = "yid",
-        Zulu = "zul",
+        Uzbek = "uzb", # Script type: Alphabet; Writing system: Latin (Uzbek alphabet), Cyrillic, Perso-Arabic, Uzbek Braille, (Uzbek alphabets)
+        Venda = "ven", # Script type: Alphabet; Writing system: Latin (Venda alphabet), Venda Braille, Ditema tsa Dinoko
+        Volapük = "vol", # Script type: Alphabet; Writing system: Latin
+        Welsh = "wel", # Script type: Alphabet; Writing system: Latin (Welsh alphabet), Welsh Braille
+        Wolof = "wol", # Script type: Alphabet; Writing system: Latin (Wolof alphabet), Arabic (Wolofal), Garay
+        Ugaritic = "uga", # Script type	Abjad; Writing system: Ugaritic alphabet
+        Yakut = "sah", # Script type: Alphabet; Writing system: Cyrillic (formerly Latin and Cyrillic-based)
+        Yiddish = "yid", # Script type: Abjad; Writing system: Hebrew alphabet (Yiddish orthography), occasionally Latin alphabet
+        Zulu = "zul", # Script type: Alphabet; Writing system: Latin (Zulu alphabet), Zulu Braille, Ditema tsa Dinoko
 
    
     # Values represent ISO-15924 identifiers
     class Abjad(Enum):
+        Sorani = "ckb",
+        Punjabi_Shahmukhi = "Guru",
+        Persian = "per",
+        Pashto = "pus",
+        Ugaritic = "Ugar",
         Balochi = "bal", # Note, no ISO-15924 identifier available
         Hebrew_Samaritan = "Samr",
         Phoenician  = "Phnx",
         Parthian = "Prti",
-        Ugaritic  = "Ugar",
+        Yiddish = "yid", # Yiddish represents a modified version of the Hebrew script, with all vowels rendered in the spelling, except in the case of inherited Hebrew words, which typically retain their Hebrew consonant-only spellings. 
         Hebrew = "Hebr",
         Arabic = "Arab",
+    
 
     # Values represent ISO-15924 or (if not available/present for the respective language) ISO 639-2/3 identifiers !
     class Abugida(Enum):
+        Sanskrit = "san",
+        Punjabi_Gurmukhī = "Guru",
+        Nepali = "nep",
         Boro = "brx",
         Hindi = "hin",
         Angika = "anp",
@@ -345,7 +403,8 @@ class WritingSystem:
         Assamese = "asm",
         Thaana = "Thaa",
 
-    # Values represent ISO-15924 identifiers. These represent the keys within the json file.  
+
+    # Values represent ISO-15924 identifiers. These represent the keys within the json file.
     class Syllabary(Enum):
         Avestan = "Avst",
         Ethiopic = "Ethi",
@@ -355,14 +414,116 @@ class WritingSystem:
         Cherokee = "Cher",
         Katakana = "Kana",
 
+
     # Values represent ISO-15924 identifiers. These represent the keys within the json file. 
-    class Logographic(Enum):    
+    class Logographic(Enum):
         Kanji = "Hani",
         Chinese_Simplified = "Hans",
     
 
     class Featural (Enum):
         Hangul = "Hang",
+    
+    def __jsonfiles_present(self) -> NoReturn:
+        """
+        Checks the presence of required JSON files and raises an error if any are missing.
+
+        This method iterates through a list of file paths obtained from `JsonUtils.FilePath`.
+        It checks if each file exists at the specified path. If one or more files are missing,
+        it raises a `FileNotFoundError` with a message indicating which files were not found.
+
+        Raises:
+            FileNotFoundError: If one or more JSON files are not found. The error message
+            will specify the missing file(s).
+
+        Example:
+            # Assume `JsonUtils.FilePath` contains paths to necessary JSON files.
+            self.__jsonfiles_present__()
+            
+            # If one or more files are missing, a respective FileNotFoundError will be raised:
+            # FileNotFoundError: Json file: [missing_file.json] was not found. Ensure this file exists before performing the instantiation.
+            # FileNotFoundError: The following json files: ['missing_file1.json', 'missing_file2.json'] were not found. Ensure these files exists before performing the instantiation.
+        """
+        json_filepaths = [x.value[0] for x in JsonUtils.FilePath]
+
+        missing_jsonfiles = []
+        for json_filepath in json_filepaths:
+            if not Path(json_filepath).exists():
+                missing_jsonfiles.append(json_filepath)
+
+        if len(missing_jsonfiles) == 1:
+            raise FileNotFoundError(f"Json file: [{missing_jsonfiles[0]}] was not found. Ensure this file exists before performing the instantiation.")
+        if len(missing_jsonfiles) > 1:
+            raise FileNotFoundError(f"The following json files: {missing_jsonfiles} were not found. Ensure these files exists before performing the instantiation.")
+ 
+
+    def __mapping_writing_systems_to_scripts(self) -> dict:
+        """Generates a dictionary mapping of writing systems to sets of unique script characters.
+
+        This method retrieves data from pre-defined JSON files associated with different writing systems 
+        (defined in the `FilePath` enum of the `JsonUtils` class) and processes it to create the final dictionary.
+
+        Returns:
+            dict: A dictionary where keys are writing system names (obtained from the file paths) and 
+            values are sets containing unique characters from all scripts within that writing system.
+
+        Raises:
+            (Implicit) Any exceptions raised by the `load_dict_from_jsonfile` function used for loading JSON data. 
+        """
+        writing_systen_json_filepaths = [
+            JsonUtils.FilePath.Abjad,
+            JsonUtils.FilePath.Abugida,
+            JsonUtils.FilePath.Alphabet,
+            JsonUtils.FilePath.Syllabary,
+            JsonUtils.FilePath.Logographic,
+            JsonUtils.FilePath.Featural]
+        
+        writing_systen_map_script = {w.name:list(JsonUtils.load_dict_from_jsonfile(w).values()) for w in writing_systen_json_filepaths}
+        return {ws_name:set(list("".join(["".join(d['script']) for d in script]))) for ws_name, script in writing_systen_map_script.items()}
+ 
+
+
+    def __init__(self) -> NoReturn:
+        self.__jsonfiles_present()
+        self.writing_systems_to_scripts = self.__mapping_writing_systems_to_scripts()
+        self.iso_15924_to_iso_639_2_3 = { "Hang" : set(["kor", "jje"]), } # Required for fallback strategy (ISO 639-2/3 language code --> ISO 15924)
+
+
+    def is_abjad(self, sequence: str, strip_spaces: bool = True) -> bool:
+        if sequence:
+            sequence = sequence = re.sub(r"\s+", "", sequence)
+        return all([c in self.writing_systems_to_scripts[self.Abjad.__name__] for c in sequence])
+    
+
+    def is_abugida(self, sequence: str, strip_spaces: bool = True) -> bool:
+        if sequence:
+            sequence = sequence = re.sub(r"\s+", "", sequence)
+        return all([c in self.writing_systems_to_scripts[self.Abugida.__name__] for c in sequence])
+
+
+    def is_alphabet(self, sequence: str, strip_spaces: bool = True) -> bool:
+        if sequence:
+            sequence = sequence = re.sub(r"\s+", "", sequence)
+        return all([c in self.writing_systems_to_scripts['Alphabet'] for c in sequence])
+
+
+    def is_syllabary(self, sequence: str, strip_spaces: bool = True) -> bool:
+        if sequence:
+            sequence = sequence = re.sub(r"\s+", "", sequence)
+        return all([c in self.writing_systems_to_scripts[self.Syllabary.__name__] for c in sequence])
+
+
+    def is_logographic(self, sequence: str, strip_spaces: bool = True) -> bool:
+        if sequence:
+            sequence = sequence = re.sub(r"\s+", "", sequence)
+        return all([c in self.writing_systems_to_scripts[self.Logographic.__name__] for c in sequence])
+    
+
+    def is_featural(self, sequence: str, strip_spaces: bool = True) -> bool:
+        if sequence:
+            sequence = sequence = re.sub(r"\s+", "", sequence)
+        return all([c in self.writing_systems_to_scripts[self.Featural.__name__] for c in sequence])
+
 
     def pretty_print(self, script_dict: dict, show_script_key: bool = False) -> NoReturn:
         for key in script_dict.keys():
@@ -384,6 +545,7 @@ class WritingSystem:
         Hexagraph = 6, # Six letters, as Irish ⟨oidhea⟩)
         Heptagraph = 7 # Seven letters, as German ⟨schtsch⟩)
 
+
     class LetterCase(Enum):
         Lower = auto(),
         Upper = auto(),
@@ -392,67 +554,133 @@ class WritingSystem:
 
     class LatinScriptCode(Enum):
         Morse = auto(),
-        NATO_Phonetic_Alphabet = auto(), 
+        NATO_Phonetic_Alphabet = auto()
 
 
     def by_abjad(self, abjad: Abjad, as_list: bool = False) -> Union[dict, list[str]]:
-         _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Abjad)
-         iso_name, script = abjad.value[0], _dict[abjad.value[0]]["script"]
-         return script if as_list else {iso_name : script}
+        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Abjad)
+        iso_name, script = abjad.value[0], _dict[abjad.value[0]]["script"]
+        return script if as_list else {iso_name : script}
 
 
     def by_abugida(self, abugida: Abugida, as_list: bool = False) -> Union[dict, list[str]]:
-         _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Abugida)
-         iso_name, script = abugida.value[0], _dict[abugida.value[0]]["script"]
-         return script if as_list else {iso_name : script}
+        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Abugida)
+        iso_name, script = abugida.value[0], _dict[abugida.value[0]]["script"]
+        return script if as_list else {iso_name : script}
 
 
     def by_syllabary(self, syllabary: Syllabary, as_list: bool = False) -> Union[dict, list[str]]:
-         _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Syllabary)
-         iso_name, script = syllabary.value[0], _dict[syllabary.value[0]]["script"]
-         return script if as_list else {iso_name : script}
+        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Syllabary)
+        iso_name, script = syllabary.value[0], _dict[syllabary.value[0]]["script"]
+        return script if as_list else {iso_name : script}
     
 
     def by_logographic(self, logographic: Logographic, as_list: bool = False) -> Union[dict, list[str]]:
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Logographic)       
+        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Logographic)
         iso_name, script = logographic.name, _dict[logographic.value[0]]["script"]
         return script if as_list else {iso_name : script}
     
 
     def by_featural(self, featural: Featural, as_list: bool = False) -> Union[dict, list[str]]:
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Featural)       
+        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Featural)
         iso_name, script = featural.value[0], _dict[featural.value[0]]["script"]
         return script if as_list else {iso_name : script}
     
 
-    def by_code(self, latin_script_code: LatinScriptCode) -> list[tuple[str,str]]:       
+    def by_code(self, latin_script_code: LatinScriptCode) -> list[tuple[str,str]]:
         _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Latin_Script_Code)
         return _dict[latin_script_code.name]["script"]
 
 
-    def provides_letter_cases(self, alphabet: list[str]) -> bool:
-        return True if len([c for c in alphabet if c.isupper() or c.islower()]) > 0 else False 
+    def has_upper_or_lower_case(self, script: list[str]) -> bool:
+        """
+        Checks if the provided alphabet (e.g., alphabet) contains any letters with case (upper or lower).
+
+        Parameters:
+        -----------
+        script : list[str]
+            A list of strings representing the script to be checked.
+
+        Returns:
+        --------
+        bool
+            True if the script contains at least one letter that is either uppercase or lowercase, False otherwise.
+
+        Example:
+        --------
+        >>> ws = WritingSystem()
+        >>> has_upper_or_lower_case(ws.by_language(ws.Language.German, as_list=True))
+        True
+        >>> has_upper_or_lower_case(ws.by_language(ws.Language.Hebrew, as_list=True))
+        False
+        """
+        return any(c.isupper() or c.islower() for c in script)
 
 
     def extract_diacritics(self, alphabet: list[str]) -> list[str]:
+        """
+        Extracts and returns a list of unique diacritic characters from the given list of alphabetic characters.
+
+        Args:
+            alphabet (list[str]): A list of strings, where each string represents a letter of an alphabet.
+
+        Returns:
+            list[str]: A list of unique diacritic characters present in the input alphabet.
+        """
         extracted_diacritics = dcl.get_diacritics("".join(alphabet) )
         return [c.character for _, c in extracted_diacritics.items()]
     
 
     def extract_multigraphs(self, alphabet: list[str], multigraph_size: MultigraphSize) -> list[str]:
+        """
+        Extracts multigraphs from a given alphabet based on the specified size constraints. 
+        A multigraph (or pleograph) is a sequence of letters that behaves as a unit.  
+
+        Parameters:
+        -----------
+        alphabet : list[str]
+            A list of strings representing the alphabet from which multigraphs are to be extracted.
+        multigraph_size : MultigraphSize
+            An instance of the MultigraphSize class, which can either specify a specific size for the multigraphs
+            or a range of sizes if set to MultigraphSize.All.
+
+        Returns:
+        --------
+        list[str]
+            A list of multigraphs from the given alphabet that match the specified size constraints.
+
+        Notes:
+        ------
+        - If `multigraph_size` is set to `MultigraphSize.All`, the function returns all strings in the alphabet
+        whose lengths fall within the range defined by `MultigraphSize.All.value`.
+        - Otherwise, the function returns only those strings whose lengths exactly match `multigraph_size.value[0]`.
+        """
         all_ = self.MultigraphSize.All
 
         if multigraph_size == all_:
-            return [c for c in alphabet  if all_.value[0] <= len(c) <= all_.value[1]]
-        else:
-            return [c for c in alphabet if len(c) == multigraph_size.value[0]]
+            return [c for c in alphabet  if all_.value[0] <= len(c) <= all_.value[1]]        
+        return [c for c in alphabet if len(c) == multigraph_size.value[0]]
     
 
-    def get_iso_formal_name(self, iso_15924_group: str, script_type: Enum) -> str:
-        for entry in script_type:
-            if entry.value[0] == iso_15924_group:
-                return entry.name
-            
+    def retrieve_iso_formal_name(self, iso_15924_group: str, script_type: Enum) -> str:
+        """Retrieves the formal name for a given ISO 15924 group code.
+
+        Args:
+            iso_15924_group (str): The ISO 15924 group code (e.g., "Cher").
+            script_type (Enum): An enumeration representing a script type (e.g., Syllabary).
+
+        Returns:
+            str: The formal name of the script system if found, otherwise raises a ValueError.
+
+        Raises:
+            ValueError: If no matching entry is found for the provided ISO 15924 group code.
+        """
+        name_map = {entry.value[0]: entry.name for entry in script_type}
+        if iso_15924_group in name_map:
+            return name_map[iso_15924_group]
+        else:
+            raise ValueError(f"No entry found for the ISO 15924 group code: {iso_15924_group}")
+        
 
     def by_language(self,
                     language: Language, 
@@ -476,7 +704,7 @@ class WritingSystem:
             if language == self.Language.Japanese:
                 return {self.Language.Japanese.name: {self.Syllabary.Hiragana.name: self.by_syllabary(self.Syllabary.Hiragana, as_list=True),
                         self.Syllabary.Katakana.name : self.by_syllabary(self.Syllabary.Katakana, as_list=True),
-                        self.Logographic.Kanji.name : self.by_logographic(self.Logographic.Kanji, as_list=True)}}           
+                        self.Logographic.Kanji.name : self.by_logographic(self.Logographic.Kanji, as_list=True)}}
                  
             
             abjad_dict = dict([(a.name, a.value[0]) for a in self.Abjad]) 
@@ -489,18 +717,16 @@ class WritingSystem:
             for iso_15924_group, languages in self.iso_15924_to_iso_639_2_3.items():
                 if language_code in languages:
                     if iso_15924_group in set([a.value[0] for a in self.Abugida]):
-                        iso_formal_name = self.get_iso_formal_name(iso_15924_group, self.Abugida)
-                        script = self.by_abugida(self.Abugida[iso_formal_name], as_list=True)
+                        script = self.by_abugida(self.Abugida[self.retrieve_iso_formal_name(iso_15924_group, self.Abugida)], as_list=True)
                         return script if as_list else {language.name : script}
                     
                     elif iso_15924_group in set([a.value[0] for a in self.Featural]):
-                        iso_formal_name = self.get_iso_formal_name(iso_15924_group, self.Featural)
-                        script = self.by_featural(self.Featural[iso_formal_name], as_list=True)
+                        script = self.by_featural(self.Featural[self.retrieve_iso_formal_name(iso_15924_group, self.Featural)], as_list=True)
                         return script if as_list else {language.name : script}
 
             if language.name in syllabary_dict:
                 script = self.by_syllabary(self.Syllabary[language.name], as_list=True)
-                return script if as_list else {language.name : script} 
+                return script if as_list else {language.name : script}
 
             elif language.name in logographic_dict:
                 script = self.by_logographic(self.Logographic[language.name], as_list=True)
@@ -520,7 +746,6 @@ class WritingSystem:
         else:
             alphabet = _dict[language_code]["script"]
 
-        
         # Apply specified filters
         # ---------------------------------------------------------------------------------------
         if strip_diacritics:
@@ -532,10 +757,11 @@ class WritingSystem:
             multigraphs = self.extract_multigraphs(alphabet, multigraphs_size)
             alphabet = [c for c in alphabet if c not in multigraphs]
 
-        if letter_case == self.LetterCase.Lower and self.provides_letter_cases(alphabet):
-            alphabet = [c for c in alphabet if c.islower()] 
+        if letter_case == self.LetterCase.Lower and self.has_upper_or_lower_case(alphabet):
+            alphabet = [c for c in alphabet if c.islower()]
 
-        elif letter_case == self.LetterCase.Upper and self.provides_letter_cases(alphabet):
+        elif letter_case == self.LetterCase.Upper and self.has_upper_or_lower_case(alphabet):
             alphabet = [c for c in alphabet if c.isupper()]
 
         return alphabet if as_list else {language.name : alphabet}
+    
