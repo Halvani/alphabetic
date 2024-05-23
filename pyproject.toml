@@ -21,7 +21,8 @@ classifiers = [
 ]
 
 dependencies = [
-    "dcl==1.0.0"
+    "dcl==1.0.0",
+	"jamo==0.4.1"
 ]
 
 keywords = [
