@@ -1,9 +1,10 @@
 import re
 import dcl
 import json
+from jamo import h2j, j2hcj
 from pathlib import Path
 from enum import Enum, auto
-from typing import Union, NoReturn
+from typing import Union, NoReturn, Tuple
 from .errors import Non_Existing_ISO_639_2_Langcode
 
 class JsonUtils:
@@ -222,9 +223,7 @@ class JsonUtils:
 # Clarify --> Mahajani (Language?): ["𑅐", "𑅑", "𑅒", "𑅓", "𑅔", "𑅕", "𑅖", "𑅗", "𑅘", "𑅙", "𑅚", "𑅛", "𑅜", "𑅝", "𑅞", "𑅟", "𑅠", "𑅡", "𑅢", "𑅣", "𑅤", "𑅥", "𑅦", "𑅧", "𑅨", "𑅩", "𑅪", "𑅫", "𑅬", "𑅭", "𑅮", "𑅯", "𑅰", "𑅱", "𑅲"],  What is the language code? --> https://en.wikipedia.org/wiki/Mahajani 
 
 
-
 class WritingSystem:
-
     
     class Language(Enum):
         Abkhazian = "abk", # Script type: Alphabet; Writing system: Cyrillic script
@@ -348,17 +347,17 @@ class WritingSystem:
         Slovenian = "slv", # Script type: Alphabet; Writing system: Latin (Slovene alphabet), Slovene Braille
         Somali = "som", # Script type: Alphabet; Writing system: Somali Latin alphabet (Latin script; official), Wadaad's writing (Arabic script), Osmanya alphabet, Borama alphabet, Kaddare alphabet
         Sorani = "ckb", # Script type: Abjad; Writing system: Kurdo-Arabic alphabet (Persian alphabet), Hawar alphabet (occasionally)
-        Spanish = "spa",
-        Sundanese = "sun",
-        Swedish = "swe",
-        Tajik = "tgk",
-        Tatar = "tat",
-        Turkish = "tur",
-        Turkmen = "tuk",
-        Arapaho = "arp",
-        Tuvan = "tyv",
-        Twi = "twi",
-        Ukrainian = "ukr",
+        Spanish = "spa", # Script type: Alphabet; Writing system: Latin script (Spanish alphabet), Spanish Braille
+        Sundanese = "sun", # Script type: Abugida; Writing system: Latin script (present), Sundanese script (present; optional), Sundanese Pégon script (17–20th centuries AD, present; religious schools only), Old Sundanese script (14–18th centuries AD, present; optional), Sundanese Cacarakan script (17–19th centuries AD, present; certain areas), Buda Script (13–15th centuries AD, present; optional), Kawi script (historical), Pallava (historical), Pranagari (historical), Vatteluttu (historical)
+        Swedish = "swe", # Script type: Alphabet; Writing system: Latin (Swedish alphabet), Swedish Braille
+        Tajik = "tgk", # Script type: Alphabet; Writing system: Cyrillic (Tajik alphabet), Historically: Arabic (Persian alphabet), Latin (Yañalif-based), Hebrew (by Bukharan Jews), Tajik Braille
+        Tatar = "tat", # Script type: Alphabet; Writing system: Tatar alphabet (Cyrillic, Latin, formerly Arabic)
+        Turkish = "tur", # Script type: Alphabet; Writing system: Latin (Turkish alphabet), Turkish Braille
+        Turkmen = "tuk", # Script type: Alphabet; Writing system: Latin (Turkmen alphabet, official in Turkmenistan), Perso-Arabic, Cyrillic, Turkmen Braille
+        Arapaho = "arp", # Script type: Alphabet; Writing system: Latin
+        Tuvan = "tyv", # Script type: Alphabet; Writing system: Cyrillic script
+        Twi = "twi", # Script type: Alphabet; Writing system: Latin
+        Ukrainian = "ukr", # Script type: Alphabet; Writing system: Cyrillic (Ukrainian alphabet), Ukrainian Braille
         Uzbek = "uzb", # Script type: Alphabet; Writing system: Latin (Uzbek alphabet), Cyrillic, Perso-Arabic, Uzbek Braille, (Uzbek alphabets)
         Venda = "ven", # Script type: Alphabet; Writing system: Latin (Venda alphabet), Venda Braille, Ditema tsa Dinoko
         Volapük = "vol", # Script type: Alphabet; Writing system: Latin
@@ -373,7 +372,7 @@ class WritingSystem:
     # Values represent ISO-15924 identifiers
     class Abjad(Enum):
         Sorani = "ckb",
-        Punjabi_Shahmukhi = "Guru",
+        Punjabi_Shahmukhi = "pan",
         Persian = "per",
         Pashto = "pus",
         Ugaritic = "Ugar",
@@ -399,7 +398,6 @@ class WritingSystem:
         Amharic = "amh",
         Sundanese = "Sund",
         Malayalam = "Mlym",
-        Javanese = "Java",
         Assamese = "asm",
         Thaana = "Thaa",
 
@@ -482,50 +480,125 @@ class WritingSystem:
         return {ws_name:set(list("".join(["".join(d['script']) for d in script]))) for ws_name, script in writing_systen_map_script.items()}
  
 
-
     def __init__(self) -> NoReturn:
         self.__jsonfiles_present()
         self.writing_systems_to_scripts = self.__mapping_writing_systems_to_scripts()
         self.iso_15924_to_iso_639_2_3 = { "Hang" : set(["kor", "jje"]), } # Required for fallback strategy (ISO 639-2/3 language code --> ISO 15924)
 
 
-    def is_abjad(self, sequence: str, strip_spaces: bool = True) -> bool:
-        if sequence:
-            sequence = sequence = re.sub(r"\s+", "", sequence)
-        return all([c in self.writing_systems_to_scripts[self.Abjad.__name__] for c in sequence])
-    
+    def decompose_korean_char_sequence(self, sequence: str) -> str:
+        """
+        Decompose a sequence of Korean characters into their constituent Hangul Jamo components.
 
-    def is_abugida(self, sequence: str, strip_spaces: bool = True) -> bool:
-        if sequence:
-            sequence = sequence = re.sub(r"\s+", "", sequence)
-        return all([c in self.writing_systems_to_scripts[self.Abugida.__name__] for c in sequence])
+        This function takes a string of Korean characters (Hangul syllables) and decomposes
+        each character into its constituent Jamo (consonant and vowel) components using
+        the `j2hcj` and `h2j` functions.
+
+        Parameters:
+        sequence (str): A string of Korean characters to be decomposed.
+
+        Returns:
+        str: A string where each Korean character is decomposed into its constituent Jamo components.
+
+        Example:
+        >>> decompose_korean_char_sequence("안녕하세요")
+        'ㅇㅏㄴㄴㅕㅇㅎㅏㅅㅔㅇㅛ'
+        """
+        return j2hcj(h2j(sequence))
+
+
+    def is_writing_system(self, sequence: str, system_type: str, strip_spaces: bool = True) -> bool:
+        """
+        Check if a sequence of characters belongs to a specified writing system.
+
+        This function verifies whether all characters in the given sequence are part of the
+        specified writing system. It supports multiple writing systems such as Abjad, Abugida,
+        Alphabet, Syllabary, Logographic, and Featural. Optionally, spaces can be stripped from 
+        the sequence before checking.
+
+        Parameters:
+        sequence (str): The input string to be checked.
+        system_type (str): The type of writing system to check against. This should be one of 
+                        'Abjad', 'Abugida', 'Alphabet', 'Syllabary', 'Logographic', or 'Featural'.
+        strip_spaces (bool): Whether to strip spaces from the input string before checking. Default is True.
+
+        Returns:
+        bool: True if all characters in the sequence belong to the specified writing system, False otherwise.
+
+        Raises:
+        ValueError: If an unknown writing system type is provided.
+
+        Example:
+        >>> is_writing_system('안녕하세요', 'Alphabet')
+        False
+        >>> is_writing_system('abcdef', 'Alphabet')
+        True
+        >>> is_writing_system('مرحبا', 'Abjad')
+        True
+        >>> is_writing_system('안녕하세요', 'Featural')
+        True
+        """
+        if sequence and strip_spaces:
+            sequence = re.sub(r"\s+", "", sequence)
+        
+        # Special case for Hangul (each character must be decomposed into its constituents)
+        if system_type == "Featural":
+            sequence = self.decompose_korean_char_sequence(sequence)
+        
+        system_key = self.writing_systems_to_scripts.get(system_type)
+        
+        if system_key is None:
+            raise ValueError(f"Unknown writing system type: {system_type}")
+        
+        return all(c in system_key for c in sequence)
 
 
     def is_alphabet(self, sequence: str, strip_spaces: bool = True) -> bool:
-        if sequence:
-            sequence = sequence = re.sub(r"\s+", "", sequence)
-        return all([c in self.writing_systems_to_scripts['Alphabet'] for c in sequence])
+        return self.is_writing_system(sequence, 'Alphabet', strip_spaces)
+    
+    def is_abjad(self, sequence: str, strip_spaces: bool = True) -> bool:
+        return self.is_writing_system(sequence, self.Abjad.__name__, strip_spaces)
 
+    def is_abugida(self, sequence: str, strip_spaces: bool = True) -> bool:
+        return self.is_writing_system(sequence, self.Abugida.__name__, strip_spaces)
 
     def is_syllabary(self, sequence: str, strip_spaces: bool = True) -> bool:
-        if sequence:
-            sequence = sequence = re.sub(r"\s+", "", sequence)
-        return all([c in self.writing_systems_to_scripts[self.Syllabary.__name__] for c in sequence])
-
+        return self.is_writing_system(sequence, self.Syllabary.__name__, strip_spaces)
 
     def is_logographic(self, sequence: str, strip_spaces: bool = True) -> bool:
-        if sequence:
-            sequence = sequence = re.sub(r"\s+", "", sequence)
-        return all([c in self.writing_systems_to_scripts[self.Logographic.__name__] for c in sequence])
-    
+        return self.is_writing_system(sequence, self.Logographic.__name__, strip_spaces)
 
     def is_featural(self, sequence: str, strip_spaces: bool = True) -> bool:
-        if sequence:
-            sequence = sequence = re.sub(r"\s+", "", sequence)
-        return all([c in self.writing_systems_to_scripts[self.Featural.__name__] for c in sequence])
+        return self.is_writing_system(sequence, self.Featural.__name__, strip_spaces)
 
 
     def pretty_print(self, script_dict: dict, show_script_key: bool = False) -> NoReturn:
+        """
+        Pretty print the contents of a dictionary where keys are script names and values are lists of characters.
+
+        This function iterates through the given dictionary and prints the characters in each list. If `show_script_key` 
+        is set to True, it also prints the script name (the dictionary key) before the corresponding characters. 
+        An extra newline is added between different script lists if the dictionary contains more than one key.
+
+        Parameters:
+        script_dict (dict): A dictionary where keys are script names and values are lists of characters.
+        show_script_key (bool): Whether to print the script name (key) before the characters. Default is False.
+
+        Returns:
+        NoReturn: This function does not return anything. It prints the output directly.
+
+        Example:
+        >>> script_dict = {
+                'Latin': ['A', 'B', 'C'],
+                'Greek': ['Α', 'Β', 'Γ']
+            }
+        >>> pretty_print(script_dict, show_script_key=True)
+        Latin:
+        A B C
+        
+        Greek:
+        Α Β Γ
+        """
         for key in script_dict.keys():
             if show_script_key:
                 print(f"{key}:")
@@ -557,39 +630,59 @@ class WritingSystem:
         NATO_Phonetic_Alphabet = auto()
 
 
-    def by_abjad(self, abjad: Abjad, as_list: bool = False) -> Union[dict, list[str]]:
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Abjad)
-        iso_name, script = abjad.value[0], _dict[abjad.value[0]]["script"]
-        return script if as_list else {iso_name : script}
+    def by_script(self, script_type: Union[Abjad, Abugida, Syllabary, Logographic, Featural, LatinScriptCode],
+                  as_list: bool = False) -> Union[dict, list[str], list[tuple[str, str]]]:
+        """
+        Retrieve the script information for a given script type.
 
+        Args:
+            script_type: The type of script to retrieve information for. This can be an instance of Abjad, Abugida, Syllabary, Logographic, Featural, or LatinScriptCode.
+            as_list (bool): Determines the format of the returned script information. If True, returns a list of scripts. If False, returns a dictionary with the ISO name as the key and the script as the value. Defaults to False.
+
+        Returns:
+            Union[dict, list[str], list[tuple[str, str]]]: The script information. The format depends on the value of the as_list parameter and the type of script_type provided.
+        """
+        
+        file_path_mapping = {
+            self.Abjad: JsonUtils.FilePath.Abjad,
+            self.Abugida: JsonUtils.FilePath.Abugida,
+            self.Syllabary: JsonUtils.FilePath.Syllabary,
+            self.Logographic: JsonUtils.FilePath.Logographic,
+            self.Featural: JsonUtils.FilePath.Featural,
+            self.LatinScriptCode: JsonUtils.FilePath.Latin_Script_Code,
+        }
+        
+        script_class = type(script_type)
+        _dict = JsonUtils.load_dict_from_jsonfile(file_path_mapping[script_class])
+        
+        if script_class is self.LatinScriptCode:
+            return {script_type.name: _dict[script_type.name]["script"]}
+                        
+        iso_name = script_type.value[0]
+        script = _dict[iso_name]["script"]
+        
+        return script if as_list else {iso_name: script}
+
+
+    def by_abjad(self, abjad: Abjad, as_list: bool = False) -> Union[dict, list[str]]:
+        return self.by_script(abjad, as_list)
 
     def by_abugida(self, abugida: Abugida, as_list: bool = False) -> Union[dict, list[str]]:
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Abugida)
-        iso_name, script = abugida.value[0], _dict[abugida.value[0]]["script"]
-        return script if as_list else {iso_name : script}
-
+        return self.by_script(abugida, as_list)
 
     def by_syllabary(self, syllabary: Syllabary, as_list: bool = False) -> Union[dict, list[str]]:
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Syllabary)
-        iso_name, script = syllabary.value[0], _dict[syllabary.value[0]]["script"]
-        return script if as_list else {iso_name : script}
+        return self.by_script(syllabary, as_list)
     
-
     def by_logographic(self, logographic: Logographic, as_list: bool = False) -> Union[dict, list[str]]:
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Logographic)
-        iso_name, script = logographic.name, _dict[logographic.value[0]]["script"]
-        return script if as_list else {iso_name : script}
+        return self.by_script(logographic, as_list)
     
-
     def by_featural(self, featural: Featural, as_list: bool = False) -> Union[dict, list[str]]:
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Featural)
-        iso_name, script = featural.value[0], _dict[featural.value[0]]["script"]
-        return script if as_list else {iso_name : script}
+        return self.by_script(featural, as_list)
     
-
     def by_code(self, latin_script_code: LatinScriptCode) -> list[tuple[str,str]]:
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Latin_Script_Code)
-        return _dict[latin_script_code.name]["script"]
+        return self.by_script(latin_script_code)
+        #_dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Latin_Script_Code)
+        #return _dict[latin_script_code.name]["script"]
 
 
     def has_upper_or_lower_case(self, script: list[str]) -> bool:
@@ -689,6 +782,40 @@ class WritingSystem:
                     strip_multigraphs: bool = False,
                     multigraphs_size: MultigraphSize = MultigraphSize.All,
                     as_list: bool = False) -> Union[list[str], dict]:
+        """Retrieves characters for a given language based on writing system and filters.
+
+        This function retrieves the characters associated with a specific language. 
+        It considers the language's writing system and applies the specified filters.
+
+        Args:
+            language (Language): The language for which to retrieve characters.
+            letter_case (LetterCase, optional): Controls the output letter case 
+                (uppercase, lowercase, or both). Defaults to LetterCase.Both.
+            strip_diacritics (bool, optional): If True, removes diacritics from the characters. 
+                Defaults to False.
+            strip_multigraphs (bool, optional): If True, removes multigraphs from the characters 
+                based on the specified `multigraphs_size`. Defaults to False.
+            multigraphs_size (MultigraphSize, optional): Specifies the size of multigraphs to remove 
+                when `strip_multigraphs` is True. Defaults to MultigraphSize.All.
+            as_list (bool, optional): If True, returns the characters as a list. Otherwise, returns 
+                a dictionary with the language name as the key and the characters as the value. 
+                Defaults to False.
+
+        Returns:
+            Union[list[str], dict]: A list of characters (if `as_list` is True) or a dictionary 
+                mapping the language name to a list of characters (if `as_list` is False).
+
+        Raises:
+            ValueError: If the provided language code is not found or an unsupported filter 
+                combination is used (e.g., `strip_multigraphs` with Japanese language).
+
+        Special Cases:
+            - Languages with multiple writing systems (e.g., Japanese):
+                - This function returns a dictionary with each writing system (Hiragana, Katakana, Kanji) 
+                as a key and its corresponding characters as a list as a value. 
+                - Filters cannot be applied in this case due to the complexity of handling 
+                multiple writing systems.
+        """            
        
         # Check if the accociated language code exists within the internal JsonFile.Alphabet file. 
         # If the key is not present, perform a fallback to the Syllabary and Logographic json files and return the respective script.

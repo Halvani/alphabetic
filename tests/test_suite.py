@@ -105,8 +105,8 @@ class TestCore(unittest.TestCase):
 
     def test_by_code(self):
         ws = WritingSystem()
-        alphabet = ws.by_code(ws.LatinScriptCode.NATO_Phonetic_Alphabet)
-        assert [alphabet[c] for c in "HALVANI"] == ['Hotel', 'Alfa', 'Lima', 'Victor', 'Alfa', 'November', 'India']
+        alphabet = ws.by_code(x:=ws.LatinScriptCode.NATO_Phonetic_Alphabet)
+        assert [alphabet[x.name][c] for c in "HALVANI"] == ['Hotel', 'Alfa', 'Lima', 'Victor', 'Alfa', 'November', 'India']
 
 
     def test_iso_15924_maps_to_iso_639_test_1(self):
@@ -123,3 +123,21 @@ class TestCore(unittest.TestCase):
     def test_multiple_writing_systems(self):
         ws = WritingSystem()
         assert sorted(ws.by_language(x:=ws.Language.Japanese)[x.name].keys()) == ['Hiragana', 'Kanji', 'Katakana']
+
+
+    def test_is_script_type(self):
+        ws = WritingSystem()
+        # t_i, f_i --> (True, False)
+        t0, f0 = ws.is_alphabet(x:="dzień dobry"), ws.is_abjad(x)
+        t1, f1 = ws.is_abugida(x:=" ምልካም እድል"), ws.is_logographic(x)
+        t2, f2 = ws.is_featural(x:="좋은 아침"), ws.is_syllabary(x)
+        t3, f3 = ws.is_abjad(x:="החדשות"), ws.is_abugida(x)
+        t4, f4 = ws.is_alphabet(x:=" Nachrichten"), ws.is_featural(x)
+        t5, f5 = ws.is_logographic(x:="您好 "), ws.is_featural(x)
+        t6, f6 = ws.is_syllabary(x:="ᏧᏂᎸᏫᏍᏓᏁᏗ"), ws.is_featural(x)
+        t7, f7 = ws.is_alphabet(x:="Здравейте"), ws.is_abugida(x)
+        t8, f8 = ws.is_abjad(x:="مرحبا"), ws.is_logographic(x)
+        t9, f9 = ws.is_alphabet(x:="Сәлеметсіз бе"), ws.is_syllabary(x)
+        t10, f10 = ws.is_syllabary(x:="こんにちは"), ws.is_alphabet(x)
+
+        assert all([t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10]) and not any([f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10])
