@@ -3,20 +3,29 @@
 </div>
 
 # Alphabetic
-A Python module for querying writing systems of languages, including alphabets, abjads, abugidas, syllabaries, logographics as well as Latin script codes.
+A Python module for retrieving script types of writing systems including alphabets, abjads, abugidas, syllabaries, logographs, featurals as well as Latin script codes.
 
 ## Description / Background
-Alphabetic is a small project that was born out of the need to find out the alphabet of several languages for a private NLP project. Determining the alphabet (or other script types) of a language is important for various NLP tasks (e.g., to classify the language of a given text or to normalize it by removing noisy/random strings). 
+Alphabetic is a small project that was born out of the need to find out the alphabet of different languages for a private NLP project. Determining the alphabet (or other script types) of a language plays an important role in a variety of NLP tasks and can be used, for example, to classify the language of a given text, normalize it by removing noisy/random strings, apply fine-grained regex pattern matching, and more.  
 
-The basic idea is simple: given the name of the [desired language](#Supported_Languages), Alphabetic first translates it internally into a respective ISO-code (either [ISO 639-2](https://www.loc.gov/standards/iso639-2/php/code_list.php) or [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924)) and then returns the accociated script, which might be an [alphabet](https://en.wikipedia.org/wiki/Alphabet), [abjad](https://en.wikipedia.org/wiki/Abjad), [abugida](https://en.wikipedia.org/wiki/Abugida), [syllabary](https://en.wikipedia.org/wiki/Syllabary) or [logographic](https://en.wikipedia.org/wiki/Logogram). 
+The basic idea is simple: given a [specific language](#Supported_Languages), Alphabetic first translates its name internally into a corresponding ISO code (either [ISO 639-2](https://www.loc.gov/standards/iso639-2/php/code_list.php) or [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924)) and outputs the corresponding script, which is categorized according to the writing systems listed in the following table (adapted from [here](https://en.wikipedia.org/wiki/Writing_system)):
 
-One might ask why such a distinction between "scripts" is necessary, and the answer is that the [writing systems](https://en.wikipedia.org/wiki/Writing_system) of languages differ depending on many factors and due to this can lead to confusing behavior. If you have worked with the built-in string functions in Python, you have probably noticed questionable results like the following: 
+|Writing system|Each symbol represents|Example|
+|---|---|---|
+|[Abjad](https://en.wikipedia.org/wiki/Abjad)|Consonant|Arabic alphabet|
+|[Abugida](https://en.wikipedia.org/wiki/Abugida)|Consonant accompanied by specific vowel modifying symbols represent other vowels|Indian Devanagari|
+|[Alphabet](https://en.wikipedia.org/wiki/Alphabet)|Consonant or vowel|Latin alphabet|
+|[Featural system](https://en.wikipedia.org/wiki/Featural_writing_system)|Distinctive feature of segment|Korean Hangul|
+|[Logographic](https://en.wikipedia.org/wiki/Logogram)|Word or morpheme as well as syllable|Chinese characters|
+|[Syllabary](https://en.wikipedia.org/wiki/Syllabary)|Syllable|Japanese kana|
+
+The distinction between the different script types is important in this respect and necessary in certain application scenarios, as otherwise it can lead to unexpected behavior. Perhaps you have already worked with the built-in string functions in Python? If so, you may have noticed the following questionable result: 
 ```python
 print("伏伐休众优伙".isalpha())
 
 # True
 ```
-The answer ```True``` could be interpreted as meaning that the string of characters, which is written in Chinese, is **alphabetic**. From a linguistic point of view, however, this is incorrect, as [there is no alphabet](https://www.berlitz.com/blog/chinese-alphabet) in Chinese ([the Chinese writing system is logographic](https://en.wikipedia.org/wiki/Simplified_Chinese_characters)). On the other hand, the following string, which is written in the Devanagari script, is in fact [not an alphabet but an abugida](https://en.wikipedia.org/wiki/Devanagari):
+The answer ```True``` could be interpreted as meaning that the string, which is written in Chinese, is **alphabetic**. From a linguistic point of view, however, this is incorrect, as [there is no alphabet](https://www.berlitz.com/blog/chinese-alphabet) in Chinese ([the Chinese writing system is logographic](https://en.wikipedia.org/wiki/Simplified_Chinese_characters)). On the other hand, the following string, which is written in the Devanagari script, is in fact [not an alphabet but an abugida](https://en.wikipedia.org/wiki/Devanagari):
 ```python
 print("अमित".isalpha())
        
@@ -98,11 +107,11 @@ ws.pretty_print(ws.by_language(ws.Language.Chinese_Simplified))
 ```
 Another use case is to check whether a given sequence of characters represents a specific script of a writing system. This can be achieved as follows:
 ```python
-ws.is_logographic("早上好") # True
-ws.is_syllabary("早上好") # False
-
 ws.is_alphabet("dobré ráno") # True
 ws.is_abjad("dobré ráno") # False
+
+ws.is_logographic("早上好") # True
+ws.is_syllabary("早上好") # False
 
 ws.is_abugida("ምልካም እድል") # True
 ws.is_abjad("ምልካም እድል") # False
@@ -117,9 +126,11 @@ ws.is_abjad("დილა მშვიდობისა") # False
 ## Features
 - Currently [140 languages](#Supported_Languages) and the corresponding scripts are supported, with more to follow over time.
 
-- In total, Alphabet covers 6 script types of writing systems: [abjads](https://en.wikipedia.org/wiki/Abjad), [abugidas](https://en.wikipedia.org/wiki/Abugida), [alphabets](https://en.wikipedia.org/wiki/Alphabet), [syllabaries](https://en.wikipedia.org/wiki/Syllabary), [logographics](https://en.wikipedia.org/wiki/Logogram) as well as [featurals](https://en.wikipedia.org/wiki/Featural_writing_system). 
+- In total, Alphabetic covers 6 script types of writing systems: [abjads](https://en.wikipedia.org/wiki/Abjad), [abugidas](https://en.wikipedia.org/wiki/Abugida), [alphabets](https://en.wikipedia.org/wiki/Alphabet), [syllabaries](https://en.wikipedia.org/wiki/Syllabary), [logographics](https://en.wikipedia.org/wiki/Logogram) as well as [featurals](https://en.wikipedia.org/wiki/Featural_writing_system). 
 
-- Besides, (true) writing systems, Alphabet also offers Latin script representations (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)).
+- Besides, (true) writing systems, Alphabetic also offers Latin script representations (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)).
+
+- Alphabetic includes a complete list of all ISO 639-1 and -2 codes and enables bidirectional translation between country names and language codes.
 
 - At the heart of Alphabetic are [json files](https://github.com/Halvani/alphabetic/blob/main/alphabetic/data) that can be used independently of the respective programming language or application.
 
@@ -346,7 +357,7 @@ ws.is_abjad("დილა მშვიდობისა") # False
 
 
 <a name="Design_Considerations"></a>
-## Design considerations
+## Design considerations / limitations
 Once delving deeper into the world of [writing systems](https://en.wikipedia.org/wiki/List_of_writing_systems), one is overwhelmed by the numerous difficulties that arise when organizing the various alphabets, syllabaries and logographies. This is particularly difficult when it comes to non-Latin scripts with their many variabilities and forms. Therefore, various design considerations were made to make "Alphabetic" as simple and usable as possible. 
 
 - For languages that exhibit several variants of alphabets, the **more modern** or the **most frequently** encountered form was used. References to sources such as Omniglot, Wikipedia and Britannica were used for this purpose. 
@@ -357,7 +368,7 @@ Once delving deeper into the world of [writing systems](https://en.wikipedia.org
 
 - In case of abugida-based scripts [dependent vowels](https://en.wikipedia.org/wiki/Khmer_script#Dependent_vowels) are not considered as part of the script for complexity resaons.  
 
-- The functions ```is_abjad, is_alphabet, is_logographic, ...``` are **not** fully functional, especially ```is_abugida```. The reason for this is that there is currently (at least according to my research) no suitable Python-based grapheme splitter that can be applied to arbitrary script types in which vowels and consonants are blended together.
+- The function ```is_abjad``` is **not** fully functional. The reason for this is that there is currently (at least according to our best knowledge) no suitable Python-based grapheme splitter that can be applied to arbitrary script types in which vowels and consonants are blended together.
 
 - For so-called [non-bicameral](https://www.liquidbubble.co.uk/blog/the-comprehensive-guide-to-typography-jargon-for-designers/) languages such as *Hebrew* or *Arabic*, where there is **no distinction between upper and lower case**, the respective filter ``` letter_case=``` argument is ignored and the entire alphabet is returned instead:
 
