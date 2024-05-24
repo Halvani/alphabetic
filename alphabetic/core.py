@@ -19,6 +19,7 @@ class JsonUtils:
         Syllabary = r"alphabetic/data/syllabary.json",
         Latin_Script_Code = r"alphabetic/data/latin_script_code.json",
         ISO_639_1_2_Language_Code = r"alphabetic/data/iso_639_1-2_codes_en_de_fr.json",
+        ISO_639_3_Language_Code = r"alphabetic/data/iso_639_3_codes_en.json",
 
 
     @staticmethod
@@ -107,23 +108,33 @@ class JsonUtils:
      
 
     @staticmethod
-    def update_lang_json_file(iso_code_or_name_to_insert: str, script_to_insert: list[str]) -> None:
+    def update_lang_json_file(iso_name: str, script: list[str]) -> None:
+
         #TODO: Modify to handle all script type jsonfiles.
-        language_code_db = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.ISO_639_1_2_Language_Code)
-        if iso_code_or_name_to_insert not in language_code_db:
-            raise Non_Existing_ISO_639_2_Langcode(f"Specified language code: [{iso_code_or_name_to_insert}] does not exist in the internal ISO 639-1/2 database.")
+
+        iso_639_2_language_code_db = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.ISO_639_1_2_Language_Code)
+        if iso_name not in iso_639_2_language_code_db:
+            print(f"Specified language code: [{iso_name}] does not exist in the internal ISO 639-1/2 database. Switching to ISO 639-3 database...")
+            iso_639_3_language_code_db = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.ISO_639_3_Language_Code)
+
+            if iso_name not in iso_639_3_language_code_db:
+                raise Non_Existing_ISO_639_2_Langcode(f"Specified language code: [{iso_name}] does not exist in both the ISO 639-1/2 and ISO 639-3 databases.")
 
         json_filename = JsonUtils.FilePath.Alphabet.value[0]
         alphabet_dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Alphabet)
-        alphabet_dict[iso_code_or_name_to_insert] = {"script": script_to_insert}
+        alphabet_dict[iso_name] = {"script": script}
         Path(json_filename).write_text(json.dumps(alphabet_dict, ensure_ascii=False), encoding="utf8")
         created_dict = json.loads(Path(json_filename).read_text(encoding="utf8"))
 
-        if iso_code_or_name_to_insert in created_dict:
-            language = language_code_db[iso_code_or_name_to_insert][1]
-            print(f"✅ Updated json-file successfully!\nLanguage: {language};\nLanguage code: {iso_code_or_name_to_insert}; Alphabet size: {len(created_dict[iso_code_or_name_to_insert]['script'])} (characters).\nNote, in order to use this language, you must add the respective entry: {language} = '{iso_code_or_name_to_insert}' to the enum class Language.")    
+        if iso_name in created_dict:
+            if iso_name in iso_639_2_language_code_db:
+                language_print_name = iso_639_2_language_code_db[iso_name][1]
+            elif iso_name in iso_639_3_language_code_db:
+                language_print_name = iso_639_3_language_code_db[iso_name]
+
+            print(f"✅ Updated json-file successfully!\nLanguage: {language_print_name};\nLanguage code: {iso_name}; Alphabet size: {len(created_dict[iso_name]['script'])} (characters).\nNote, in order to use this language, you must add the respective entry: {language_print_name} = '{iso_name}' to the enum class Language.")    
         else:
-            print("❌ Something went wrong! Alphabet could not be written to internal json file.")
+            print("❌ Specified language code: {iso_name} was not found in updated json file!")
 
 
     @staticmethod
@@ -355,8 +366,10 @@ class WritingSystem:
         Turkish = "tur", # Script type: Alphabet; Writing system: Latin (Turkish alphabet), Turkish Braille
         Turkmen = "tuk", # Script type: Alphabet; Writing system: Latin (Turkmen alphabet, official in Turkmenistan), Perso-Arabic, Cyrillic, Turkmen Braille
         Arapaho = "arp", # Script type: Alphabet; Writing system: Latin
+        Istro_Romanian = "ruo", # Script type: Alphabet; Writing system: Latin
         Tuvan = "tyv", # Script type: Alphabet; Writing system: Cyrillic script
         Twi = "twi", # Script type: Alphabet; Writing system: Latin
+        Luxembourgish = "ltz", # Script type: Alphabet; Writing system: Latin (Luxembourgish alphabet), Luxembourgish Braille
         Ukrainian = "ukr", # Script type: Alphabet; Writing system: Cyrillic (Ukrainian alphabet), Ukrainian Braille
         Uzbek = "uzb", # Script type: Alphabet; Writing system: Latin (Uzbek alphabet), Cyrillic, Perso-Arabic, Uzbek Braille, (Uzbek alphabets)
         Venda = "ven", # Script type: Alphabet; Writing system: Latin (Venda alphabet), Venda Braille, Ditema tsa Dinoko
