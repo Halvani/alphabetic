@@ -383,7 +383,7 @@ ws.pretty_print(ws.by_language(ws.Language.Arabic, letter_case=ws.LetterCase.Low
 ```
 
 ## Contribution
-If you like this project, you are welcome to support it, e.g. by testing it or providing additional languages (there is a **lot** to do with regard to the [remaining languages](https://www.loc.gov/standards/iso639-2/php/code_list.php)). Feel free to fork the repository and create a pull request to suggest and collaborate on changes.
+If you like this project, you are welcome to support it, e.g. by testing it or providing additional languages (there is a **lot** to do with regard to the [remaining languages](https://www.omniglot.com/writing/languages.htm)). Feel free to fork the repository and create a pull request to suggest and collaborate on changes.
 
 ## Disclaimer
 Although this project has been carried out with great care, no liability is accepted for the completeness and accuracy of all the underlying data. The use of Alphabetic for integration into production systems is at your own risk!

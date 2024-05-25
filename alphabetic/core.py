@@ -132,7 +132,7 @@ class JsonUtils:
             elif iso_name in iso_639_3_language_code_db:
                 language_print_name = iso_639_3_language_code_db[iso_name]
 
-            print(f"✅ Updated json-file successfully!\nLanguage: {language_print_name};\nLanguage code: {iso_name}; Alphabet size: {len(created_dict[iso_name]['script'])} (characters).\nNote, in order to use this language, you must add the respective entry: {language_print_name} = '{iso_name}' to the enum class Language.")    
+            print(f"✅ Updated json-file successfully!\nLanguage: {language_print_name}; Language code: {iso_name}; Alphabet size: {len(created_dict[iso_name]['script'])} (characters).\nNote, in order to use this language, you must add the respective entry: {language_print_name} = '{iso_name}' to the enum class Language.")    
         else:
             print("❌ Specified language code: {iso_name} was not found in updated json file!")
 
@@ -272,6 +272,11 @@ class WritingSystem:
         Danish = "dan", # Script type: Alphabet; Writing system: Latin (Danish alphabet), Danish Braille
         Dungan = "dng", # Script type: Alphabet; Writing system: Cyrillic (official), Chinese characters (obsolete), Xiao'erjing (obsolete), Latin (historical)
         Dutch = "nld", # Script type: Alphabet; Writing system: Latin (Dutch alphabet), Dutch Braille
+        Flemish = "dut", # Script type: Alphabet; Writing system: Latin (Dutch alphabet), Dutch Braille
+        Swiss_German = "gsw", # Script type: Alphabet; Writing system: Latin
+        Bavarian = "bar", # Script type: Alphabet; Writing system: Latin alphabet, Marcomannic (historically)
+        Cimbrian = "cim", # Script type: Alphabet; Writing system: Latin
+        Zeeuws = "zea", # Script type: Alphabet; Writing system: Zeelandic alphabet (Latin)
         Dzongkha = "dzo", # Script type: Abugida; Writing system: Tibetan script, Dzongkha Braille
         English = "eng", # Script type: Alphabet; Writing system: Latin script
         Esperanto = "epo", # Script type: Alphabet; Writing system: Latin script (Esperanto alphabet), Esperanto Braille
@@ -367,8 +372,11 @@ class WritingSystem:
         Turkmen = "tuk", # Script type: Alphabet; Writing system: Latin (Turkmen alphabet, official in Turkmenistan), Perso-Arabic, Cyrillic, Turkmen Braille
         Arapaho = "arp", # Script type: Alphabet; Writing system: Latin
         Istro_Romanian = "ruo", # Script type: Alphabet; Writing system: Latin
+        Vengo = "bav", # Script type: Alphabet; Writing system: Latin
         Tuvan = "tyv", # Script type: Alphabet; Writing system: Cyrillic script
         Twi = "twi", # Script type: Alphabet; Writing system: Latin
+        Elfdalian = "ovd", # Script type: Alphabet; Writing system: Latin (Elfdalian alphabet), Dalecarlian runes, (until the 20th century)
+        Cornish = "cor", # Script type: Alphabet; Writing system: Latin alphabet
         Luxembourgish = "ltz", # Script type: Alphabet; Writing system: Latin (Luxembourgish alphabet), Luxembourgish Braille
         Ukrainian = "ukr", # Script type: Alphabet; Writing system: Cyrillic (Ukrainian alphabet), Ukrainian Braille
         Uzbek = "uzb", # Script type: Alphabet; Writing system: Latin (Uzbek alphabet), Cyrillic, Perso-Arabic, Uzbek Braille, (Uzbek alphabets)
@@ -573,6 +581,7 @@ class WritingSystem:
         return self.is_writing_system(sequence, self.Abjad.__name__, strip_spaces)
 
     def is_abugida(self, sequence: str, strip_spaces: bool = True) -> bool:
+        #TODO: Decomposition of abugida graphemes can be accomplished as follows: print(*list("ਸ੍ਰੀ ਅਕਾਲ")) # --> ਸ ੍ ਰ ੀ   ਅ ਕ ਾ ਲ
         return self.is_writing_system(sequence, self.Abugida.__name__, strip_spaces)
 
     def is_syllabary(self, sequence: str, strip_spaces: bool = True) -> bool:
