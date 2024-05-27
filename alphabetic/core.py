@@ -408,19 +408,19 @@ class WritingSystem:
 
     # Values represent ISO-15924 or (if not available/present for the respective language) ISO 639-2/3 identifiers !
     class Abugida(Enum):
-        Sanskrit = "san",
-        Punjabi_Gurmukhī = "Guru",
-        Nepali = "nep",
-        Boro = "brx",
-        Hindi = "hin",
-        Angika = "anp",
-        Devanagari = "Deva", # Languages: Apabhramsha, Angika, Awadhi, Bajjika, Bhili, Bhojpuri, Boro, Braj, Chhattisgarhi, Dogri, Garhwali, Haryanvi, Hindi, Kashmiri, Khandeshi, Konkani, Kumaoni, Magahi, Maithili, Marathi, Marwari, Mundari, Nagpuri, Newari, Nepali, Pāli, Pahari, Prakrit, Rajasthani, Sanskrit, Santali, Saraiki, Sherpa, Sindhi, Surjapuri, and many more.
-        Dzongkha = "dzo",
-        Amharic = "amh",
-        Sundanese = "Sund",
-        Malayalam = "Mlym",
-        Assamese = "asm",
-        Thaana = "Thaa",
+        Sanskrit = "san", # Tests ✔️
+        Punjabi_Gurmukhī = "Guru", # Tests ✔️
+        Nepali = "nep", # Tests ✔️
+        Boro = "brx", # Tests ✔️
+        Hindi = "hin", # Tests ✔️
+        Angika = "anp", # Tests ✔️
+        Devanagari = "Deva", # Tests ✔️   # Languages: Apabhramsha, Angika, Awadhi, Bajjika, Bhili, Bhojpuri, Boro, Braj, Chhattisgarhi, Dogri, Garhwali, Haryanvi, Hindi, Kashmiri, Khandeshi, Konkani, Kumaoni, Magahi, Maithili, Marathi, Marwari, Mundari, Nagpuri, Newari, Nepali, Pāli, Pahari, Prakrit, Rajasthani, Sanskrit, Santali, Saraiki, Sherpa, Sindhi, Surjapuri, and many more.
+        Dzongkha = "dzo", # Tests ❌
+        Amharic = "amh", # Tests ✔️
+        Sundanese = "Sund", # Tests ✔️
+        Malayalam = "Mlym", # Tests ✔️
+        Assamese = "asm", # Tests ✔️
+        Thaana = "Thaa", # Tests ✔️
 
 
     # Values represent ISO-15924 identifiers. These represent the keys within the json file.
@@ -434,7 +434,7 @@ class WritingSystem:
         Katakana = "Kana",
 
 
-    # Values represent ISO-15924 identifiers. These represent the keys within the json file. 
+    # Values represent ISO-15924 identifiers. These represent the keys within the json file.
     class Logographic(Enum):
         Kanji = "Hani",
         Chinese_Simplified = "Hans",
