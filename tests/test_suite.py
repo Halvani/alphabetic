@@ -10,7 +10,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
 from alphabetic import JsonUtils, WritingSystem
-from alphabetic.errors import *
+from alphabetic.errors import Non_Existing_ISO_639_2_Langcode
 
 class TestCore(unittest.TestCase):
 
@@ -45,6 +45,14 @@ class TestCore(unittest.TestCase):
         dict_ = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Alphabet)
         assert langcode in dict_ and sorted(dict_[langcode]["script"]) == sorted(alphabet)
     #-------------------------------------------------------------------------
+
+
+    def test_iso_code_2_language(self):
+        ws = WritingSystem()
+        assert (ws.iso_code_to_name("deu") == 'German' and 
+                ws.iso_code_to_name("Mlym") == 'Malayalam' and 
+                ws.iso_code_to_name("dng") == 'Dungan')
+
 
     def test_diacritics_handling(self):
         ws = WritingSystem()

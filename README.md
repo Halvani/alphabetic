@@ -8,7 +8,7 @@ A Python module for retrieving script types of writing systems including alphabe
 ## Description / Background
 Alphabetic is a small project that was born out of the need to find out the alphabet of different languages for a private NLP project. Determining the alphabet (or other script types) of a language plays an important role in a variety of NLP tasks and can be used, for example, to classify the language of a given text, normalize it by removing noisy/random strings, apply fine-grained regex pattern matching, and more.  
 
-The basic idea is simple: given a [specific language](#Supported_Languages), Alphabetic first translates its name internally into a corresponding ISO code (either [ISO 639-2](https://www.loc.gov/standards/iso639-2/php/code_list.php) or [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924)) and outputs the corresponding script, which is categorized according to the writing systems listed in the following table (adapted from [here](https://en.wikipedia.org/wiki/Writing_system)):
+Core functionality in a nutshell: given a [specific language](#Supported_Languages) Alphabetic, first translates its name internally into a corresponding ISO code (either [ISO 639-2/3](https://www.loc.gov/standards/iso639-2/php/code_list.php) or [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924)) and outputs the corresponding script, which is categorized according to the writing systems listed in the following table (adapted from [here](https://en.wikipedia.org/wiki/Writing_system)):
 
 |Writing system|Each symbol represents|Example|
 |---|---|---|
@@ -25,13 +25,13 @@ print("伏伐休众优伙".isalpha())
 
 # True
 ```
-The answer ```True``` could be interpreted as meaning that the string, which is written in Chinese, is **alphabetic**. From a linguistic point of view, however, this is incorrect, as [there is no alphabet](https://www.berlitz.com/blog/chinese-alphabet) in Chinese ([the Chinese writing system is logographic](https://en.wikipedia.org/wiki/Simplified_Chinese_characters)). On the other hand, the following string, which is written in the Devanagari script, is in fact [not an alphabet but an abugida](https://en.wikipedia.org/wiki/Devanagari):
+The answer ```True``` could be interpreted as meaning that the string, which is written in Chinese, is **alphabetic**. From a linguistic point of view, however, this is incorrect, as [there is no alphabet](https://www.berlitz.com/blog/chinese-alphabet) in Chinese (the Chinese writing system is [logographic](https://en.wikipedia.org/wiki/Simplified_Chinese_characters)). On the other hand, the following string, which is written in the Devanagari script, is in fact [not an alphabet but an abugida](https://en.wikipedia.org/wiki/Devanagari):
 ```python
 print("अमित".isalpha())
        
 # False
 ```
-For this and other use cases (described [here](#Usage)), Alphabetic can be used.   
+For this and other [use cases](#Usage) Alphabetic can be employed.   
 
 ## Installation
 The easiest way to install Alphabetic is to use pip, where you can choose between PyPI and this repository: 
@@ -39,11 +39,11 @@ The easiest way to install Alphabetic is to use pip, where you can choose betwee
 - ```pip install alphabetic```
 - ```pip install git+https://github.com/Halvani/alphabetic.git```
 
-The latter will pull and install the latest commit from this repository as well as the required Python dependencies. 
+The latter will pull and install the latest commit from this repository as well as the required Python dependencies. Note that the repo is updated regulary, while PyPi-packages are less frequently released (primarily after mayor bugfixing, refactoring, etc.).
 
 <a name="Usage"></a>
 ## Usage
-A simple lookup of a language's alphabet can be performed as follows:
+A simple lookup of a language's script (e.g., alphabet) can be performed as follows:
 ```python
 from alphabetic import WritingSystem
 
@@ -65,8 +65,8 @@ ws.pretty_print(ws.by_language(ws.Language.Dutch))
 
 # A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z
 ```
-If the resulting script represents an alphabet, the result can be filtered in terms of: 
-- **Letter casing**:
+If the resulting script represents an alphabet, the result can be further filtered in terms of: 
+- **Letter Casing**:
 ```python
 ws.pretty_print(ws.by_language(ws.Language.Bosnian))
 
@@ -105,7 +105,7 @@ ws.pretty_print(ws.by_language(ws.Language.Chinese_Simplified))
 
 # 㑇 㑊 㕮 㘎 㙍 㙘 㙦 㛃 㛚 㛹 㟃 㠇 㠓 㤘 㥄 㧐 ...
 ```
-Another use case is to check whether a given sequence of characters represents a specific script of a writing system. This can be achieved as follows:
+Another important use case is to check whether a given sequence of characters represents a specific script of a writing system. This can be achieved as follows:
 ```python
 ws.is_alphabet("dobré ráno") # True
 ws.is_abjad("dobré ráno") # False
@@ -124,24 +124,24 @@ ws.is_abjad("დილა მშვიდობისა") # False
 ```
 
 ## Features
-- Currently [140 languages](#Supported_Languages) and the corresponding scripts are supported, with more to follow over time.
+- Currently [151 languages](#Supported_Languages) and corresponding scripts are supported, with more to follow over time;
 
-- In total, Alphabetic covers 6 script types of writing systems: [abjads](https://en.wikipedia.org/wiki/Abjad), [abugidas](https://en.wikipedia.org/wiki/Abugida), [alphabets](https://en.wikipedia.org/wiki/Alphabet), [syllabaries](https://en.wikipedia.org/wiki/Syllabary), [logographics](https://en.wikipedia.org/wiki/Logogram) as well as [featurals](https://en.wikipedia.org/wiki/Featural_writing_system). 
+- In total, Alphabetic covers six writing systems script types: [abjads](https://en.wikipedia.org/wiki/Abjad), [abugidas](https://en.wikipedia.org/wiki/Abugida), [alphabets](https://en.wikipedia.org/wiki/Alphabet), [syllabaries](https://en.wikipedia.org/wiki/Syllabary), [logographics](https://en.wikipedia.org/wiki/Logogram) as well as [featurals](https://en.wikipedia.org/wiki/Featural_writing_system);
 
-- Besides, (true) writing systems, Alphabetic also offers Latin script representations (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet)).
+- Beside (true) writing systems, Alphabetic also offers Latin script representations (e.g., [Morse](https://en.wikipedia.org/wiki/Morse_code) or [NATO Phonetic Alphabet](https://en.wikipedia.org/wiki/NATO_phonetic_alphabet));
 
-- Alphabetic includes a complete list of all ISO 639-1 and -2 codes and enables bidirectional translation between country names and language codes.
+- Alphabetic includes a complete list of all ISO 639-1/2/3 as well as ISO 15924 codes and enables bidirectional translation between language names and codes;
 
-- At the heart of Alphabetic are [json files](https://github.com/Halvani/alphabetic/blob/main/alphabetic/data) that can be used independently of the respective programming language or application.
+- At the heart of Alphabetic are [json files](https://github.com/Halvani/alphabetic/blob/main/alphabetic/data) that can be used independently of the respective programming language or application;
 
 - Consistently documented source code.
 
 
 <a name="Supported_Languages"></a>
-## Supported languages
+## Supported Languages
 <details><summary>Open to view all supported languages</summary>
 
-|Language|ISO 639-2 code|
+|Language|ISO 639-2/3 code|
 |---|---|
 |Abkhazian|abk|
 |Afar|aar|
@@ -160,6 +160,7 @@ ws.is_abjad("დილა მშვიდობისა") # False
 |Bambara|bam|
 |Bashkir|bak|
 |Basque|baq|
+|Bavarian|bar|
 |Belarusian|bel|
 |Bislama|bis|
 |Boko|bqc|
@@ -176,6 +177,8 @@ ws.is_abjad("დილა მშვიდობისა") # False
 |Chinese_Simplified|chi|
 |Chukchi|ckt|
 |Chuvash|chv|
+|Cimbrian|cim|
+|Cornish|cor|
 |Corsican|cos|
 |Cree|cre|
 |Croatian|hrv|
@@ -184,6 +187,7 @@ ws.is_abjad("დილა მშვიდობისა") # False
 |Dungan|dng|
 |Dutch|nld|
 |Dzongkha|dzo|
+|Elfdalian|ovd|
 |English|eng|
 |Esperanto|epo|
 |Estonian|est|
@@ -191,6 +195,7 @@ ws.is_abjad("დილა მშვიდობისა") # False
 |Faroese|fao|
 |Fijian|fij|
 |Finnish|fin|
+|Flemish|dut|
 |French|fra|
 |Georgian|kat|
 |German|deu|
@@ -206,6 +211,7 @@ ws.is_abjad("დილა მშვიდობისა") # False
 |Igbo|ibo|
 |Indonesian|ind|
 |Irish|gle|
+|Istro_Romanian|ruo|
 |Italian|ita|
 |Japanese|jpn|
 |Javanese|jav|
@@ -226,6 +232,7 @@ ws.is_abjad("დილა მშვიდობისა") # False
 |Lingala|lin|
 |Lithuanian|lit|
 |Luganda|lug|
+|Luxembourgish|ltz|
 |Macedonian|mkd|
 |Malagasy|mlg|
 |Malay|may|
@@ -250,7 +257,8 @@ ws.is_abjad("დილა მშვიდობისა") # False
 |Phoenician|phn|
 |Polish|pol|
 |Portuguese|por|
-|Punjabi|pan|
+|Punjabi_Gurmukhī|_pan|
+|Punjabi_Shahmukhi|pan|
 |Quechua|que|
 |Rohingya|rhg|
 |Russian|rus|
@@ -267,6 +275,7 @@ ws.is_abjad("დილა მშვიდობისა") # False
 |Spanish|spa|
 |Sundanese|sun|
 |Swedish|swe|
+|Swiss_German|gsw|
 |Tajik|tgk|
 |Tatar|tat|
 |Turkish|tur|
@@ -277,17 +286,19 @@ ws.is_abjad("დილა მშვიდობისა") # False
 |Ukrainian|ukr|
 |Uzbek|uzb|
 |Venda|ven|
+|Vengo|bav|
 |Volapük|vol|
 |Welsh|wel|
 |Wolof|wol|
 |Yakut|sah|
 |Yiddish|yid|
+|Zeeuws|zea|
 |Zulu|zul|
 </details>
 
 
 <a name="Supported_Abjads"></a>
-## Supported abjads
+## Supported Abjads
 <details><summary>Open to view all supported abjads</summary>
 
 |Abjad|ISO code|
@@ -297,12 +308,17 @@ ws.is_abjad("დილა მშვიდობისა") # False
 |Hebrew|Hebr|
 |Hebrew_Samaritan|Samr|
 |Parthian|Prti|
+|Pashto|pus|
+|Persian|per|
 |Phoenician|Phnx|
+|Punjabi_Shahmukhi|pan|
+|Sorani|ckb|
 |Ugaritic|Ugar|
+|Yiddish|yid|
 </details>
 
 <a name="Supported_Abugidas"></a>
-## Supported abugidas
+## Supported Abugidas
 <details><summary>Open to view all supported abugidas</summary>
 
 |Abugida|ISO code|
@@ -314,15 +330,17 @@ ws.is_abjad("დილა მშვიდობისა") # False
 |Devanagari|Deva|
 |Dzongkha|dzo|
 |Hindi|hin|
-|Javanese|Java|
 |Malayalam|Mlym|
+|Nepali|nep|
+|Punjabi_Gurmukhī|Guru|
+|Sanskrit|san|
 |Sundanese|Sund|
 |Thaana|Thaa|
 </details>
 
 
 <a name="Supported_Syllabaries"></a>
-## Supported syllabaries
+## Supported Syllabaries
 <details><summary>Open to view all supported syllabaries</summary>
 
 |Syllabary|ISO code|
@@ -337,7 +355,7 @@ ws.is_abjad("დილა მშვიდობისა") # False
 </details>
 
 <a name="Supported_Logographics"></a>
-## Supported logographics
+## Supported Logographics
 <details><summary>Open to view all supported logographics</summary>
 
 |Logographic|ISO code|
@@ -357,18 +375,16 @@ ws.is_abjad("დილა მშვიდობისა") # False
 
 
 <a name="Design_Considerations"></a>
-## Design considerations / limitations
-Once delving deeper into the world of [writing systems](https://en.wikipedia.org/wiki/List_of_writing_systems), one is overwhelmed by the numerous difficulties that arise when organizing the various alphabets, syllabaries and logographies. This is particularly difficult when it comes to non-Latin scripts with their many variabilities and forms. Therefore, various design considerations were made to make "Alphabetic" as simple and usable as possible. 
+## Design Considerations / Limitations
+Once delving deeper into the world of [writing systems](https://en.wikipedia.org/wiki/List_of_writing_systems), one is overwhelmed by the numerous difficulties that arise when organizing the various script types. This is particularly difficult when it comes to non-Latin scripts with their many variabilities and forms. Therefore, various design considerations were made to make Alphabetic as simple and usable as possible. 
 
 - For languages that exhibit several variants of alphabets, the **more modern** or the **most frequently** encountered form was used. References to sources such as Omniglot, Wikipedia and Britannica were used for this purpose. 
 
-- For Arbaic scripts where the character form depends on its position, the so-called [isolated forms](https://www.arabacademy.com/the-different-forms-of-arabic-letters-and-how-they-come-together/) were used. 
+- For Arabic scripts where the character form depends on its position, the so-called [isolated forms](https://www.arabacademy.com/the-different-forms-of-arabic-letters-and-how-they-come-together/) were used. 
 
 - Multigraphs are considered as part of the scripts. However, if desired they can be [suppressed](#Usage). The same applies to [diacritical marks](https://en.wikipedia.org/wiki/Diacritic) (e.g., acute, breve, cédille, gravis, etc.). 
 
-- In case of abugida-based scripts [dependent vowels](https://en.wikipedia.org/wiki/Khmer_script#Dependent_vowels) are not considered as part of the script for complexity resaons.  
-
-- The function ```is_abjad``` is **not** fully functional. The reason for this is that there is currently (at least according to our best knowledge) no suitable Python-based grapheme splitter that can be applied to arbitrary script types in which vowels and consonants are blended together.
+- The function ```is_abugida``` is **not** fully functional because not all vowel forms are integrated yet. 
 
 - For so-called [non-bicameral](https://www.liquidbubble.co.uk/blog/the-comprehensive-guide-to-typography-jargon-for-designers/) languages such as *Hebrew* or *Arabic*, where there is **no distinction between upper and lower case**, the respective filter ``` letter_case=``` argument is ignored and the entire alphabet is returned instead:
 
@@ -390,5 +406,5 @@ Although this project has been carried out with great care, no liability is acce
 
 Furthermore, please note that this project is still in its initial phase. The code structure may therefore change over time.
 
-## Last remarks
+## Last Remarks
 As is usual with open source projects, we developers do not earn any money with what we do, but are primarily interested in giving something back to the community with fun, passion and joy. Nevertheless, we would be very happy if you rewarded all the time that has gone into the project with just a small star 🤗

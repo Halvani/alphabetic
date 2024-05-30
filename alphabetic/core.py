@@ -20,7 +20,8 @@ class JsonUtils:
         Latin_Script_Code = r"alphabetic/data/latin_script_code.json",
         ISO_639_1_2_Language_Code = r"alphabetic/data/iso_639_1-2_codes_en_de_fr.json",
         ISO_639_3_Language_Code = r"alphabetic/data/iso_639_3_codes_en.json",
-
+        ISO_15924_Code = r"alphabetic/data/iso_15924_codes.json",
+    
 
     @staticmethod
     def __pluralize(word: str) -> str:
@@ -109,9 +110,21 @@ class JsonUtils:
 
     @staticmethod
     def update_lang_json_file(iso_name: str, script: list[str]) -> None:
+        """
+        Updates the alphabet JSON file with the script for a specified ISO 639-2/3 language code.
 
-        #TODO: Modify to handle all script type jsonfiles.
+        This function attempts to update the JSON file containing alphabets with a new script for a specified ISO language code. 
+        It first checks if the given ISO language code exists in the ISO 639-1/2 database. If not found, it then checks the ISO 639-3 database.
+        If the language code is found in either database, it updates the JSON file with the new script. If the language code is not found in both databases, it raises an exception.
 
+        Args:
+            iso_name (str): The ISO 639-2/3 language code to update.
+            script (list[str]): A list of characters representing the script for the language.
+
+        Raises:
+            Non_Existing_ISO_639_2_Langcode: If the specified language code does not exist in both the ISO 639-1/2 and ISO 639-3 databases.
+        """
+            
         iso_639_2_language_code_db = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.ISO_639_1_2_Language_Code)
         if iso_name not in iso_639_2_language_code_db:
             print(f"Specified language code: [{iso_name}] does not exist in the internal ISO 639-1/2 database. Switching to ISO 639-3 database...")
@@ -507,6 +520,54 @@ class WritingSystem:
         self.iso_15924_to_iso_639_2_3 = { "Hang" : set(["kor", "jje"]), } # Required for fallback strategy (ISO 639-2/3 language code --> ISO 15924)
 
 
+    def iso_code_to_name(self, iso_code: str) -> str:
+        """
+        Convert an ISO 639-2/3 or ISO 15924 code to its corresponding language or script name.
+
+        This function takes an ISO code as input and returns the corresponding name based on the code type.
+        It supports both ISO 639-2/3 language codes and ISO 15924 script codes.
+
+        Args:
+            iso_code (str): An ISO 639-2/3 or ISO 15924 code.
+
+        Returns:
+            str: The corresponding language or script name.
+
+        Raises:
+            ValueError: If the given input is not a valid ISO 639-2/3 or ISO 15924 code.
+
+        Notes:
+            - For ISO 639-2/3 codes, it loads dictionaries from JSON files to map the codes to language names.
+            - For ISO 15924 codes, it loads a dictionary from a JSON file to map the codes to script names.
+            - ISO 639-2/3 codes are three letters long.
+            - ISO 15924 codes are four letters long.
+
+        Example:
+            iso_code_to_name('deu') -> 'German'
+            iso_code_to_name('Hang') -> 'Hangul (Hangŭl, Hangeul)'
+        """
+        iso_code = iso_code.strip()
+
+        # Assume we are given an ISO 639-2/3 code.
+        if len(iso_code) == 3:
+            iso_639_1_2_dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.ISO_639_1_2_Language_Code)
+            iso_639_3_dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.ISO_639_3_Language_Code)
+
+            if iso_code in iso_639_1_2_dict:
+                return iso_639_1_2_dict[iso_code][1]
+            elif iso_code in iso_639_3_dict:
+                lang = iso_639_3_dict[iso_code]            
+                return lang.split(";")[0]
+
+        elif len(iso_code) == 4:
+            iso_15924_dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.ISO_15924_Code)        
+            
+            if iso_code in iso_15924_dict:
+                return iso_15924_dict[iso_code]
+        else:
+            raise ValueError(f"The specified string [{iso_code}] does not appear to represent a valid ISO 639-2/3 or ISO 15924 code.")
+
+
     def decompose_korean_char_sequence(self, sequence: str) -> str:
         """
         Decompose a sequence of Korean characters into their constituent Hangul Jamo components.
@@ -581,7 +642,6 @@ class WritingSystem:
         return self.is_writing_system(sequence, self.Abjad.__name__, strip_spaces)
 
     def is_abugida(self, sequence: str, strip_spaces: bool = True) -> bool:
-        #TODO: Decomposition of abugida graphemes can be accomplished as follows: print(*list("ਸ੍ਰੀ ਅਕਾਲ")) # --> ਸ ੍ ਰ ੀ   ਅ ਕ ਾ ਲ
         return self.is_writing_system(sequence, self.Abugida.__name__, strip_spaces)
 
     def is_syllabary(self, sequence: str, strip_spaces: bool = True) -> bool:
@@ -862,7 +922,7 @@ class WritingSystem:
             logographic_dict = dict([(l.name, l.value[0]) for l in self.Logographic])
             featural_dict = dict([(l.name, l.value[0]) for l in self.Featural])
             
-            #TODO: add other writing systems when needed..
+            # Note: Add other writing systems only when needed..
             for iso_15924_group, languages in self.iso_15924_to_iso_639_2_3.items():
                 if language_code in languages:
                     if iso_15924_group in set([a.value[0] for a in self.Abugida]):
