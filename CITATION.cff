@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this library, please cite it as below."
+authors:
+  - family-names: "Halvani"
+    given-names: "Oren"
+    orcid: "https://orcid.org/0000-0002-1460-9373"		
+title: "Alphabetic - A Python module for retrieving script types of writing systems including alphabets, abjads, abugidas, syllabaries, logographs, featurals as well as Latin script codes"
+version: 0.0.5
+doi: 10.5281/zenodo.11580510
+date-released: 2024-06-06
+url: "https://github.com/Halvani/alphabetic"

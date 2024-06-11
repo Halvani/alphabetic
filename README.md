@@ -1,5 +1,15 @@
 <div align="center">
-  <p><a href="#"><img src="https://raw.githubusercontent.com/Halvani/alphabetic/main/assets/images/logo.jpg" alt="Alphabetic logo"/></a></p>
+  <p>
+    <a href="#"><img src="https://raw.githubusercontent.com/Halvani/alphabetic/main/assets/images/logo.jpg" alt="Alphabetic logo"/></a>
+  </p>
+  <p align="center">
+    <a href="https://pypi.org/project/alphabetic/"><img src="https://img.shields.io/pypi/v/alphabetic?style=flat-square"/></a>
+	<a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg"/></a>
+  <a href="https://pypi.org/project/alphabetic"><img src="https://img.shields.io/pypi/pyversions/alphabetic.svg"/></a>
+    <a href="https://github.com/Halvani/alphabetic/actions/workflows/python-package.yml"><img src="https://github.com/Halvani/alphabetic/actions/workflows/python-package.yml/badge.svg"/></a>
+    <a href="https://github.com/Halvani/alphabetic"><img src="https://img.shields.io/github/last-commit/Halvani/alphabetic"/></a>
+    <a href="https://doi.org/10.5281/zenodo.11580510"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.11580510.svg"/></a>
+  </p>
 </div>
 
 # Alphabetic
