@@ -416,5 +416,23 @@ Although this project has been carried out with great care, no liability is acce
 
 Furthermore, please note that this project is still in its initial phase. The code structure may therefore change over time.
 
+## Citation
+If you find this repository helpful, feel free to cite it in your paper or project: 
+```bibtex
+@software{Halvani_Constituent_Treelib:2024,
+	author = {Halvani, Oren},
+	title = {{Alphabetic - A Python module for retrieving script types of writing systems including alphabets, abjads, abugidas, syllabaries, logographs, featurals as well as Latin script codes}},
+	doi = {https://doi.org/10.5281/zenodo.11580510},
+	month = jun,	
+	url = {https://github.com/Halvani/alphabetic},
+	version = {0.0.5},
+	year = {2024}
+}
+```
+
+## License
+The Alphabetic package is released under the Apache-2.0 license. See <a href="https://github.com/Halvani/alphabetic/blob/main/LICENSE">LICENSE</a> for further details.
+
+
 ## Last Remarks
 As is usual with open source projects, we developers do not earn any money with what we do, but are primarily interested in giving something back to the community with fun, passion and joy. Nevertheless, we would be very happy if you rewarded all the time that has gone into the project with just a small star 🤗
