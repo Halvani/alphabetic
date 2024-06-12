@@ -21,7 +21,7 @@ class JsonUtils:
         ISO_639_1_2_Language_Code = r"alphabetic/data/iso_639_1-2_codes_en_de_fr.json",
         ISO_639_3_Language_Code = r"alphabetic/data/iso_639_3_codes_en.json",
         ISO_15924_Code = r"alphabetic/data/iso_15924_codes.json",
-    
+
 
     @staticmethod
     def __pluralize(word: str) -> str:
@@ -254,18 +254,24 @@ class WritingSystem:
         Afar = "aar", # Script type: Alphabet; Writing system: Latin script
         Afrikaans = "afr", # Script type: Alphabet; Writing system: Latin script
         Albanian = "sqi", # Script type: Alphabet; Writing system: Latin script
+        Aleut = "ale", # Script type: Alphabet; Writing system: Latin (Alaska), Cyrillic (Alaska, Russia)
         Amharic = "amh",  # Script type: Abugida; Writing system: Geʽez script (slightly derivated)
+        Angika = "anp", # Script type: Abugida; Writing system: Devanagari (official) 
         Arabic = "ara", # Script type: Abjad; Writing system: Arabic alphabet, Others: Latin script (Arabizi, Said Akl's alphabet,  Hassaniya alphabet, Maltese alphabet, Cypriot Maronite Latin alphabet), Hebrew alphabet (in Israel for Levantine), Syriac alphabet (Garshuni), Greek alphabet (Cypriot Maronite Greek alphabet) 
+        Arapaho = "arp", # Script type: Alphabet; Writing system: Latin
         Armenian = "arm", # Script type	Alphabet: Writing system: Armenian alphabet
         Assamese = "asm", # Script type	Abugida; Writing system: Bengali–Assamese script 
         Avar = "ava", # Script type: Alphabet; Writing system: Cyrillic (current)
         Avestan = "ave", # Script type: Alphabet; Writing system: Avestan alphabet
+        Balochi = "bal", # Script type: Abjad; Writing system: Balochi Standard Alphabet
         Bambara = "bam", # Script type: Alphabet; Writing system: Latin script (current), Arabic (Ajami), N'ko
         Bashkir = "bak", # Script type: Alphabet; Writing system: Cyrillic (Bashkir alphabet)
         Basque = "baq", # Script type: Alphabet; Writing system: Basque alphabet
+        Bavarian = "bar", # Script type: Alphabet; Writing system: Latin alphabet, Marcomannic (historically)
         Belarusian = "bel", # Script type: Alphabet; Writing system: Cyrillic (Belarusian alphabet), Belarusian Latin alphabet, Belarusian Braille, Belarusian Arabic alphabet
         Bislama = "bis", # Script type: Alphabet; Writing system: Latin, Avoiuli (local)
         Boko = "bqc", # Script type: Alphabet; Writing system: Latin script
+        Boro = "brx", # Script type: Abugida; Writing system: Devanagari (official), Eastern Nagari (contemporary), Latin (contemporary)
         Bosnian = "bos", # Script type: Alphabet; Writing system: Latin (Gaj's alphabet), Cyrillic (Vuk's alphabet), Yugoslav Braille, Formerly: Arabic (Arebica), Bosnian Cyrillic (Bosančica)
         Breton = "bre", # Script type: Alphabet; Writing system: Latin script (Breton alphabet)
         Bulgarian = "bul", # Script type: Alphabet; Writing system: Cyrillic (Bulgarian alphabet, since 893), Latin (Banat Bulgarian Alphabet) (Banat Bulgarian dialect), Bulgarian Braille
@@ -278,6 +284,8 @@ class WritingSystem:
         Chinese_Simplified = "chi", # Script type: Logographic; Writing system: Chinese characters, Bopomofo, Pinyin, Xiao'erjing, Dungan, Chinese Braille, ʼPhags-pa script
         Chukchi = "ckt", # Script type: Alphabet; Writing system: Cyrillic script, Tenevil (Historically)
         Chuvash = "chv", # Script type: Alphabet; Writing system: Cyrillic
+        Cimbrian = "cim", # Script type: Alphabet; Writing system: Latin
+        Cornish = "cor", # Script type: Alphabet; Writing system: Latin alphabet
         Corsican = "cos", # Script type: Alphabet; Writing system: Latin script (Corsican alphabet)
         Cree = "cre", # Writing system: Latin, Canadian Aboriginal syllabics (Cree)
         Croatian = "hrv", # Script type: Alphabet; Writing system: Latin (Gaj's alphabet), Yugoslav Braille, Glagolitic (historical), Bosnian cyrillic (historical)
@@ -285,12 +293,8 @@ class WritingSystem:
         Danish = "dan", # Script type: Alphabet; Writing system: Latin (Danish alphabet), Danish Braille
         Dungan = "dng", # Script type: Alphabet; Writing system: Cyrillic (official), Chinese characters (obsolete), Xiao'erjing (obsolete), Latin (historical)
         Dutch = "nld", # Script type: Alphabet; Writing system: Latin (Dutch alphabet), Dutch Braille
-        Flemish = "dut", # Script type: Alphabet; Writing system: Latin (Dutch alphabet), Dutch Braille
-        Swiss_German = "gsw", # Script type: Alphabet; Writing system: Latin
-        Bavarian = "bar", # Script type: Alphabet; Writing system: Latin alphabet, Marcomannic (historically)
-        Cimbrian = "cim", # Script type: Alphabet; Writing system: Latin
-        Zeeuws = "zea", # Script type: Alphabet; Writing system: Zeelandic alphabet (Latin)
         Dzongkha = "dzo", # Script type: Abugida; Writing system: Tibetan script, Dzongkha Braille
+        Elfdalian = "ovd", # Script type: Alphabet; Writing system: Latin (Elfdalian alphabet), Dalecarlian runes, (until the 20th century)
         English = "eng", # Script type: Alphabet; Writing system: Latin script
         Esperanto = "epo", # Script type: Alphabet; Writing system: Latin script (Esperanto alphabet), Esperanto Braille
         Estonian = "est", # Script type: Alphabet; Writing system: Latin (Estonian alphabet), Estonian Braille
@@ -298,14 +302,11 @@ class WritingSystem:
         Faroese = "fao", # Script type: Alphabet; Writing system: Latin (Faroese alphabet), Faroese Braille
         Fijian = "fij", # Script type: Alphabet; Writing system: Latin-based
         Finnish = "fin", # Script type: Alphabet; Writing system: Latin (Finnish alphabet), Finnish Braille
+        Flemish = "dut", # Script type: Alphabet; Writing system: Latin (Dutch alphabet), Dutch Braille
         French = "fra", # Script type: Alphabet; Writing system: Latin script (French alphabet), French Braille
-        Scottish_Gaelic = "gla", # Script type: Alphabet; Writing system: Latin (Scottish Gaelic alphabet), Insular script (historically), Ogham (historically)  
         Georgian = "kat", # Script type: Alphabet; Writing system: Georgian script, Georgian Braille
-        Parthian  = "xpr", # Script type: Abjad; Writing system: Inscriptional Parthian, Manichaean script
-        Irish = "gle", # Script type: Alphabet; Writing system: Writing system: Latin (Irish alphabet), Ogham (historically), Irish Braille
         German = "deu", # Script type: Alphabet; Writing system: Latin script (German alphabet), German Braille, Until the seventh/eighth century: Runic, Until the mid-20th century: Hebrew Alphabet
         Greek = "gre", # Script type: Alphabet; Writing system: Greek alphabet       
-        Balochi = "bal", # Script type: Abjad; Writing system: Balochi Standard Alphabet
         Guarani = "grn", # Script type: Alphabet; Writing system: Guarani alphabet (Latin script)
         Haitian_Creole = "hat", # Script type: Alphabet; Writing system: Latin (Haitian Creole alphabet)
         Hausa = "hau", # Script type: Alphabet; Writing system: Latin (Boko alphabet), Arabic (Hausa Ajami), Hausa Braille
@@ -313,14 +314,15 @@ class WritingSystem:
         Hebrew = "heb", # Script type: Abjad; Writing system: Hebrew alphabet, Hebrew Braille, Paleo-Hebrew alphabet (Archaic Biblical Hebrew), Imperial Aramaic script (Late Biblical Hebrew), Samaritan script (Samaritan Biblical Hebrew)
         Herero = "her", # Script type: Alphabet; Writing system: Latin (Herero alphabet), Herero Braille
         Hindi = "hin", # Script type: Abugida; Writing system: Devanagari (official), Kaithi (historical), Mahajani (historical), Laṇḍā (historical), Latin (Hinglish, unofficial), Devanagari Braille
-        Angika = "anp", # Script type: Abugida; Writing system: Devanagari (official) 
-        Boro = "brx", # Script type: Abugida; Writing system: Devanagari (official), Eastern Nagari (contemporary), Latin (contemporary)
         Icelandic = "isl", # Script type: Alphabet; Writing system: Latin (Icelandic alphabet), Icelandic Braille
         Igbo = "ibo", # Script type: Alphabet; Writing system: Latin (Önwu alphabet), Nwagu Aneke script, Neo-Nsibidi, Ndebe script, Igbo Braille
         Indonesian = "ind", # Script type: Alphabet; Writing system: Latin (Indonesian alphabet), Indonesian Braille
+        Irish = "gle", # Script type: Alphabet; Writing system: Writing system: Latin (Irish alphabet), Ogham (historically), Irish Braille
+        Istro_Romanian = "ruo", # Script type: Alphabet; Writing system: Latin
         Italian = "ita", # Script type: Alphabet; Writing system: Latin script (Italian alphabet), Italian Braille
         Japanese = "jpn", # Script types: Kanji, Hiragana, Katakana; Writing system: Mixed scripts of Kanji (Chinese characters) and Kana (Hiragana, Katakana), Japanese Braille
         Javanese = "jav", # Script type: Alphabet; Writing system: Latin script, Javanese script, Pegon script
+        Jeju = "jje", # Script type: Featural alphabet; Writing system: Hangul
         Kabardian = "kbd", # Script type: Alphabet; Writing system: Cyrillic script, Latin script, Arabic script
         Kanuri = "kau", # Script type: Alphabet; Writing system: Latin, Arabic (Ajami)[3]
         Kashubian = "csb", # Script type: Alphabet; Writing system: Latin (Kashubian alphabet)
@@ -328,10 +330,7 @@ class WritingSystem:
         Kinyarwanda = "kin", # Script type: Alphabet; Writing system: Latin
         Kirghiz = "kir", # Script type: Alphabet; Writing system: Kyrgyz alphabets (Cyrillic script, Perso-Arabic script, Kyrgyz Braille)
         Komi = "kpv", # Script type: Alphabet; Writing system: Cyrillic, Old Permic (formerly)
-        Samaritan = "smp", # Script type Abjad; Writing system: Samaritan abjad
         Korean = "kor", # Script type: Featural alphabet; Writing system: Hangul / chosŏn'gŭl (Korean script); Hanja / hancha (auxiliary script for disambiguation [South Korea], historical in North Korea)
-        Jeju = "jje", # Script type: Featural alphabet; Writing system: Hangul
-        Osage = "osa", # Script type: Alphabet; Writing system: Latin (Osage alphabet), Osage script
         Kumyk = "kum", # Script type: Alphabet; Writing system: Cyrillic, Latin, Arabic
         Kurmanji = "kmr", # Script type: Alphabet; Writing system: Hawar alphabet (Latin) in Turkey, Syria, Iraq and Iran, Sorani alphabet (Arabic) in Iraq and Iran, Cyrillic script in Russia and Armenia
         Latin = "lat", # Script type: Alphabet; Writing system: Latin alphabet (Latin script)
@@ -340,6 +339,7 @@ class WritingSystem:
         Lingala = "lin", # Script type: Alphabet; Writing system: African reference alphabet (Latin), Mandombe script
         Lithuanian = "lit", # Script type: Alphabet; Writing system: Latin (Lithuanian alphabet), Lithuanian Braille
         Luganda = "lug", # Script type: Alphabet; Writing system: Latin script (Ganda alphabet), Ganda Braille
+        Luxembourgish = "ltz", # Script type: Alphabet; Writing system: Latin (Luxembourgish alphabet), Luxembourgish Braille
         Macedonian = "mkd", # Script type: Alphabet; Writing system: Cyrillic (Macedonian alphabet), Macedonian Braille
         Malagasy = "mlg", # Script type: Alphabet; Writing system: Latin script (Malagasy alphabet), Sorabe alphabet (Historically), Malagasy Braille
         Malay = "may", # Script type: Alphabet; Writing system: Latin (Malay alphabet), Arabic (Jawi script), Arabic (Pegon script) (In Indonesia), Thai alphabet (in Thailand), Malay Braille, Historically Pallava script, Kawi script, Ulu scripts, Rejang script
@@ -357,20 +357,23 @@ class WritingSystem:
         Norwegian = "nor", # Script type: Alphabet; Writing system: Latin (Norwegian alphabet), Norwegian Braille
         Occitan = "oci", # Script type: Alphabet; Writing system: Latin alphabet (Occitan alphabet)
         Oromo = "orm", # Script type: Alphabet; Writing system: Latin (Qubee, Oromo alphabet), Qubee Sheek Bakrii Saphaloo
+        Osage = "osa", # Script type: Alphabet; Writing system: Latin (Osage alphabet), Osage script
+        Parthian  = "xpr", # Script type: Abjad; Writing system: Inscriptional Parthian, Manichaean script
         Pashto = "pus", # Script type: Abjad; Writing system: Pashto alphabet
         Persian = "per", # Script type: Abjad; Writing system: Persian alphabet (Iran and Afghanistan), Tajik alphabet (Tajikistan), Old Persian cuneiform (525 BC – 330 BC), Pahlavi scripts (2nd century BC to 7th century AD), Persian Braille
-        Polish = "pol", # Script type: Alphabet; Writing system: Latin (Polish alphabet)
-        Aleut = "ale", # Script type: Alphabet; Writing system: Latin (Alaska), Cyrillic (Alaska, Russia)
-        Portuguese = "por", # Script type: Alphabet; Writing system: Latin (Portuguese alphabet), Portuguese Braille
         Phoenician = "phn", # Script type: Abjad; Writing system: Phoenician alphabet
-        Punjabi_Shahmukhi = "pan", # Script type: Abjad; Writing system: Shāhmukhī (majority, Pakistan), Gurmukhī (official, India), Punjabi Braille
+        Polish = "pol", # Script type: Alphabet; Writing system: Latin (Polish alphabet)
+        Portuguese = "por", # Script type: Alphabet; Writing system: Latin (Portuguese alphabet), Portuguese Braille
         Punjabi_Gurmukhī = "_pan", # Script type: Abugida; Writing system: Shāhmukhī (majority, Pakistan), Gurmukhī (official, India), Punjabi Braille
+        Punjabi_Shahmukhi = "pan", # Script type: Abjad; Writing system: Shāhmukhī (majority, Pakistan), Gurmukhī (official, India), Punjabi Braille
         Quechua = "que", # Script type: Alphabet; Writing system: Latin (Quechuan alphabet)
         Rohingya = "rhg", # Script type: Alphabet: Writing system: Hanifi Rohingya, Perso-Arabic (Rohingya Arabic Alphabet), Latin (Rohingyalish), Burmese, Bengali–Assamese (rare)
         Russian = "rus", # Script type: Alphabet: Writing system: Cyrillic (Russian alphabet), Russian Braille
+        Samaritan = "smp", # Script type Abjad; Writing system: Samaritan abjad
         Samoan = "smo", # Script type: Alphabet; Writing system: Latin (Samoan alphabet), Samoan Braille
         Sango = "sag", # Script type: Alphabet; Writing system: Latin script
         Sanskrit = "san", # Script type: Abugida; Writing system: Devanagari script (present day), Originally orally transmitted, Brahmi script (from 1st century BCE), Brahmic scripts
+        Scottish_Gaelic = "gla", # Script type: Alphabet; Writing system: Latin (Scottish Gaelic alphabet), Insular script (historically), Ogham (historically)  
         Serbian = "srp", # Script type: Alphabet; Writing system: Serbian Cyrillic, Serbian Latin, Yugoslav Braille
         Slovak = "slo", # Script type: Alphabet; Writing system: Latin (Slovak alphabet), Slovak Braille, Cyrillic (Pannonian Rusyn alphabet)
         Slovenian = "slv", # Script type: Alphabet; Writing system: Latin (Slovene alphabet), Slovene Braille
@@ -379,29 +382,26 @@ class WritingSystem:
         Spanish = "spa", # Script type: Alphabet; Writing system: Latin script (Spanish alphabet), Spanish Braille
         Sundanese = "sun", # Script type: Abugida; Writing system: Latin script (present), Sundanese script (present; optional), Sundanese Pégon script (17–20th centuries AD, present; religious schools only), Old Sundanese script (14–18th centuries AD, present; optional), Sundanese Cacarakan script (17–19th centuries AD, present; certain areas), Buda Script (13–15th centuries AD, present; optional), Kawi script (historical), Pallava (historical), Pranagari (historical), Vatteluttu (historical)
         Swedish = "swe", # Script type: Alphabet; Writing system: Latin (Swedish alphabet), Swedish Braille
+        Swiss_German = "gsw", # Script type: Alphabet; Writing system: Latin
         Tajik = "tgk", # Script type: Alphabet; Writing system: Cyrillic (Tajik alphabet), Historically: Arabic (Persian alphabet), Latin (Yañalif-based), Hebrew (by Bukharan Jews), Tajik Braille
         Tatar = "tat", # Script type: Alphabet; Writing system: Tatar alphabet (Cyrillic, Latin, formerly Arabic)
         Turkish = "tur", # Script type: Alphabet; Writing system: Latin (Turkish alphabet), Turkish Braille
         Turkmen = "tuk", # Script type: Alphabet; Writing system: Latin (Turkmen alphabet, official in Turkmenistan), Perso-Arabic, Cyrillic, Turkmen Braille
-        Arapaho = "arp", # Script type: Alphabet; Writing system: Latin
-        Istro_Romanian = "ruo", # Script type: Alphabet; Writing system: Latin
-        Vengo = "bav", # Script type: Alphabet; Writing system: Latin
         Tuvan = "tyv", # Script type: Alphabet; Writing system: Cyrillic script
         Twi = "twi", # Script type: Alphabet; Writing system: Latin
-        Elfdalian = "ovd", # Script type: Alphabet; Writing system: Latin (Elfdalian alphabet), Dalecarlian runes, (until the 20th century)
-        Cornish = "cor", # Script type: Alphabet; Writing system: Latin alphabet
-        Luxembourgish = "ltz", # Script type: Alphabet; Writing system: Latin (Luxembourgish alphabet), Luxembourgish Braille
+        Ugaritic = "uga", # Script type	Abjad; Writing system: Ugaritic alphabet
         Ukrainian = "ukr", # Script type: Alphabet; Writing system: Cyrillic (Ukrainian alphabet), Ukrainian Braille
         Uzbek = "uzb", # Script type: Alphabet; Writing system: Latin (Uzbek alphabet), Cyrillic, Perso-Arabic, Uzbek Braille, (Uzbek alphabets)
         Venda = "ven", # Script type: Alphabet; Writing system: Latin (Venda alphabet), Venda Braille, Ditema tsa Dinoko
+        Vengo = "bav", # Script type: Alphabet; Writing system: Latin
         Volapük = "vol", # Script type: Alphabet; Writing system: Latin
         Welsh = "wel", # Script type: Alphabet; Writing system: Latin (Welsh alphabet), Welsh Braille
         Wolof = "wol", # Script type: Alphabet; Writing system: Latin (Wolof alphabet), Arabic (Wolofal), Garay
-        Ugaritic = "uga", # Script type	Abjad; Writing system: Ugaritic alphabet
         Yakut = "sah", # Script type: Alphabet; Writing system: Cyrillic (formerly Latin and Cyrillic-based)
         Yiddish = "yid", # Script type: Abjad; Writing system: Hebrew alphabet (Yiddish orthography), occasionally Latin alphabet
+        Zeeuws = "zea", # Script type: Alphabet; Writing system: Zeelandic alphabet (Latin)
         Zulu = "zul", # Script type: Alphabet; Writing system: Latin (Zulu alphabet), Zulu Braille, Ditema tsa Dinoko
-
+    
    
     # Values represent ISO-15924 identifiers
     class Abjad(Enum):
@@ -411,7 +411,7 @@ class WritingSystem:
         Pashto = "pus",
         Ugaritic = "Ugar",
         Balochi = "bal", # Note, no ISO-15924 identifier available
-        Hebrew_Samaritan = "Samr",
+        Samaritan = "Samr",
         Phoenician  = "Phnx",
         Parthian = "Prti",
         Yiddish = "yid", # Yiddish represents a modified version of the Hebrew script, with all vowels rendered in the spelling, except in the case of inherited Hebrew words, which typically retain their Hebrew consonant-only spellings. 
@@ -451,11 +451,11 @@ class WritingSystem:
     class Logographic(Enum):
         Kanji = "Hani",
         Chinese_Simplified = "Hans",
-    
+
 
     class Featural (Enum):
         Hangul = "Hang",
-    
+
     def __jsonfiles_present(self) -> NoReturn:
         """
         Checks the presence of required JSON files and raises an error if any are missing.
@@ -512,9 +512,9 @@ class WritingSystem:
         
         writing_systen_map_script = {w.name:list(JsonUtils.load_dict_from_jsonfile(w).values()) for w in writing_systen_json_filepaths}
         return {ws_name:set(list("".join(["".join(d['script']) for d in script]))) for ws_name, script in writing_systen_map_script.items()}
- 
 
-    def __init__(self) -> NoReturn:
+
+    def __init__(self) -> NoReturn:        
         self.__jsonfiles_present()
         self.writing_systems_to_scripts = self.__mapping_writing_systems_to_scripts()
         self.iso_15924_to_iso_639_2_3 = { "Hang" : set(["kor", "jje"]), } # Required for fallback strategy (ISO 639-2/3 language code --> ISO 15924)
@@ -749,18 +749,23 @@ class WritingSystem:
     def by_abjad(self, abjad: Abjad, as_list: bool = False) -> Union[dict, list[str]]:
         return self.by_script(abjad, as_list)
 
+
     def by_abugida(self, abugida: Abugida, as_list: bool = False) -> Union[dict, list[str]]:
         return self.by_script(abugida, as_list)
 
+
     def by_syllabary(self, syllabary: Syllabary, as_list: bool = False) -> Union[dict, list[str]]:
         return self.by_script(syllabary, as_list)
-    
+
+
     def by_logographic(self, logographic: Logographic, as_list: bool = False) -> Union[dict, list[str]]:
         return self.by_script(logographic, as_list)
-    
+
+
     def by_featural(self, featural: Featural, as_list: bool = False) -> Union[dict, list[str]]:
         return self.by_script(featural, as_list)
-    
+
+
     def by_code(self, latin_script_code: LatinScriptCode) -> list[tuple[str,str]]:
         return self.by_script(latin_script_code)
         #_dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Latin_Script_Code)
@@ -804,7 +809,7 @@ class WritingSystem:
         """
         extracted_diacritics = dcl.get_diacritics("".join(alphabet) )
         return [c.character for _, c in extracted_diacritics.items()]
-    
+
 
     def extract_multigraphs(self, alphabet: list[str], multigraph_size: MultigraphSize) -> list[str]:
         """
@@ -835,7 +840,7 @@ class WritingSystem:
         if multigraph_size == all_:
             return [c for c in alphabet  if all_.value[0] <= len(c) <= all_.value[1]]        
         return [c for c in alphabet if len(c) == multigraph_size.value[0]]
-    
+
 
     def retrieve_iso_formal_name(self, iso_15924_group: str, script_type: Enum) -> str:
         """Retrieves the formal name for a given ISO 15924 group code.
@@ -855,7 +860,7 @@ class WritingSystem:
             return name_map[iso_15924_group]
         else:
             raise ValueError(f"No entry found for the ISO 15924 group code: {iso_15924_group}")
-        
+
 
     def by_language(self,
                     language: Language, 
@@ -897,24 +902,25 @@ class WritingSystem:
                 as a key and its corresponding characters as a list as a value. 
                 - Filters cannot be applied in this case due to the complexity of handling 
                 multiple writing systems.
-        """            
+        """
        
         # Check if the accociated language code exists within the internal JsonFile.Alphabet file. 
         # If the key is not present, perform a fallback to the Syllabary and Logographic json files and return the respective script.
         _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Alphabet)
         language_code = language.value[0]
+
+        alphabet = None
     
         if language_code not in _dict:
-            # Special case for languages that have *multiple* writing systems and non-mapable language codes. 
+            # Special case for languages that have *multiple* writing systems and non-mapable language codes.
             # ---------------------------------------------------------------------------------------
             # Note that for such languages such as Japanese none of the filters below can be applied. 
-            # Also, the parameter *as_list* is ignored, as otherwise it is difficult to understand which list refers to which writing system. 
-            # Thus, the respective writing system type(s) is/are returned as they are. 
+            # Also, the parameter *as_list* is ignored, as otherwise it is difficult to understand which list refers to which writing system.
+            # Thus, the respective writing system type(s) is/are returned as they are.
             if language == self.Language.Japanese:
                 return {self.Language.Japanese.name: {self.Syllabary.Hiragana.name: self.by_syllabary(self.Syllabary.Hiragana, as_list=True),
                         self.Syllabary.Katakana.name : self.by_syllabary(self.Syllabary.Katakana, as_list=True),
                         self.Logographic.Kanji.name : self.by_logographic(self.Logographic.Kanji, as_list=True)}}
-                 
             
             abjad_dict = dict([(a.name, a.value[0]) for a in self.Abjad]) 
             abugida_dict = dict([(a.name, a.value[0]) for a in self.Abugida]) 
@@ -962,7 +968,7 @@ class WritingSystem:
             alphabet = [c for c in alphabet if c not in diacritics]
 
         # Multigraph: https://en.wikipedia.org/wiki/Multigraph_(orthography)
-        if strip_multigraphs: 
+        if strip_multigraphs:
             multigraphs = self.extract_multigraphs(alphabet, multigraphs_size)
             alphabet = [c for c in alphabet if c not in multigraphs]
 
@@ -973,4 +979,70 @@ class WritingSystem:
             alphabet = [c for c in alphabet if c.isupper()]
 
         return alphabet if as_list else {language.name : alphabet}
-    
+
+
+    def all_script_characters(self) -> list[str]:
+        """
+        Retrieve a sorted list of all unique characters used in the scripts of all languages supported by Alphabetic.
+
+        This function aggregates all characters from all available languages by fetching the entire 
+        script (alphabet, abjad, ...) for each language using the `by_language` function. 
+        The list is then deduplicated and sorted before being returned.
+
+        Returns:
+            list[str]: A sorted list of unique characters from all supported language scripts.
+        """
+
+        languages = [language for language in self.Language]
+        script_characters = list()
+
+        for language in languages:
+            # Japanese represents a special case, as here three scripts (Hiragana, Katakana and Kanji) are used
+            if language.name == self.Language.Japanese.name:
+                jap_scripts = self.by_language(language)["Japanese"]
+
+                for _, chars in jap_scripts.items():
+                    script_characters.extend(chars)
+            else:
+                script_characters.extend(self.by_language(language, as_list=True))
+
+        return sorted(set(script_characters))
+
+
+    def keep_only_script_characters(self,
+                                    str_2_check: str,
+                                    keep_spaces: bool = True) -> str:
+        """
+        Filters a given string to keep only characters of all supported scripts.
+
+        This function takes an input string and returns a new string consisting only of the characters that are 
+        contained in all script types (alphabets, abjads, etc.) supported by Alphabetic. If `keep_spaces` is set to True, 
+        spaces are kept; otherwise all spaces are removed.
+
+        Args:
+            str_2_check (str): The input string to be filtered.
+            keep_spaces (bool): A flag indicating whether to retain spaces in the output string. Defaults to True.
+
+        Returns:
+            str: A string containing only the characters specified in `script_characters`,
+                with spaces optionally retained.
+
+        Examples:
+            >>> keep_only_script_characters("hello world!", ['h', 'e', 'l', 'o', 'w', 'r', 'd'])
+            'hello world'
+            >>> keep_only_script_characters("hello world!", ['h', 'e', 'l', 'o', 'w', 'r', 'd'], keep_spaces=False)
+            'helloworld'
+        """
+
+        script_characters = self.all_script_characters()
+            
+        if keep_spaces:
+            result = []
+            tokens = str_2_check.split()
+            
+            for token in tokens:
+                cleaned_token = "".join([c for c in token if c in script_characters])
+                result.append(cleaned_token)
+            return " ".join(result)
+        else:
+            return "".join([c for c in str_2_check if c in script_characters])

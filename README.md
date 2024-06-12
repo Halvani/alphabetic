@@ -117,6 +117,9 @@ ws.pretty_print(ws.by_language(ws.Language.Chinese_Simplified))
 ```
 Another important use case is to check whether a given sequence of characters represents a specific script of a writing system. This can be achieved as follows:
 ```python
+ws.is_abjad("גדולים או בינוניים") # True
+ws.is_alphabet("גדולים או בינוניים") # False
+
 ws.is_alphabet("dobré ráno") # True
 ws.is_abjad("dobré ráno") # False
 
@@ -131,6 +134,14 @@ ws.is_logographic("좋은 아침") # False
 
 ws.is_alphabet("დილა მშვიდობისა") # True
 ws.is_abjad("დილა მშვიდობისა") # False
+```
+
+Furthermore, you can also use Alphabetic to remove all characters from a given string that do not occur within the supported script types (abjads, abugidas, alphabets, etc.):  
+
+```python
+ws.keep_only_script_characters("#jüste BAD/good tösté X4567Y ßÜ משהו действует?!")
+
+# Result: 'jüste BADgood tösté XY ßÜ משהו действует'
 ```
 
 ## Features
