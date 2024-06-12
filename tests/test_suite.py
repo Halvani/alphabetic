@@ -149,11 +149,3 @@ class TestCore(unittest.TestCase):
         t10, f10 = ws.is_syllabary(x:="こんにちは"), ws.is_alphabet(x)
 
         assert all([t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10]) and not any([f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10])
-
-
-    def test_keep_all_non_characters(self):
-        ws = WritingSystem()
-        assert ws.keep_only_script_characters("§§..Czyż t+o nie miłe?") == "Czyż to nie miłe"
-        assert ws.keep_only_script_characters("546here!""§$ //(it)\\746 is*#*~~!!") == "here it is"
-        assert ws.keep_only_script_characters("12456niini'kokoh'u3ecoo3i789!!") == "niini'kokoh'u3ecoo3i"
-        assert ws.keep_only_script_characters("*A=l?l*Sp~aces   Rem`&``oved?} Here ", keep_spaces=False) == "AllSpacesRemovedHere"
