@@ -1,26 +1,31 @@
+import os
 import re
 import dcl
 import json
 from jamo import h2j, j2hcj
 from pathlib import Path
 from enum import Enum, auto
-from typing import Union, NoReturn, Tuple
+from typing import Union, NoReturn
 from .errors import Non_Existing_ISO_639_2_Langcode
+
+module_dir = os.path.dirname(os.path.abspath(__file__))
 
 class JsonUtils:
     """Provides utility functions for working with writing systems and scripts embeddedd in JSON data."""
+    
     class FilePath(Enum):
         """An enumeration containing file paths for internal JSON data on specific writing systems."""
-        Abjad = r"alphabetic/data/abjad.json",
-        Abugida = r"alphabetic/data/abugida.json",
-        Alphabet = r"alphabetic/data/alphabet.json",
-        Featural = r"alphabetic/data/featural.json",
-        Logographic = r"alphabetic/data/logographic.json",
-        Syllabary = r"alphabetic/data/syllabary.json",
-        Latin_Script_Code = r"alphabetic/data/latin_script_code.json",
-        ISO_639_1_2_Language_Code = r"alphabetic/data/iso_639_1-2_codes_en_de_fr.json",
-        ISO_639_3_Language_Code = r"alphabetic/data/iso_639_3_codes_en.json",
-        ISO_15924_Code = r"alphabetic/data/iso_15924_codes.json",
+
+        Abjad = os.path.normpath(os.path.join(module_dir, "data/abjad.json")),
+        Abugida = os.path.normpath(os.path.join(module_dir, "data/abugida.json")),
+        Alphabet = os.path.normpath(os.path.join(module_dir, "data/alphabet.json")),
+        Featural = os.path.normpath(os.path.join(module_dir, "data/featural.json")),
+        Logographic = os.path.normpath(os.path.join(module_dir, "data/logographic.json")),
+        Syllabary = os.path.normpath(os.path.join(module_dir, "data/syllabary.json")),
+        Latin_Script_Code = os.path.normpath(os.path.join(module_dir, "data/latin_script_code.json")),
+        ISO_639_1_2_Language_Code = os.path.normpath(os.path.join(module_dir, "data/iso_639_1-2_codes_en_de_fr.json")),
+        ISO_639_3_Language_Code = os.path.normpath(os.path.join(module_dir, "data/iso_639_3_codes_en.json")),
+        ISO_15924_Code = os.path.normpath(os.path.join(module_dir, "data/iso_15924_codes.json")),
 
 
     @staticmethod
@@ -863,7 +868,7 @@ class WritingSystem:
 
 
     def by_language(self,
-                    language: Language, 
+                    language: Language,
                     letter_case: LetterCase = LetterCase.Both,
                     strip_diacritics: bool = False,
                     strip_multigraphs: bool = False,
@@ -904,14 +909,14 @@ class WritingSystem:
                 multiple writing systems.
         """
        
-        # Check if the accociated language code exists within the internal JsonFile.Alphabet file. 
-        # If the key is not present, perform a fallback to the Syllabary and Logographic json files and return the respective script.
-        _dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Alphabet)
+        # Check if the accociated language code exists within the internal JsonFile.Alphabet file.
+        # If the key is not present, perform a fallback to the other script types contained in the json files and return the respective script.
+        alphabet_json = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Alphabet)
         language_code = language.value[0]
 
         alphabet = None
     
-        if language_code not in _dict:
+        if language_code not in alphabet_json:
             # Special case for languages that have *multiple* writing systems and non-mapable language codes.
             # ---------------------------------------------------------------------------------------
             # Note that for such languages such as Japanese none of the filters below can be applied. 
@@ -921,9 +926,10 @@ class WritingSystem:
                 return {self.Language.Japanese.name: {self.Syllabary.Hiragana.name: self.by_syllabary(self.Syllabary.Hiragana, as_list=True),
                         self.Syllabary.Katakana.name : self.by_syllabary(self.Syllabary.Katakana, as_list=True),
                         self.Logographic.Kanji.name : self.by_logographic(self.Logographic.Kanji, as_list=True)}}
-            
-            abjad_dict = dict([(a.name, a.value[0]) for a in self.Abjad]) 
-            abugida_dict = dict([(a.name, a.value[0]) for a in self.Abugida]) 
+            # ---------------------------------------------------------------------------------------
+
+            abjad_dict = dict([(a.name, a.value[0]) for a in self.Abjad])
+            abugida_dict = dict([(a.name, a.value[0]) for a in self.Abugida])
             syllabary_dict = dict([(s.name, s.value[0]) for s in self.Syllabary])
             logographic_dict = dict([(l.name, l.value[0]) for l in self.Logographic])
             featural_dict = dict([(l.name, l.value[0]) for l in self.Featural])
@@ -957,11 +963,12 @@ class WritingSystem:
 
             elif language.name in abugida_dict:
                 script = self.by_abugida(self.Abugida[language.name], as_list=True)
-                return script if as_list else { language.name : script}
+                return script if as_list else {language.name : script}
         else:
-            alphabet = _dict[language_code]["script"]
+            alphabet = alphabet_json[language_code]["script"]
 
-        # Apply specified filters
+        
+        # In case the given language has an alphabet, the following filters are optional. 
         # ---------------------------------------------------------------------------------------
         if strip_diacritics:
             diacritics = set(self.extract_diacritics(alphabet))
