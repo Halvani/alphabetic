@@ -98,7 +98,7 @@ class TestCore(unittest.TestCase):
 
     def test_by_syllabary(self):
         ws = WritingSystem()
-        assert set(['ዟ','የ','ዩ','ዪ']).issubset(set(ws.by_syllabary(ws.Syllabary.Ethiopic, as_list=True)))
+        set("ᎩᎨᏍᏗ").issubset(set(ws.by_syllabary(ws.Syllabary.Cherokee, as_list=True)))
 
 
     def test_by_featural(self):
