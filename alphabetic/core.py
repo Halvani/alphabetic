@@ -949,26 +949,25 @@ class WritingSystem:
                 script = self.by_syllabary(self.Syllabary[language.name], as_list=True)
                 return script if as_list else {language.name : script}
 
-            elif language.name in logographic_dict:
+            if language.name in logographic_dict:
                 script = self.by_logographic(self.Logographic[language.name], as_list=True)
                 return script if as_list else {language.name : script}
             
-            elif language.name in featural_dict:
+            if language.name in featural_dict:
                 script = self.by_featural(self.Featural[language.name], as_list=True)
                 return script if as_list else {language.name : script}
 
-            elif language.name in abjad_dict:
+            if language.name in abjad_dict:
                 script = self.by_abjad(self.Abjad[language.name], as_list=True)
                 return script if as_list else {language.name : script}
 
-            elif language.name in abugida_dict:
+            if language.name in abugida_dict:
                 script = self.by_abugida(self.Abugida[language.name], as_list=True)
                 return script if as_list else {language.name : script}
         else:
             alphabet = alphabet_json[language_code]["script"]
 
-        
-        # In case the given language has an alphabet, the following filters are optional. 
+        # In case the given language has an alphabet, the following filters are optional.
         # ---------------------------------------------------------------------------------------
         if strip_diacritics:
             diacritics = set(self.extract_diacritics(alphabet))

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "alphabetic"
-version = "0.0.5"
+version = "0.0.6"
 authors = [{name="Oren Halvani"}]
 description = "A Python module for retrieving script types of writing systems including alphabets, abjads, abugidas, syllabaries, logographs, featurals as well as Latin script codes"
 readme = "README.md"
