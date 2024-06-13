@@ -350,6 +350,7 @@ ws.keep_only_script_characters("#jüste BAD/good tösté X4567Y ßÜ משהו д
 |Boro|brx|
 |Devanagari|Deva|
 |Dzongkha|dzo|
+|Ethiopic|Ethi|
 |Hindi|hin|
 |Malayalam|Mlym|
 |Nepali|nep|
@@ -369,7 +370,6 @@ ws.keep_only_script_characters("#jüste BAD/good tösté X4567Y ßÜ משהו д
 |Avestan|Avst|
 |Carian|Cari|
 |Cherokee|Cher|
-|Ethiopic|Ethi|
 |Hiragana|Hira|
 |Katakana|Kana|
 |Lydian|Lydi|

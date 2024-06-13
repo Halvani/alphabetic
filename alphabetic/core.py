@@ -306,7 +306,7 @@ class WritingSystem:
         French = "fra", # Script type: Alphabet; Writing system: Latin script (French alphabet), French Braille
         Georgian = "kat", # Script type: Alphabet; Writing system: Georgian script, Georgian Braille
         German = "deu", # Script type: Alphabet; Writing system: Latin script (German alphabet), German Braille, Until the seventh/eighth century: Runic, Until the mid-20th century: Hebrew Alphabet
-        Greek = "gre", # Script type: Alphabet; Writing system: Greek alphabet       
+        Greek = "gre", # Script type: Alphabet; Writing system: Greek alphabet
         Guarani = "grn", # Script type: Alphabet; Writing system: Guarani alphabet (Latin script)
         Haitian_Creole = "hat", # Script type: Alphabet; Writing system: Latin (Haitian Creole alphabet)
         Hausa = "hau", # Script type: Alphabet; Writing system: Latin (Boko alphabet), Arabic (Hausa Ajami), Hausa Braille
@@ -434,12 +434,12 @@ class WritingSystem:
         Malayalam = "Mlym", # Tests ✔️
         Assamese = "asm", # Tests ✔️
         Thaana = "Thaa", # Tests ✔️
+        Ethiopic = "Ethi",
 
 
     # Values represent ISO-15924 identifiers. These represent the keys within the json file.
     class Syllabary(Enum):
         Avestan = "Avst",
-        Ethiopic = "Ethi",
         Carian = "Cari",
         Lydian = "Lydi",
         Hiragana = "Hira",
