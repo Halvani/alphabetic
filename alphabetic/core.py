@@ -33,7 +33,7 @@ class JsonUtils:
         """
         Converts a given singular noun to its plural form based on standard English grammar rules.
 
-        Args:
+        Parameters:
             word (str): The singular noun to be pluralized.
 
         Returns:
@@ -77,7 +77,7 @@ class JsonUtils:
         """
         Converts a given json filename to its plural form.
 
-        Args:
+        Parameters:
             json_file (FilePath): The singular filename to be pluralized.
 
         Returns:
@@ -95,7 +95,7 @@ class JsonUtils:
         This method reads a JSON file specified by `json_filename` and returns its contents as a dictionary.
         If the file does not exist, a `FileNotFoundError` is raised with an appropriate error message.
 
-        Args:
+        Parameters:
             json_filename (FilePath): A `FilePath` object containing the path to the (internal) JSON file.
 
         Returns: 
@@ -122,7 +122,7 @@ class JsonUtils:
         It first checks if the given ISO language code exists in the ISO 639-1/2 database. If not found, it then checks the ISO 639-3 database.
         If the language code is found in either database, it updates the JSON file with the new script. If the language code is not found in both databases, it raises an exception.
 
-        Args:
+        Parameters:
             iso_name (str): The ISO 639-2/3 language code to update.
             script (list[str]): A list of characters representing the script for the language.
 
@@ -164,7 +164,7 @@ class JsonUtils:
         removes the key-value pair from the dictionary. It then writes the updated dictionary back to the JSON file. 
         Finally, it verifies that the key has been successfully deleted.
 
-        Args:
+        Parameters:
             json_file (FilePath): The path to the JSON file from which the entry should be deleted.
             key (str): The key of the entry to be deleted.
 
@@ -202,10 +202,10 @@ class JsonUtils:
 # The exact relationship between writing systems and languages can be complex. 
 # A single language (e.g. Hindustani) can have multiple writing systems, and a writing system can also represent multiple languages. --> https://en.wikipedia.org/wiki/Writing_system
 #
-# ISO 639 is a standardized nomenclature used to classify languages. Each language is assigned a two-letter (set 1) and three-letter lowercase abbreviation (sets 2–5). 
+# ISO 639 is a standardized nomenclature used to classify languages. Each language is assigned a two-letter (set 1) and three-letter lowercase abbreviation (sets 2–5).
 # Alphabetic uses in almost all cases ISO 639-2 as a language code identifier. However, in cases where no ISO 639-2 fields were available (e.g., "Komi") the ISO 639-3 code was used instead.    
 #
-# Sources of alphabets --> https://www.omniglot.com/index.htm; https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes    
+# Sources of alphabets --> https://www.omniglot.com/index.htm; https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
 # Sources of language code listings --> https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes ; https://de.wikipedia.org/wiki/Kategorie:Alphabet
 # Overview of all languages in the world listed by categories: https://en.wikipedia.org/wiki/Lists_of_languages
 # 
@@ -221,11 +221,11 @@ class JsonUtils:
 #
 # Punjabi: The Punjabi language is written in multiple scripts i.e. Gurmukhi (Abugida) and Shahmukhi (Abjad). This phenomenon is also known as synchronic digraphia!
 #
-# Japanese: There is no alphabet in Japanese. In fact, there are three writing systems called Hiragana, Katakana and Kanji. Katakana and Hiragana constitute syllabaries; 
+# Japanese: There is no alphabet in Japanese. In fact, there are three writing systems called Hiragana, Katakana and Kanji. Katakana and Hiragana constitute syllabaries;
 # Katakana are primarily used to write foreign words, plant and animal names, and for emphasis. --> https://en.wikipedia.org/wiki/Japanese_language#Writing_system
 #
 # Sorani: It is unclear which script type Sorani strictly belongs to. Many Kurdish varieties, mainly Sorani, are written using a modified Persian alphabet with 33 letters introduced by Sa'id Kaban Sedqi. 
-# Unlike the Persian alphabet, which is an abjad, Central Kurdish is almost a true alphabet in which vowels are given the same treatment as consonants. 
+# Unlike the Persian alphabet, which is an abjad, Central Kurdish is almost a true alphabet in which vowels are given the same treatment as consonants.
 # However, we consider for simplicity the Abjad classification. Compare: https://en.wikipedia.org/wiki/Sorani vs. https://kurdishwriting.com/alphabetpage
 # 
 # Javanese: Javanese can also be written with the Arabic script (known as the Pegon script) and today generally uses Latin script instead of Javanese script for practical purposes. --> https://en.wikipedia.org/wiki/Javanese_language#Writing_system
@@ -237,12 +237,12 @@ class JsonUtils:
 #
 # Hindi: Hindi is written in the Devanagari script --> https://en.wikipedia.org/wiki/Devanagari
 #
-# Balochi: The Balochi Standard Alphabet is classified as an Abjad script type. However, it is unclear if it falls under the ISO-15924 identifier "Arab". 
-# Therefore, it will used here as an Abjad but with its ISO 639-2 language code: "bal" 
+# Balochi: The Balochi Standard Alphabet is classified as an Abjad script type. However, it is unclear if it falls under the ISO-15924 identifier "Arab".
+# Therefore, it will used here as an Abjad but with its ISO 639-2 language code: "bal"
 # 
 # Sanskrit: Currently, Devanagari serves as its writing system --> https://www.easyhindityping.com/sanskrit-alphabet
 #
-# Sundanese: These days Sundanese is normally written with the Latin alphabet, however the Sundanese script is still used to some extent. 
+# Sundanese: These days Sundanese is normally written with the Latin alphabet, however the Sundanese script is still used to some extent.
 #
 # Zulu: Additional phonemes in Zulu are written using sequences of multiple letters. However, it is not clear if they count as alphabetic letters too.  -->  https://en.wikipedia.org/wiki/Zulu_language
 #
@@ -261,11 +261,11 @@ class WritingSystem:
         Albanian = "sqi", # Script type: Alphabet; Writing system: Latin script
         Aleut = "ale", # Script type: Alphabet; Writing system: Latin (Alaska), Cyrillic (Alaska, Russia)
         Amharic = "amh",  # Script type: Abugida; Writing system: Geʽez script (slightly derivated)
-        Angika = "anp", # Script type: Abugida; Writing system: Devanagari (official) 
+        Angika = "anp", # Script type: Abugida; Writing system: Devanagari (official)
         Arabic = "ara", # Script type: Abjad; Writing system: Arabic alphabet, Others: Latin script (Arabizi, Said Akl's alphabet,  Hassaniya alphabet, Maltese alphabet, Cypriot Maronite Latin alphabet), Hebrew alphabet (in Israel for Levantine), Syriac alphabet (Garshuni), Greek alphabet (Cypriot Maronite Greek alphabet) 
         Arapaho = "arp", # Script type: Alphabet; Writing system: Latin
         Armenian = "arm", # Script type	Alphabet: Writing system: Armenian alphabet
-        Assamese = "asm", # Script type	Abugida; Writing system: Bengali–Assamese script 
+        Assamese = "asm", # Script type	Abugida; Writing system: Bengali–Assamese script
         Avar = "ava", # Script type: Alphabet; Writing system: Cyrillic (current)
         Avestan = "ave", # Script type: Alphabet; Writing system: Avestan alphabet
         Balochi = "bal", # Script type: Abjad; Writing system: Balochi Standard Alphabet
@@ -284,7 +284,7 @@ class WritingSystem:
         Catalan = "cat", # Script type: Alphabet; Writing system: Latin script (Catalan alphabet), Catalan Braille
         Chamorro = "cha", # Script type: Alphabet; Writing system: Latin script
         Chechen = "che", # Script type: Alphabet; Writing system: Cyrillic script (present, official), Latin script (historically), Arabic script (historically), Georgian script (historically)
-        Cherokee = "chr", # Script type	Syllabary; Writing system: Cherokee Syllabary 
+        Cherokee = "chr", # Script type	Syllabary; Writing system: Cherokee Syllabary
         Chichewa = "nya", # Script type: Alphabet; Writing system: Latin (Chewa alphabet), Mwangwego, Chewa Braille
         Chinese_Simplified = "chi", # Script type: Logographic; Writing system: Chinese characters, Bopomofo, Pinyin, Xiao'erjing, Dungan, Chinese Braille, ʼPhags-pa script
         Chukchi = "ckt", # Script type: Alphabet; Writing system: Cyrillic script, Tenevil (Historically)
@@ -378,7 +378,7 @@ class WritingSystem:
         Samoan = "smo", # Script type: Alphabet; Writing system: Latin (Samoan alphabet), Samoan Braille
         Sango = "sag", # Script type: Alphabet; Writing system: Latin script
         Sanskrit = "san", # Script type: Abugida; Writing system: Devanagari script (present day), Originally orally transmitted, Brahmi script (from 1st century BCE), Brahmic scripts
-        Scottish_Gaelic = "gla", # Script type: Alphabet; Writing system: Latin (Scottish Gaelic alphabet), Insular script (historically), Ogham (historically)  
+        Scottish_Gaelic = "gla", # Script type: Alphabet; Writing system: Latin (Scottish Gaelic alphabet), Insular script (historically), Ogham (historically)
         Serbian = "srp", # Script type: Alphabet; Writing system: Serbian Cyrillic, Serbian Latin, Yugoslav Braille
         Slovak = "slo", # Script type: Alphabet; Writing system: Latin (Slovak alphabet), Slovak Braille, Cyrillic (Pannonian Rusyn alphabet)
         Slovenian = "slv", # Script type: Alphabet; Writing system: Latin (Slovene alphabet), Slovene Braille
@@ -461,6 +461,7 @@ class WritingSystem:
     class Featural (Enum):
         Hangul = "Hang",
 
+
     def __jsonfiles_present(self) -> NoReturn:
         """
         Checks the presence of required JSON files and raises an error if any are missing.
@@ -481,6 +482,7 @@ class WritingSystem:
             # FileNotFoundError: Json file: [missing_file.json] was not found. Ensure this file exists before performing the instantiation.
             # FileNotFoundError: The following json files: ['missing_file1.json', 'missing_file2.json'] were not found. Ensure these files exists before performing the instantiation.
         """
+
         json_filepaths = [x.value[0] for x in JsonUtils.FilePath]
 
         missing_jsonfiles = []
@@ -507,6 +509,7 @@ class WritingSystem:
         Raises:
             (Implicit) Any exceptions raised by the `load_dict_from_jsonfile` function used for loading JSON data. 
         """
+
         writing_systen_json_filepaths = [
             JsonUtils.FilePath.Abjad,
             JsonUtils.FilePath.Abugida,
@@ -519,7 +522,7 @@ class WritingSystem:
         return {ws_name:set(list("".join(["".join(d['script']) for d in script]))) for ws_name, script in writing_systen_map_script.items()}
 
 
-    def __init__(self) -> NoReturn:        
+    def __init__(self) -> NoReturn:
         self.__jsonfiles_present()
         self.writing_systems_to_scripts = self.__mapping_writing_systems_to_scripts()
         self.iso_15924_to_iso_639_2_3 = { "Hang" : set(["kor", "jje"]), } # Required for fallback strategy (ISO 639-2/3 language code --> ISO 15924)
@@ -532,7 +535,7 @@ class WritingSystem:
         This function takes an ISO code as input and returns the corresponding name based on the code type.
         It supports both ISO 639-2/3 language codes and ISO 15924 script codes.
 
-        Args:
+        Parameters:
             iso_code (str): An ISO 639-2/3 or ISO 15924 code.
 
         Returns:
@@ -561,11 +564,11 @@ class WritingSystem:
             if iso_code in iso_639_1_2_dict:
                 return iso_639_1_2_dict[iso_code][1]
             elif iso_code in iso_639_3_dict:
-                lang = iso_639_3_dict[iso_code]            
+                lang = iso_639_3_dict[iso_code]
                 return lang.split(";")[0]
 
         elif len(iso_code) == 4:
-            iso_15924_dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.ISO_15924_Code)        
+            iso_15924_dict = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.ISO_15924_Code)
             
             if iso_code in iso_15924_dict:
                 return iso_15924_dict[iso_code]
@@ -594,7 +597,7 @@ class WritingSystem:
         return j2hcj(h2j(sequence))
 
 
-    def is_writing_system(self, sequence: str, system_type: str, strip_spaces: bool = True) -> bool:
+    def is_writing_system(self, sequence: str, script_type: str, strip_spaces: bool = True) -> bool:
         """
         Check if a sequence of characters belongs to a specified writing system.
 
@@ -605,7 +608,7 @@ class WritingSystem:
 
         Parameters:
         sequence (str): The input string to be checked.
-        system_type (str): The type of writing system to check against. This should be one of 
+        script_type (str): The type of writing system to check against. This should be one of 
                         'Abjad', 'Abugida', 'Alphabet', 'Syllabary', 'Logographic', or 'Featural'.
         strip_spaces (bool): Whether to strip spaces from the input string before checking. Default is True.
 
@@ -629,13 +632,13 @@ class WritingSystem:
             sequence = re.sub(r"\s+", "", sequence)
         
         # Special case for Hangul (each character must be decomposed into its constituents)
-        if system_type == "Featural":
+        if script_type == "Featural":
             sequence = self.decompose_korean_char_sequence(sequence)
         
-        system_key = self.writing_systems_to_scripts.get(system_type)
+        system_key = self.writing_systems_to_scripts.get(script_type)
         
         if system_key is None:
-            raise ValueError(f"Unknown writing system type: {system_type}")
+            raise ValueError(f"Unknown writing system type: {script_type}")
         
         return all(c in system_key for c in sequence)
 
@@ -698,12 +701,12 @@ class WritingSystem:
 
     class MultigraphSize(Enum):
         All = 2, 7, # All from below (range: [2; 7])
-        Digraph = 2, # Two letters, as English ⟨ch⟩ or ⟨ea⟩)
-        Trigraph = 3, # Three letters, as French ⟨tch⟩ or ⟨eau⟩)
-        Tetragraph = 4, # Four letters, as German ⟨tsch⟩)
-        Pentagraph = 5, # Five letters, as Avar ⟨чӀчӀв⟩)
-        Hexagraph = 6, # Six letters, as Irish ⟨oidhea⟩)
-        Heptagraph = 7 # Seven letters, as German ⟨schtsch⟩)
+        Digraph = 2, # Two letters
+        Trigraph = 3, # Three letters
+        Tetragraph = 4, # Four letters
+        Pentagraph = 5, # Five letters
+        Hexagraph = 6, # Six letters
+        Heptagraph = 7 # Seven letters
 
 
     class LetterCase(Enum):
@@ -717,12 +720,70 @@ class WritingSystem:
         NATO_Phonetic_Alphabet = auto()
 
 
+    def text_to_latin_script_code(self,
+                                  word_2_translate: str,
+                                  latin_script_code: LatinScriptCode,
+                                  as_string: bool = False) -> Union[str, list[str]]:
+        """
+        Convert a given word to its corresponding representation in a specified Latin script code.
+
+        This function translates each character of the input word to its corresponding
+        representation in the specified Latin script code. The script code is provided
+        as an enumeration value from the `LatinScriptCode` Enum. The result can be
+        returned either as a single concatenated string or as a list of individual
+        translations.
+
+        Parameters:
+            word_2_translate (str): The input word to be translated. The word should
+                                    contain only Latin characters (A-Z).
+            latin_script_code (LatinScriptCode): The enumeration value representing the
+                                                desired Latin script code for translation.
+            as_string (bool, optional): If True, the translated word is returned as a
+                                        single string. If False, the translated word is
+                                        returned as a list of individual translations.
+                                        Default is False.
+
+        Returns:
+            Union[str, list[str]]: The translated word either as a single concatenated
+                                string or as a list of individual translations, based
+                                on the value of `as_string`.
+
+        Raises:
+            ValueError: If the input string contains invalid characters. Only Latin
+                        characters (A-Z) are allowed.
+
+        Example:
+            Suppose the Enum `LatinScriptCode` has a value `NATO_Phonetic_Alphabet`
+            which translates characters as follows:
+            `{'NATO_Phonetic_Alphabet': {'A': 'Alfa', 'B': 'Bravo', 'C': 'Charlie', ...}}`
+
+            >>> self.text_to_latin_script_code("AB", LatinScriptCode.NATO_Phonetic_Alphabet)
+            ['Alfa', 'Bravo']
+            
+            >>> self.text_to_latin_script_code("AB", LatinScriptCode.NATO_Phonetic_Alphabet, as_string=True)
+            'AlfaBravo'
+        """        
+
+        alphabet = self.by_language(self.Language.English, as_list=True)
+
+        if not (len(word_2_translate.strip()) > 0 and set(word_2_translate).issubset(set(alphabet))):
+            raise ValueError("Invalid characters found in the input string. Only Latin characters (A-Z) are allowed!")
+
+        # By convention, Latin characters are capitalized
+        word_2_translate = word_2_translate.upper()
+
+        latin_script_code_alphabet = self.by_code(latin_script_code)
+        result = [latin_script_code_alphabet[latin_script_code.name][c] for c in word_2_translate]
+        
+        return "".join(result) if as_string else result
+
+
     def by_script(self, script_type: Union[Abjad, Abugida, Syllabary, Logographic, Featural, LatinScriptCode],
                   as_list: bool = False) -> Union[dict, list[str], list[tuple[str, str]]]:
         """
         Retrieve the script information for a given script type.
 
-        Args:
+        Parameters:
             script_type: The type of script to retrieve information for. This can be an instance of Abjad, Abugida, Syllabary, Logographic, Featural, or LatinScriptCode.
             as_list (bool): Determines the format of the returned script information. If True, returns a list of scripts. If False, returns a dictionary with the ISO name as the key and the script as the value. Defaults to False.
 
@@ -806,7 +867,7 @@ class WritingSystem:
         """
         Extracts and returns a list of unique diacritic characters from the given list of alphabetic characters.
 
-        Args:
+        Parameters:
             alphabet (list[str]): A list of strings, where each string represents a letter of an alphabet.
 
         Returns:
@@ -850,7 +911,7 @@ class WritingSystem:
     def retrieve_iso_formal_name(self, iso_15924_group: str, script_type: Enum) -> str:
         """Retrieves the formal name for a given ISO 15924 group code.
 
-        Args:
+        Parameters:
             iso_15924_group (str): The ISO 15924 group code (e.g., "Cher").
             script_type (Enum): An enumeration representing a script type (e.g., Syllabary).
 
@@ -879,7 +940,7 @@ class WritingSystem:
         This function retrieves the characters associated with a specific language. 
         It considers the language's writing system and applies the specified filters.
 
-        Args:
+        Parameters:
             language (Language): The language for which to retrieve characters.
             letter_case (LetterCase, optional): Controls the output letter case 
                 (uppercase, lowercase, or both). Defaults to LetterCase.Both.
@@ -1015,40 +1076,75 @@ class WritingSystem:
         return sorted(set(script_characters))
 
 
-    def keep_only_script_characters(self,
+    def strip_non_script_characters(self,
                                     str_2_check: str,
-                                    keep_spaces: bool = True) -> str:
+                                    language: Language = None,
+                                    process_token_wise: bool = True,
+                                    strip_spaces: bool = True) -> str:
         """
-        Filters a given string to keep only characters of all supported scripts.
+        Remove non-script characters from the input string based on the specified language or all supported script types.
 
-        This function takes an input string and returns a new string consisting only of the characters that are 
-        contained in all script types (alphabets, abjads, etc.) supported by Alphabetic. If `keep_spaces` is set to True, 
-        spaces are kept; otherwise all spaces are removed.
-
-        Args:
-            str_2_check (str): The input string to be filtered.
-            keep_spaces (bool): A flag indicating whether to retain spaces in the output string. Defaults to True.
+        Parameters:
+            str_2_check (str): The input string to be processed.
+            language (Language, optional): The language to restrict script characters.
+                If None, characters from all supported script types are used. Defaults to None.
+            process_token_wise (bool, optional): If True, process the string token by token.
+                Each token's non-script characters are filtered based on the language or script types.
+                If False, filter characters from the entire string directly. Defaults to True.
+            strip_spaces (bool, optional): If True, strip leading and trailing spaces from the resulting string.
+                Defaults to True.
 
         Returns:
-            str: A string containing only the characters specified in `script_characters`,
-                with spaces optionally retained.
-
-        Examples:
-            >>> keep_only_script_characters("hello world!", ['h', 'e', 'l', 'o', 'w', 'r', 'd'])
-            'hello world'
-            >>> keep_only_script_characters("hello world!", ['h', 'e', 'l', 'o', 'w', 'r', 'd'], keep_spaces=False)
-            'helloworld'
+            str: The input string stripped of non-script characters based on the specified criteria.
         """
 
-        script_characters = self.all_script_characters()
+        # If no language is given, all characters of all supported script types (abjad, abugida, alphabet, syllabary, logographic and featural) will be used.
+        script_characters = self.all_script_characters() if language is None else self.by_language(language, as_list=True)
             
-        if keep_spaces:
+        if process_token_wise:
             result = []
             tokens = str_2_check.split()
             
             for token in tokens:
                 cleaned_token = "".join([c for c in token if c in script_characters])
                 result.append(cleaned_token)
-            return " ".join(result)
+            joined = " ".join(result)
         else:
-            return "".join([c for c in str_2_check if c in script_characters])
+            joined = "".join([c for c in str_2_check if c in script_characters])
+        return joined.strip() if strip_spaces else joined
+
+
+    def generate_all_characters_in_range(self, unicode_range: str) -> list[str]:
+        """
+        Generate a list of all characters within a specified Unicode range.
+
+        This function takes a string representing a Unicode range and returns a list
+        of characters that fall within this range. The input string should specify
+        the range in the format '\\uXXXX-\\uYYYY', where XXXX and YYYY are hexadecimal
+        Unicode code points. The function will include both the start and end points
+        in the resulting list.
+
+        Parameters:
+            unicode_range (str): A string representing the Unicode range in the 
+                                format "\\uXXXX-\\uYYYY". For example, "\\u0061-\\u007A"
+                                represents the range from 'a' to 'z'.
+
+        Returns:
+            list[str]: A list of characters within the specified Unicode range.
+
+        Example:
+            >>> generate_all_characters_in_range("\u0061-\u007A")
+            ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 
+            'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+        Notes:
+            - The function assumes that the input string is properly formatted.
+            - The input range is inclusive of both the start and end points.
+            - Only one range should be specified in the input string. Multiple ranges
+            or individual characters are not supported by this function.
+        """
+
+        range_start, range_end = unicode_range.split("-")
+        start = ord(range_start)
+        end = ord(range_end) + 1  # +1 to include the end character
+        return [chr(codepoint) for codepoint in range(start, end)]

@@ -40,7 +40,7 @@ class TestCore(unittest.TestCase):
         assert langcode not in dict_
 
     def test_update_jsonfile(self):
-        langcode, alphabet = "haw", ["A", "E", "H", "I", "K", "L", "M", "N", "O", "P", "U", "W", "a", "e", "h", "i", "k", "l", "m", "n", "o", "p", "u", "w", "ʻ"] 
+        langcode, alphabet = "haw", ["A", "E", "H", "I", "K", "L", "M", "N", "O", "P", "U", "W", "a", "e", "h", "i", "k", "l", "m", "n", "o", "p", "u", "w", "ʻ"]
         JsonUtils.update_lang_json_file(langcode, alphabet)
         dict_ = JsonUtils.load_dict_from_jsonfile(JsonUtils.FilePath.Alphabet)
         assert langcode in dict_ and sorted(dict_[langcode]["script"]) == sorted(alphabet)
@@ -49,8 +49,8 @@ class TestCore(unittest.TestCase):
 
     def test_iso_code_2_language(self):
         ws = WritingSystem()
-        assert (ws.iso_code_to_name("deu") == 'German' and 
-                ws.iso_code_to_name("Mlym") == 'Malayalam' and 
+        assert (ws.iso_code_to_name("deu") == 'German' and
+                ws.iso_code_to_name("Mlym") == 'Malayalam' and
                 ws.iso_code_to_name("dng") == 'Dungan')
 
 
@@ -111,10 +111,9 @@ class TestCore(unittest.TestCase):
         assert set(['優','元','兄','充']).issubset(set(ws.by_logographic(ws.Logographic.Kanji, as_list=True)))
 
 
-    def test_by_code(self):
+    def test_text_to_latin_script_code(self):
         ws = WritingSystem()
-        alphabet = ws.by_code(x:=ws.LatinScriptCode.NATO_Phonetic_Alphabet)
-        assert [alphabet[x.name][c] for c in "HALVANI"] == ['Hotel', 'Alfa', 'Lima', 'Victor', 'Alfa', 'November', 'India']
+        assert ws.text_to_latin_script_code("oren", ws.LatinScriptCode.NATO_Phonetic_Alphabet) == ['Oscar', 'Romeo', 'Echo', 'November']
 
 
     def test_iso_15924_maps_to_iso_639_test_1(self):
@@ -149,3 +148,26 @@ class TestCore(unittest.TestCase):
         t10, f10 = ws.is_syllabary(x:="こんにちは"), ws.is_alphabet(x)
 
         assert all([t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10]) and not any([f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10])
+
+
+    def test_non_character_stripping(self):
+        ws = WritingSystem()
+        assert (ws.strip_non_script_characters("12_-äMil%uji+ jazßyky!öü*~Γpλ\\?/!", ws.Language.Czech) == "Miluji jazykyp" and
+                ws.strip_non_script_characters("ΣλI lΟove ΛAlphαabeτtic", ws.Language.English) == "I love Alphabetic" and
+                ws.strip_non_script_characters("ΣλI lΟove ΛAlphαabeτtic", ws.Language.Greek) == 'Σλ Ο Λατ' and
+                ws.strip_non_script_characters("SΓpλrώaσcσhεeςn!", ws.Language.German) == "Sprachen" and
+                ws.strip_non_script_characters("SΓpλrώaσcσhεeςn!", ws.Language.Greek) == "Γλώσσες")
+        
+
+    def test_generate_all_characters_in_range(self):
+        ws = WritingSystem()
+        
+        german_letters_upper = "\u0041-\u005A"
+        german_letters_lower = "\u0061-\u007A"
+        german_letters_umlauts = "\u00C4\u00D6\u00DC\u00DF\u00E4\u00F6\u00FC"
+
+        upper = ws.generate_all_characters_in_range(german_letters_upper)
+        lower = ws.generate_all_characters_in_range(german_letters_lower)
+        umlauts = list(german_letters_umlauts.split("\\", maxsplit=1)[0])
+
+        assert "".join(sorted(upper + lower + umlauts)) == "".join(sorted(ws.by_language(ws.Language.German, as_list=True)))
