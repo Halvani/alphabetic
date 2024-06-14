@@ -139,10 +139,27 @@ ws.is_abjad("დილა მშვიდობისა") # False
 Furthermore, you can also use Alphabetic to remove all characters from a given string that do not occur within the supported script types (abjads, abugidas, alphabets, etc.):  
 
 ```python
-ws.keep_only_script_characters("#jüste BAD/good tösté X4567Y ßÜ משהו действует?!")
+ws.strip_non_script_characters("SΓpλrώaσcσhεeςn!", ws.Language.German)
+# "Sprachen" (languages)
 
+ws.strip_non_script_characters("SΓpλrώaσcσhεeςn!", ws.Language.Greek)
+# "Γλώσσες" (languages)
+```
+
+If no language is given, all characters of all supported script types are considered:
+```python
+ws.strip_non_script_characters("#jüste BAD/good tösté X4567Y ßÜ משהו действует?!")
 # Result: 'jüste BADgood tösté XY ßÜ משהו действует'
 ```
+
+If you wish, you can also list the characters of a language based on a specified Unicode range:
+```python
+ws.generate_all_characters_in_range("\u0400-\u04FF") # Bulgarian
+
+# ['Ѐ', 'Ё', 'Ђ', 'Ѓ', 'Є', ..., 'Ӽ', 'ӽ', 'Ӿ', 'ӿ']
+```
+
+
 
 ## Features
 - Currently [151 languages](#Supported_Languages) and corresponding scripts are supported, with more to follow over time;
