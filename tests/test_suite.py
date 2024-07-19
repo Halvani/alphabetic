@@ -150,13 +150,21 @@ class TestCore(unittest.TestCase):
         assert all([t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10]) and not any([f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10])
 
 
-    def test_non_character_stripping(self):
+    def test_strip_non_script_characters_single(self):
         ws = WritingSystem()
         assert (ws.strip_non_script_characters("12_-äMil%uji+ jazßyky!öü*~Γpλ\\?/!", ws.Language.Czech) == "Miluji jazykyp" and
                 ws.strip_non_script_characters("ΣλI lΟove ΛAlphαabeτtic", ws.Language.English) == "I love Alphabetic" and
                 ws.strip_non_script_characters("ΣλI lΟove ΛAlphαabeτtic", ws.Language.Greek) == 'Σλ Ο Λατ' and
                 ws.strip_non_script_characters("SΓpλrώaσcσhεeςn!", ws.Language.German) == "Sprachen" and
                 ws.strip_non_script_characters("SΓpλrώaσcσhεeςn!", ws.Language.Greek) == "Γλώσσες")
+        
+        
+    def test_strip_non_script_characters_multiple(self):
+        ws = WritingSystem()
+        assert (ws.strip_non_script_characters("**č,ř,š,ž;Tel ßAviv ÄÖÜתל #אביב++",
+                                               [ws.Language.English, ws.Language.Hebrew]) == "Tel Aviv תל אביב" and
+                ws.strip_non_script_characters("äöü_-/началник 클라en فجعيةplena 우드ስሉጥtemporadaதமிழ் пожарна",
+                                               [ws.Language.Spanish, ws.Language.Bulgarian]) == "началник en plena temporada пожарна")
         
 
     def test_generate_all_characters_in_range(self):

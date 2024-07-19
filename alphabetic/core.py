@@ -1077,40 +1077,76 @@ class WritingSystem:
 
 
     def strip_non_script_characters(self,
-                                    str_2_check: str,
-                                    language: Language = None,
+                                    input_text: str,
+                                    languages: Language|list[Language]|None = None,
                                     process_token_wise: bool = True,
                                     strip_spaces: bool = True) -> str:
         """
-        Remove non-script characters from the input string based on the specified language or all supported script types.
+            Remove characters from the input string that do not belong to the specified language(s) or script types.
 
-        Parameters:
-            str_2_check (str): The input string to be processed.
-            language (Language, optional): The language to restrict script characters.
-                If None, characters from all supported script types are used. Defaults to None.
-            process_token_wise (bool, optional): If True, process the string token by token.
-                Each token's non-script characters are filtered based on the language or script types.
-                If False, filter characters from the entire string directly. Defaults to True.
-            strip_spaces (bool, optional): If True, strip leading and trailing spaces from the resulting string.
-                Defaults to True.
+            This function processes the input text to retain only those characters that are part of the script(s) associated 
+            with the specified language(s). The function can process the text token-wise (word by word) or as a whole string, 
+            and it can also optionally strip spaces from the final result.
 
-        Returns:
-            str: The input string stripped of non-script characters based on the specified criteria.
-        """
+            Parameters:
+            -----------
+            input_text : str
+                The text from which non-script characters will be removed.
+            
+            languages : Language | list[Language] | None, optional
+                The language(s) whose script characters are to be retained in the input text. If None, all supported script 
+                types will be considered. Defaults to None.
+            
+            process_token_wise : bool, optional
+                If True, the text will be processed token-wise (word by word). If False, the text will be processed as a whole 
+                string. Defaults to True.
+            
+            strip_spaces : bool, optional
+                If True, leading and trailing spaces will be stripped from the final result. Defaults to True.
 
-        # If no language is given, all characters of all supported script types (abjad, abugida, alphabet, syllabary, logographic and featural) will be used.
-        script_characters = self.all_script_characters() if language is None else self.by_language(language, as_list=True)
+            Returns:
+            --------
+            str
+                The processed text with only the characters belonging to the specified script(s) retained.
+
+            Raises:
+            -------
+            ValueError
+                If the 'languages' argument is not of the expected type (None, Language, or list of Language).
+
+            Examples:
+            ---------
+            >>> strip_non_script_characters("Hello, こんにちは, Привет!", languages=Language.English)
+            'Hello'
+
+            >>> strip_non_script_characters("Schönes클라 Wetter*+/ heute!தமி חדשים", languages=[Language.German, Language.Hebrew])
+            'Schönes Wetter heute חדשים'
+            """
+
+        # If no language is given, all characters of all supported script types 
+        # (abjad, abugida, alphabet, syllabary, logographic and featural) will be used.
+        script_characters = []
+        
+        if languages is None:
+            script_characters = self.all_script_characters()
+        elif isinstance(languages, self.Language):
+            script_characters = self.by_language(languages, as_list=True)
+        elif isinstance(languages, list) and all([isinstance(language, self.Language) for language in languages]):
+            for language in languages:
+                script_characters.extend(self.by_language(language, as_list=True))
+        else:
+            raise ValueError("Invalid 'languages' argument. Must be one of the following: None|Language|list[Language]")
             
         if process_token_wise:
             result = []
-            tokens = str_2_check.split()
+            tokens = input_text.split()
             
             for token in tokens:
                 cleaned_token = "".join([c for c in token if c in script_characters])
                 result.append(cleaned_token)
             joined = " ".join(result)
         else:
-            joined = "".join([c for c in str_2_check if c in script_characters])
+            joined = "".join([c for c in input_text if c in script_characters])
         return joined.strip() if strip_spaces else joined
 
 
