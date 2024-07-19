@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "alphabetic"
-version = "0.0.6"
+version = "0.0.7"
 authors = [{name="Oren Halvani"}]
 description = "A Python module for retrieving script types of writing systems including alphabets, abjads, abugidas, syllabaries, logographs, featurals as well as Latin script codes"
 readme = "README.md"
@@ -26,7 +26,7 @@ dependencies = [
 	"jamo==0.4.1"
 ]
 
-keywords = ["writing-systems", "alphabets", "abjads", "abugidas", "syllabaries", "logographics", "featural script-types", "latin-script-codes", "alphabet-list", "alphabet-characters", "alphabet-database", "iso-639-2", "iso-639-3", "iso-15924"]
+keywords = ["alphabets", "writing-systems", "iso-639-3", "endangered-languages", "iso-639-2", "alphabet-list", "iso-15924", "syllabaries", "alphabet-characters", "alphabet-database", "logographics", "abjads", "abugidas", "latin-script-codes", "featural", "script-types"]
 
 [project.urls]
 "Homepage" = "https://github.com/Halvani/alphabetic"
