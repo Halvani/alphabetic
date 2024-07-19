@@ -1078,7 +1078,7 @@ class WritingSystem:
 
     def strip_non_script_characters(self,
                                     input_text: str,
-                                    languages: Language|list[Language]|None = None,
+                                    languages: Union[Language, list[Language], None] = None,
                                     process_token_wise: bool = True,
                                     strip_spaces: bool = True) -> str:
         """
