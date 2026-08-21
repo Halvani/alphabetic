@@ -5,7 +5,7 @@ import json
 from jamo import h2j, j2hcj
 from pathlib import Path
 from enum import Enum, auto
-from typing import Union, NoReturn
+from typing import Union
 from .errors import Non_Existing_ISO_639_2_Langcode
 
 module_dir = os.path.dirname(os.path.abspath(__file__))
@@ -462,7 +462,7 @@ class WritingSystem:
         Hangul = "Hang",
 
 
-    def __jsonfiles_present(self) -> NoReturn:
+    def __jsonfiles_present(self) -> None:
         """
         Checks the presence of required JSON files and raises an error if any are missing.
 
@@ -522,7 +522,7 @@ class WritingSystem:
         return {ws_name:set(list("".join(["".join(d['script']) for d in script]))) for ws_name, script in writing_systen_map_script.items()}
 
 
-    def __init__(self) -> NoReturn:
+    def __init__(self) -> None:
         self.__jsonfiles_present()
         self.writing_systems_to_scripts = self.__mapping_writing_systems_to_scripts()
         self.iso_15924_to_iso_639_2_3 = { "Hang" : set(["kor", "jje"]), } # Required for fallback strategy (ISO 639-2/3 language code --> ISO 15924)
@@ -662,7 +662,7 @@ class WritingSystem:
         return self.is_writing_system(sequence, self.Featural.__name__, strip_spaces)
 
 
-    def pretty_print(self, script_dict: dict, show_script_key: bool = False) -> NoReturn:
+    def pretty_print(self, script_dict: dict, show_script_key: bool = False) -> None:
         """
         Pretty print the contents of a dictionary where keys are script names and values are lists of characters.
 
@@ -675,7 +675,7 @@ class WritingSystem:
         show_script_key (bool): Whether to print the script name (key) before the characters. Default is False.
 
         Returns:
-        NoReturn: This function does not return anything. It prints the output directly.
+        None: This function does not return anything. It prints the output directly.
 
         Example:
         >>> script_dict = {
