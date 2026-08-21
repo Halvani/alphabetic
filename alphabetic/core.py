@@ -319,6 +319,7 @@ class WritingSystem:
         Hebrew = "heb", # Script type: Abjad; Writing system: Hebrew alphabet, Hebrew Braille, Paleo-Hebrew alphabet (Archaic Biblical Hebrew), Imperial Aramaic script (Late Biblical Hebrew), Samaritan script (Samaritan Biblical Hebrew)
         Herero = "her", # Script type: Alphabet; Writing system: Latin (Herero alphabet), Herero Braille
         Hindi = "hin", # Script type: Abugida; Writing system: Devanagari (official), Kaithi (historical), Mahajani (historical), Laṇḍā (historical), Latin (Hinglish, unofficial), Devanagari Braille
+        Hungarian = "hun", # Script type: Alphabet; Writing system: Latin (Hungarian alphabet), Hungarian Braille
         Icelandic = "isl", # Script type: Alphabet; Writing system: Latin (Icelandic alphabet), Icelandic Braille
         Igbo = "ibo", # Script type: Alphabet; Writing system: Latin (Önwu alphabet), Nwagu Aneke script, Neo-Nsibidi, Ndebe script, Igbo Braille
         Indonesian = "ind", # Script type: Alphabet; Writing system: Latin (Indonesian alphabet), Indonesian Braille
@@ -372,6 +373,7 @@ class WritingSystem:
         Punjabi_Gurmukhī = "_pan", # Script type: Abugida; Writing system: Shāhmukhī (majority, Pakistan), Gurmukhī (official, India), Punjabi Braille
         Punjabi_Shahmukhi = "pan", # Script type: Abjad; Writing system: Shāhmukhī (majority, Pakistan), Gurmukhī (official, India), Punjabi Braille
         Quechua = "que", # Script type: Alphabet; Writing system: Latin (Quechuan alphabet)
+        Romanian = "ron", # Script type: Alphabet; Writing system: Latin (Romanian alphabet), Romanian Braille. Note: Romanian and Moldovan share the same alphabet; "ron" is the ISO 639-3 code for Romanian (distinct from "rum" used for Moldovan).
         Rohingya = "rhg", # Script type: Alphabet: Writing system: Hanifi Rohingya, Perso-Arabic (Rohingya Arabic Alphabet), Latin (Rohingyalish), Burmese, Bengali–Assamese (rare)
         Russian = "rus", # Script type: Alphabet: Writing system: Cyrillic (Russian alphabet), Russian Braille
         Samaritan = "smp", # Script type Abjad; Writing system: Samaritan abjad

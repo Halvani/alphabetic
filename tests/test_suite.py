@@ -179,3 +179,21 @@ class TestCore(unittest.TestCase):
         umlauts = list(german_letters_umlauts.split("\\", maxsplit=1)[0])
 
         assert "".join(sorted(upper + lower + umlauts)) == "".join(sorted(ws.by_language(ws.Language.German, as_list=True)))
+
+
+    def test_hungarian_alphabet(self):
+        ws = WritingSystem()
+        hungarian = ws.by_language(ws.Language.Hungarian, as_list=True)
+        # Hungarian alphabet has multigraphs: cs, dz, dzs, gy, ly, ny, sz, ty, zs
+        assert set(['Cs', 'Dz', 'Dzs', 'Gy', 'Ly', 'Ny', 'Sz', 'Ty', 'Zs']).issubset(set(hungarian))
+        # Plus accented vowels
+        assert set(['Á', 'É', 'Í', 'Ó', 'Ö', 'Ú', 'Ü', 'Ő', 'Ű']).issubset(set(hungarian))
+        assert len(hungarian) == 88
+
+
+    def test_romanian_alphabet(self):
+        ws = WritingSystem()
+        romanian = ws.by_language(ws.Language.Romanian, as_list=True)
+        # Romanian special characters with comma below (correct modern form)
+        assert set(['Ă', 'ă', 'Â', 'â', 'Î', 'î', 'Ș', 'ș', 'Ț', 'ț']).issubset(set(romanian))
+        assert len(romanian) == 62
